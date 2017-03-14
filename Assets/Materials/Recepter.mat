@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Recepter
+  m_Shader: {fileID: 4800000, guid: be36142d8e30f3d4c9f4095a37d71734, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 2800000, guid: 6d492f15dd2f99148b7782e4a7f6b352, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    - first:
+        name: _BorderWidth
+      second: 0.03
+    - first:
+        name: _BorderXOffset
+      second: 0
+    - first:
+        name: _BorderYOffset
+      second: 0.0026
+    - first:
+        name: _Cutoff
+      second: 0.5
+    m_Colors:
+    - first:
+        name: _BackgroundColor
+      second: {r: 0.9058824, g: 0.4156863, b: 0.09411766, a: 1}
+    - first:
+        name: _BorderColor
+      second: {r: 0.5803922, g: 0.28627452, b: 0.09411766, a: 1}
