@@ -12,12 +12,14 @@ public class MovablePiece : MonoBehaviour
 
     private Vector3 basePosition;
 
-    private RecepterManager recepterManager;
+    private RecepterManager _recepterManager;
+    private SpriteRenderer _spriteRenderer;
 
     void Start()
     {
         basePosition = transform.position;
-        recepterManager = FindObjectOfType<RecepterManager>();
+        _recepterManager = FindObjectOfType<RecepterManager>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
 	// Update is called once per frame
@@ -47,6 +49,7 @@ public class MovablePiece : MonoBehaviour
         if (!placed && !reseting)
         {
             selected = true;
+            _spriteRenderer.sortingLayerName = "Selected";
         }
     }
     
@@ -55,7 +58,9 @@ public class MovablePiece : MonoBehaviour
         if (selected)
         {
             selected = false;
-            Recepter recptr = recepterManager.Fit(Id);
+            _spriteRenderer.sortingLayerName = "Middleground";
+
+            Recepter recptr = _recepterManager.Fit(Id);
             if (recptr != null)
             {
                 placed = true;

@@ -47,6 +47,9 @@ TagManager:
   - name: Middleground
     uniqueID: 149137425
     locked: 0
+  - name: Selected
+    uniqueID: 2941853723
+    locked: 0
   - name: Forground
     uniqueID: 2783562877
     locked: 0
