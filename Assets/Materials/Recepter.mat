@@ -27,7 +27,7 @@ Material:
       second: 0
     - first:
         name: _BorderWidth
-      second: 0.03
+      second: 0.05
     - first:
         name: _BorderXOffset
       second: 0
