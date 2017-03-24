@@ -69,7 +69,6 @@ public class LevelLoader : MonoBehaviour
 
         for (int i = 0; i < infos.Pieces.Count && i < m_spawns.Count; ++i)
         {
-            Debug.Log(infos.Pieces[i].Position.x);
             Vector3 position = new Vector3(_zonePosition.x + _zoneSize.x * infos.Pieces[i].Position.x, _zonePosition.y + _zoneSize.y * infos.Pieces[i].Position.y, 0f);
 
             Recepter recepter = Instantiate(m_recepterPrefab);
