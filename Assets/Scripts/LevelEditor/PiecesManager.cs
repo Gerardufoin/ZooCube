@@ -2,80 +2,160 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum E_MouseActions
+{
+    IDLING = 0,
+    CREATING,
+    MOVING,
+    SELECTING
+}
+
 public class PiecesManager : MonoBehaviour
 {
+    #region Properties
+
+    #region Editor
     [SerializeField]
     private GameObject m_areaSelection;
+    #endregion
+
+    #region SelectionMesh
+    private Mesh _selectionMesh;
+
+    private Rect _selectionBounds = new Rect();
+    private Vector3[] _vertices = new Vector3[4];
+    private Vector2[] _uvs = new Vector2[4];
+    private int[] _tris = new int[6];
+    #endregion
+
+    private E_MouseActions _currentAction;
+
+    private delegate void D_CurrentAction();
+    private Dictionary<E_MouseActions, D_CurrentAction> _actionUpdate = new Dictionary<E_MouseActions, D_CurrentAction>();
 
     private List<EditablePiece> _selectedPieces = new List<EditablePiece>();
 
-    private bool _selecting = false;
     private Vector3 _selectionStart;
 
-    private Mesh _selectionMesh;
+    private int _editableLayer = 1 << 9;
 
-	// Use this for initialization
-	void Start ()
+    #endregion
+
+    // Use this for initialization
+    void Start ()
     {
+        #region SelectionMesh
         _selectionMesh = new Mesh();
+
+        _vertices[0] = Vector3.zero;
+        _vertices[1] = Vector3.zero;
+        _vertices[2] = Vector3.zero;
+        _vertices[3] = Vector3.zero;
+
+        _uvs[0] = new Vector2(0, 1);
+        _uvs[1] = new Vector2(1, 1);
+        _uvs[2] = new Vector2(1, 0);
+        _uvs[3] = new Vector2(0, 0);
+
+        _tris[0] = 0;
+        _tris[1] = 1;
+        _tris[2] = 2;
+        _tris[3] = 2;
+        _tris[4] = 3;
+        _tris[5] = 0;
+        #endregion
 
         m_areaSelection.GetComponent<MeshFilter>().mesh = _selectionMesh;
         m_areaSelection.GetComponent<MeshRenderer>().sortingLayerName = "Forground";
+
+        _actionUpdate.Add(E_MouseActions.IDLING, new D_CurrentAction(IdlingUpdate));
+        _actionUpdate.Add(E_MouseActions.CREATING, new D_CurrentAction(CreatingUpdate));
+        _actionUpdate.Add(E_MouseActions.MOVING, new D_CurrentAction(MovingUpdate));
+        _actionUpdate.Add(E_MouseActions.SELECTING, new D_CurrentAction(SelectingUpdate));
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
-		if (Input.GetMouseButtonDown(0))
+        _actionUpdate[_currentAction]();
+	}
+
+    private void IdlingUpdate()
+    {
+        // Selection
+        if (Input.GetMouseButtonDown(0))
         {
-            _selecting = true;
             _selectionStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D result = Physics2D.OverlapPoint(_selectionStart, _editableLayer);
+            if (result != null)
+            {
+                _selectedPieces.Add(result.GetComponent<EditablePiece>());
+                _currentAction = E_MouseActions.MOVING;
+            }
+            else
+            {
+                // Prepare selection
+                _currentAction = E_MouseActions.SELECTING;
+                m_areaSelection.gameObject.SetActive(true);
+                UpdateSelectionMesh();
+            }
         }
+    }
+
+    private void CreatingUpdate()
+    {
+    }
+
+    private void MovingUpdate()
+    {
+        Debug.Log("MOVING: " + _selectedPieces.Count);
+        _selectedPieces.Clear();
+        _currentAction = E_MouseActions.IDLING;
+    }
+
+    private void SelectingUpdate()
+    {
         if (Input.GetMouseButtonUp(0))
         {
-            _selecting = false;
+            m_areaSelection.gameObject.SetActive(false);
+
+            Collider2D[] results = Physics2D.OverlapAreaAll(_selectionStart, Camera.main.ScreenToWorldPoint(Input.mousePosition), _editableLayer);
+            for (uint i = 0; i < results.Length; ++i)
+            {
+                _selectedPieces.Add(results[i].GetComponent<EditablePiece>());
+            }
+            _currentAction = E_MouseActions.MOVING;
+            if (_selectedPieces.Count == 0)
+            {
+                _currentAction = E_MouseActions.IDLING;
+            }
+            return;
         }
         UpdateSelectionMesh();
-	}
+    }
 
     private void UpdateSelectionMesh()
     {
-        if (!_selecting)
-        {
-            m_areaSelection.gameObject.SetActive(false);
-            return;
-        }
-
-        m_areaSelection.gameObject.SetActive(true);
-
         _selectionMesh.Clear();
 
         Vector3 selectionEnd = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Rect selection = new Rect(Mathf.Min(_selectionStart.x, selectionEnd.x), Mathf.Max(_selectionStart.y, selectionEnd.y),
-                                  Mathf.Abs(_selectionStart.x - selectionEnd.x), Mathf.Abs(_selectionStart.y - selectionEnd.y));
 
-        Vector3[] vertices = new Vector3[4];
-        vertices[0] = new Vector3(selection.x, selection.y, 0);
-        vertices[1] = new Vector3(selection.x + selection.width, selection.y, 0);
-        vertices[2] = new Vector3(selection.x + selection.width, selection.y - selection.height, 0);
-        vertices[3] = new Vector3(selection.x, selection.y - selection.height, 0);
+        _selectionBounds.x = Mathf.Min(_selectionStart.x, selectionEnd.x);
+        _selectionBounds.y = Mathf.Max(_selectionStart.y, selectionEnd.y);
+        _selectionBounds.width = Mathf.Abs(_selectionStart.x - selectionEnd.x);
+        _selectionBounds.height = Mathf.Abs(_selectionStart.y - selectionEnd.y);
 
-        Vector2[] uvs = new Vector2[vertices.Length];
-        uvs[0] = new Vector2(0, 1);
-        uvs[1] = new Vector2(1, 1);
-        uvs[2] = new Vector2(1, 0);
-        uvs[3] = new Vector2(0, 0);
+        _vertices[0].x = _selectionBounds.x;
+        _vertices[0].y = _selectionBounds.y;
+        _vertices[1].x = _selectionBounds.x + _selectionBounds.width;
+        _vertices[1].y = _selectionBounds.y;
+        _vertices[2].x = _selectionBounds.x + _selectionBounds.width;
+        _vertices[2].y = _selectionBounds.y - _selectionBounds.height;
+        _vertices[3].x = _selectionBounds.x;
+        _vertices[3].y = _selectionBounds.y - _selectionBounds.height;
 
-        int[] tris = new int[6];
-        tris[0] = 0;
-        tris[1] = 1;
-        tris[2] = 2;
-        tris[3] = 2;
-        tris[4] = 3;
-        tris[5] = 0;
-
-        _selectionMesh.vertices = vertices;
-        _selectionMesh.triangles = tris;
-        _selectionMesh.uv = uvs;
+        _selectionMesh.vertices = _vertices;
+        _selectionMesh.triangles = _tris;
+        _selectionMesh.uv = _uvs;
     }
 }
