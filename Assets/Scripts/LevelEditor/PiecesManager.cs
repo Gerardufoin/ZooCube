@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum E_MouseActions
 {
@@ -36,12 +37,12 @@ public class PiecesManager : MonoBehaviour
     private List<EditablePiece> _selectedPieces = new List<EditablePiece>();
 
     private Vector3 _selectionStart;
+    private GameObject _selectionMove;
 
     private int _editableLayer = 1 << 9;
 
     #endregion
 
-    // Use this for initialization
     void Start ()
     {
         #region SelectionMesh
@@ -68,34 +69,65 @@ public class PiecesManager : MonoBehaviour
         m_areaSelection.GetComponent<MeshFilter>().mesh = _selectionMesh;
         m_areaSelection.GetComponent<MeshRenderer>().sortingLayerName = "Forground";
 
+        _selectionMove = new GameObject("SelectionMoveParent");
+        _selectionMove.transform.position = Vector3.zero;
+
         _actionUpdate.Add(E_MouseActions.IDLING, new D_CurrentAction(IdlingUpdate));
         _actionUpdate.Add(E_MouseActions.CREATING, new D_CurrentAction(CreatingUpdate));
         _actionUpdate.Add(E_MouseActions.MOVING, new D_CurrentAction(MovingUpdate));
         _actionUpdate.Add(E_MouseActions.SELECTING, new D_CurrentAction(SelectingUpdate));
     }
 
-    // Update is called once per frame
     void Update ()
     {
         _actionUpdate[_currentAction]();
 	}
 
+    private bool GetMouseButtonDown(int button)
+    {
+        return (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(button));
+    }
+
+    private bool GetMouseButtonUp(int button)
+    {
+        return (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonUp(button));
+    }
+
     private void IdlingUpdate()
     {
         // Selection
-        if (Input.GetMouseButtonDown(0))
+        if (GetMouseButtonDown(0))
         {
             _selectionStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Collider2D result = Physics2D.OverlapPoint(_selectionStart, _editableLayer);
             if (result != null)
             {
-                _selectedPieces.Add(result.GetComponent<EditablePiece>());
+                // Multi selection check
+                bool selected = false;
+                for (int i = 0; i < _selectedPieces.Count; ++i)
+                {
+                    if (_selectedPieces[i].gameObject == result.gameObject)
+                    {
+                        selected = true;
+                    }
+                }
+                if (!selected)
+                {
+                    ClearSelection();
+                    AddPieceToSelection(result.gameObject);
+                }
+                _selectionMove.transform.position = _selectionStart;
+                for (int i = 0; i < _selectedPieces.Count; ++i)
+                {
+                    _selectedPieces[i].transform.parent = _selectionMove.transform;
+                }
                 _currentAction = E_MouseActions.MOVING;
             }
             else
             {
                 // Prepare selection
                 _currentAction = E_MouseActions.SELECTING;
+                ClearSelection();
                 m_areaSelection.gameObject.SetActive(true);
                 UpdateSelectionMesh();
             }
@@ -108,30 +140,48 @@ public class PiecesManager : MonoBehaviour
 
     private void MovingUpdate()
     {
-        Debug.Log("MOVING: " + _selectedPieces.Count);
-        _selectedPieces.Clear();
-        _currentAction = E_MouseActions.IDLING;
+        _selectionMove.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (GetMouseButtonUp(0))
+        {
+            for (int i = 0; i < _selectedPieces.Count; ++i)
+            {
+                _selectedPieces[i].transform.parent = null;
+            }
+            _currentAction = E_MouseActions.IDLING;
+        }
     }
 
     private void SelectingUpdate()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (GetMouseButtonUp(0))
         {
             m_areaSelection.gameObject.SetActive(false);
 
             Collider2D[] results = Physics2D.OverlapAreaAll(_selectionStart, Camera.main.ScreenToWorldPoint(Input.mousePosition), _editableLayer);
             for (uint i = 0; i < results.Length; ++i)
             {
-                _selectedPieces.Add(results[i].GetComponent<EditablePiece>());
+                AddPieceToSelection(results[i].gameObject);
             }
-            _currentAction = E_MouseActions.MOVING;
-            if (_selectedPieces.Count == 0)
-            {
-                _currentAction = E_MouseActions.IDLING;
-            }
+            // Going back to idling when the selection is done. Have to click again to start moving.
+            _currentAction = E_MouseActions.IDLING;
             return;
         }
         UpdateSelectionMesh();
+    }
+
+    private void AddPieceToSelection(GameObject piece)
+    {
+        piece.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        _selectedPieces.Add(piece.GetComponent<EditablePiece>());
+    }
+
+    private void ClearSelection()
+    {
+        for (int i = 0; i < _selectedPieces.Count; ++i)
+        {
+            _selectedPieces[i].GetComponent<SpriteRenderer>().sortingOrder = 1;
+        }
+        _selectedPieces.Clear();
     }
 
     private void UpdateSelectionMesh()
@@ -157,5 +207,13 @@ public class PiecesManager : MonoBehaviour
         _selectionMesh.vertices = _vertices;
         _selectionMesh.triangles = _tris;
         _selectionMesh.uv = _uvs;
+    }
+
+    public void ApplyPropertiesOnSelection(MaterialPropertyBlock properties)
+    {
+        for (int i = 0; i < _selectedPieces.Count; ++i)
+        {
+            _selectedPieces[i].SetShaderProperties(properties);
+        }
     }
 }

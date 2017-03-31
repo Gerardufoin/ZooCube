@@ -14,6 +14,11 @@ public class EditablePiece : MonoBehaviour {
 
     private bool _reseting;
 
+    private void Start()
+    {
+        _renderer = GetComponent<SpriteRenderer>();
+    }
+
     private void Update()
     {
         if (_reseting)
