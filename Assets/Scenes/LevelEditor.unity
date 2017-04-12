@@ -1406,7 +1406,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1048738365}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1156213577}
+        m_MethodName: CreatePiece
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1048738365
@@ -1471,6 +1482,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_areaSelection: {fileID: 257807612}
+  m_editablePiece: {fileID: 114767285227829172, guid: 7469005b8bf252d49a883eff24a67315,
+    type: 2}
 --- !u!4 &1156213576
 Transform:
   m_ObjectHideFlags: 0

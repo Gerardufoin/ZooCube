@@ -10,13 +10,22 @@ public class EditablePiece : MonoBehaviour {
     private bool _placedOnce = false;
     private Vector3 _placedPosition;
 
-    private MaterialPropertyBlock _properties;
+    private MaterialPropertyBlock _properties = null;
 
     private bool _reseting;
+
+    public void PresetProperties(MaterialPropertyBlock properties)
+    {
+        _properties = properties;
+    }
 
     private void Start()
     {
         _renderer = GetComponent<SpriteRenderer>();
+        if (_properties != null)
+        {
+            _renderer.SetPropertyBlock(_properties);
+        }
     }
 
     private void Update()

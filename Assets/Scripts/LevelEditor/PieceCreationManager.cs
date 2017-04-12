@@ -23,12 +23,14 @@ public class PieceCreationManager : MonoBehaviour
     public struct S_FaceInfos
     {
         public Texture Face;
+        public string FaceAssetPath;
         public Color BackgroundColor;
         public Color BorderColor;
 
-        public S_FaceInfos(Texture face, Color backC, Color bordC)
+        public S_FaceInfos(string face, Color backC, Color bordC)
         {
-            Face = face;
+            Face = Resources.Load<Texture2D>(face);
+            FaceAssetPath = face;
             BackgroundColor = backC;
             BorderColor = bordC;
         }
@@ -37,15 +39,17 @@ public class PieceCreationManager : MonoBehaviour
     public struct S_ShapeInfos
     {
         public Texture Shape;
+        public string ShapeAssetPath;
         public float ImageScale;
         public float ImageXOffset;
         public float ImageYOffset;
         public float BorderXOffset;
         public float BorderYOffset;
 
-        public S_ShapeInfos(Texture shape, float imgS, float ixo, float iyo, float bxo, float byo)
+        public S_ShapeInfos(string shape, float imgS, float ixo, float iyo, float bxo, float byo)
         {
-            Shape = shape;
+            Shape = Resources.Load<Texture2D>(shape);
+            ShapeAssetPath = shape;
             ImageScale = imgS;
             ImageXOffset = ixo;
             ImageYOffset = iyo;
@@ -78,14 +82,14 @@ public class PieceCreationManager : MonoBehaviour
         _piecesManager = FindObjectOfType<PiecesManager>();
 
         // Faces informations
-        _faces.Add(E_PieceFace.MONKEY, new S_FaceInfos(Resources.Load<Texture2D>("Faces/Monkey_Face"), m_backgroundColors[(int)E_PieceFace.MONKEY], m_borderColors[(int)E_PieceFace.MONKEY]));
-        _faces.Add(E_PieceFace.RABBIT, new S_FaceInfos(Resources.Load<Texture2D>("Faces/Rabbit_Face"), m_backgroundColors[(int)E_PieceFace.RABBIT], m_borderColors[(int)E_PieceFace.RABBIT]));
-        _faces.Add(E_PieceFace.PENGUIN, new S_FaceInfos(Resources.Load<Texture2D>("Faces/Penguin_Face"), m_backgroundColors[(int)E_PieceFace.PENGUIN], m_borderColors[(int)E_PieceFace.PENGUIN]));
+        _faces.Add(E_PieceFace.MONKEY, new S_FaceInfos("Faces/Monkey_Face", m_backgroundColors[(int)E_PieceFace.MONKEY], m_borderColors[(int)E_PieceFace.MONKEY]));
+        _faces.Add(E_PieceFace.RABBIT, new S_FaceInfos("Faces/Rabbit_Face", m_backgroundColors[(int)E_PieceFace.RABBIT], m_borderColors[(int)E_PieceFace.RABBIT]));
+        _faces.Add(E_PieceFace.PENGUIN, new S_FaceInfos("Faces/Penguin_Face", m_backgroundColors[(int)E_PieceFace.PENGUIN], m_borderColors[(int)E_PieceFace.PENGUIN]));
 
         // Shapes informations
-        _shapes.Add(E_PieceShape.SQUARE, new S_ShapeInfos(Resources.Load<Texture2D>("Maps/White_BG/Square_Map"), 1f, 0, 0, 0, 0));
-        _shapes.Add(E_PieceShape.CIRCLE, new S_ShapeInfos(Resources.Load<Texture2D>("Maps/White_BG/Circle_Map"), 1f, 0, 0, 0, 0));
-        _shapes.Add(E_PieceShape.TRIANGLE, new S_ShapeInfos(Resources.Load<Texture2D>("Maps/White_BG/Triangle_Map"), 0.6f, 0, -0.35f, 0, 0.02f));
+        _shapes.Add(E_PieceShape.SQUARE, new S_ShapeInfos("Maps/White_BG/Square_Map", 1f, 0, 0, 0, 0));
+        _shapes.Add(E_PieceShape.CIRCLE, new S_ShapeInfos("Maps/White_BG/Circle_Map", 1f, 0, 0, 0, 0));
+        _shapes.Add(E_PieceShape.TRIANGLE, new S_ShapeInfos("Maps/White_BG/Triangle_Map", 0.6f, 0, -0.35f, 0, 0.02f));
     }
 
     public void ChangePieceFace(int e)
@@ -102,6 +106,11 @@ public class PieceCreationManager : MonoBehaviour
 
         _currentShape = (E_PieceShape)e;
         _piecesManager.ApplyPropertiesOnSelection(CreateMaterialPropertiesBlock());
+    }
+
+    public void CreatePiece()
+    {
+        _piecesManager.CreatePiece(CreateMaterialPropertiesBlock());
     }
 
     private MaterialPropertyBlock CreateMaterialPropertiesBlock()

@@ -18,6 +18,8 @@ public class PiecesManager : MonoBehaviour
     #region Editor
     [SerializeField]
     private GameObject m_areaSelection;
+    [SerializeField]
+    private EditablePiece m_editablePiece;
     #endregion
 
     #region SelectionMesh
@@ -90,7 +92,14 @@ public class PiecesManager : MonoBehaviour
 
     private bool GetMouseButtonUp(int button)
     {
-        return (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonUp(button));
+        return (/*!EventSystem.current.IsPointerOverGameObject() && */Input.GetMouseButtonUp(button));
+    }
+
+    private Vector3 GetMouseCoordinates()
+    {
+        Vector3 coord = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        coord.z = 0;
+        return (coord);
     }
 
     private void IdlingUpdate()
@@ -98,10 +107,11 @@ public class PiecesManager : MonoBehaviour
         // Selection
         if (GetMouseButtonDown(0))
         {
-            _selectionStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            _selectionStart = GetMouseCoordinates();
             Collider2D result = Physics2D.OverlapPoint(_selectionStart, _editableLayer);
             if (result != null)
             {
+                // MOVING
                 // Multi selection check
                 bool selected = false;
                 for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -136,11 +146,20 @@ public class PiecesManager : MonoBehaviour
 
     private void CreatingUpdate()
     {
+        _selectionMove.transform.position = GetMouseCoordinates();
+        if (GetMouseButtonDown(0))
+        {
+            for (int i = 0; i < _selectedPieces.Count; ++i)
+            {
+                _selectedPieces[i].transform.parent = null;
+            }
+            _currentAction = E_MouseActions.IDLING;
+        }
     }
 
     private void MovingUpdate()
     {
-        _selectionMove.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        _selectionMove.transform.position = GetMouseCoordinates();
         if (GetMouseButtonUp(0))
         {
             for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -157,7 +176,7 @@ public class PiecesManager : MonoBehaviour
         {
             m_areaSelection.gameObject.SetActive(false);
 
-            Collider2D[] results = Physics2D.OverlapAreaAll(_selectionStart, Camera.main.ScreenToWorldPoint(Input.mousePosition), _editableLayer);
+            Collider2D[] results = Physics2D.OverlapAreaAll(_selectionStart, GetMouseCoordinates(), _editableLayer);
             for (uint i = 0; i < results.Length; ++i)
             {
                 AddPieceToSelection(results[i].gameObject);
@@ -188,7 +207,7 @@ public class PiecesManager : MonoBehaviour
     {
         _selectionMesh.Clear();
 
-        Vector3 selectionEnd = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 selectionEnd = GetMouseCoordinates();
 
         _selectionBounds.x = Mathf.Min(_selectionStart.x, selectionEnd.x);
         _selectionBounds.y = Mathf.Max(_selectionStart.y, selectionEnd.y);
@@ -215,5 +234,19 @@ public class PiecesManager : MonoBehaviour
         {
             _selectedPieces[i].SetShaderProperties(properties);
         }
+    }
+
+    public void CreatePiece(MaterialPropertyBlock properties)
+    {
+        ClearSelection();
+        _selectionStart = GetMouseCoordinates();
+        _selectionMove.transform.position = _selectionStart;
+
+        GameObject piece = Instantiate(m_editablePiece.gameObject, _selectionStart, m_editablePiece.transform.rotation);
+        piece.GetComponent<EditablePiece>().PresetProperties(properties);
+
+        AddPieceToSelection(piece);
+        piece.transform.parent = _selectionMove.transform;
+        _currentAction = E_MouseActions.CREATING;
     }
 }
