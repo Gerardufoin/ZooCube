@@ -2,33 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#region Json Structure
+[System.Serializable]
+public struct PieceInfos
+{
+    public string FacePath;
+    public string ShapePath;
+    public Color BackgroundColor;
+    public Color BorderColor;
+    public Vector2 Position;
+    public Vector2 Scale;
+    public float ImageScale;
+    public float ImageXOffset;
+    public float ImageYOffset;
+    public float BorderWidth;
+    public float BorderXOffset;
+    public float BorderYOffset;
+}
+
+[System.Serializable]
+public class LevelInfos
+{
+    public List<PieceInfos> Pieces = new List<PieceInfos>();
+}
+#endregion
+
 public class LevelLoader : MonoBehaviour
 {
-    #region Json Structure
-    [System.Serializable]
-    public struct PieceInfos
-    {
-        public Texture Face;
-        public Texture Shape;
-        public Color BackgroundColor;
-        public Color BorderColor;
-        public Vector2 Position;
-        public Vector2 Scale;
-        public float ImageScale;
-        public float ImageXOffset;
-        public float ImageYOffset;
-        public float BorderWidth;
-        public float BorderXOffset;
-        public float BorderYOffset;
-    }
-
-    [System.Serializable]
-    public class LevelInfos
-    {
-        public List<PieceInfos> Pieces = new List<PieceInfos>();
-    }
-    #endregion
-
     [SerializeField]
     private Recepter m_recepterPrefab;
     [SerializeField]
@@ -60,7 +60,7 @@ public class LevelLoader : MonoBehaviour
         }
         _zonePosition = m_playzone.bounds.min;
         _zoneSize = m_playzone.bounds.size;
-        this.LoadLevel("{\"Pieces\":[{\"Face\":{\"instanceID\":10696},\"Shape\":{\"instanceID\":10304},\"BackgroundColor\":{\"r\":0.6313725709915161,\"g\":0.40000003576278689,\"b\":0.22352942824363709,\"a\":1.0},\"BorderColor\":{\"r\":0.38431376218795779,\"g\":0.22352942824363709,\"b\":0.10588236153125763,\"a\":1.0},\"Position\":{\"x\":0.5,\"y\":0.5},\"Scale\":{\"x\":0.3,\"y\":0.3},\"ImageScale\":0.0,\"ImageXOffset\":0.0,\"ImageYOffset\":0.0,\"BorderWidth\":0.0,\"BorderXOffset\":0.0,\"BorderYOffset\":0.0}]}");
+        this.LoadLevel(System.IO.File.ReadAllText(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/test.json"));
     }
 
     public void LoadLevel(string json)
@@ -70,45 +70,21 @@ public class LevelLoader : MonoBehaviour
         for (int i = 0; i < infos.Pieces.Count && i < m_spawns.Count; ++i)
         {
             Vector3 position = new Vector3(_zonePosition.x + _zoneSize.x * infos.Pieces[i].Position.x, _zonePosition.y + _zoneSize.y * infos.Pieces[i].Position.y, 0f);
+            Vector3 scale = _recepterScale + (Vector3)infos.Pieces[i].Scale;
+            scale.x *= _zoneSize.x;
+            scale.y *= _zoneSize.y;
 
             Recepter recepter = Instantiate(m_recepterPrefab);
-            recepter.transform.localScale = _recepterScale + (Vector3)infos.Pieces[i].Scale;
+            recepter.Id = i;
+            recepter.transform.localScale = scale;
             recepter.transform.position = position;
-            SetRecepterShader(recepter, infos.Pieces[i]);
+            recepter.PieceInfos = infos.Pieces[i];
 
             MovablePiece piece = Instantiate(m_piecePrefab);
-            piece.transform.localScale = _pieceScale + (Vector3)infos.Pieces[i].Scale;
+            piece.Id = i;
+            piece.transform.localScale = scale;
             piece.transform.position = m_spawns[i].position;
-            SetPieceShader(piece, infos.Pieces[i]);
+            piece.PieceInfos = infos.Pieces[i];
         }
-    }
-
-    private void SetRecepterShader(Recepter recepter, PieceInfos infos)
-    {
-        Renderer renderer = recepter.GetComponent<Renderer>();
-
-        MaterialPropertyBlock properties = new MaterialPropertyBlock();
-        renderer.GetPropertyBlock(properties);
-        //properties.SetTexture("_MainTex", infos.Shape);
-        renderer.SetPropertyBlock(properties);
-    }
-
-    private void SetPieceShader(MovablePiece piece, PieceInfos infos)
-    {
-        Renderer renderer = piece.GetComponent<Renderer>();
-
-        MaterialPropertyBlock properties = new MaterialPropertyBlock();
-        renderer.GetPropertyBlock(properties);
-        //properties.SetTexture("_MainTex", infos.Face);
-        //properties.SetTexture("_ShapeMask", infos.Shape);
-        properties.SetColor("_BackgroundColor", infos.BackgroundColor);
-        properties.SetColor("_BorderColor", infos.BorderColor);
-        properties.SetFloat("_ImageScale", infos.ImageScale);
-        properties.SetFloat("_BorderWidth", infos.BorderWidth);
-        properties.SetFloat("_BorderXOffset", infos.BorderXOffset);
-        properties.SetFloat("_BorderYOffset", infos.BorderYOffset);
-        properties.SetFloat("_ImageXOffset", infos.ImageXOffset);
-        properties.SetFloat("_ImageYOffset", infos.ImageYOffset);
-        renderer.SetPropertyBlock(properties);
     }
 }

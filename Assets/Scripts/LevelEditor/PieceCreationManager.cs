@@ -17,48 +17,48 @@ public enum E_PieceShape
     TRIANGLE
 }
 
+#region Structures
+public struct S_FaceInfos
+{
+    public Texture Face;
+    public string FaceAssetPath;
+    public Color BackgroundColor;
+    public Color BorderColor;
+
+    public S_FaceInfos(string face, Color backC, Color bordC)
+    {
+        Face = Resources.Load<Texture2D>(face);
+        FaceAssetPath = face;
+        BackgroundColor = backC;
+        BorderColor = bordC;
+    }
+}
+
+public struct S_ShapeInfos
+{
+    public Texture Shape;
+    public string ShapeAssetPath;
+    public float ImageScale;
+    public float ImageXOffset;
+    public float ImageYOffset;
+    public float BorderXOffset;
+    public float BorderYOffset;
+
+    public S_ShapeInfos(string shape, float imgS, float ixo, float iyo, float bxo, float byo)
+    {
+        Shape = Resources.Load<Texture2D>(shape);
+        ShapeAssetPath = shape;
+        ImageScale = imgS;
+        ImageXOffset = ixo;
+        ImageYOffset = iyo;
+        BorderXOffset = bxo;
+        BorderYOffset = byo;
+    }
+}
+#endregion
+
 public class PieceCreationManager : MonoBehaviour
 {
-    #region Structures
-    public struct S_FaceInfos
-    {
-        public Texture Face;
-        public string FaceAssetPath;
-        public Color BackgroundColor;
-        public Color BorderColor;
-
-        public S_FaceInfos(string face, Color backC, Color bordC)
-        {
-            Face = Resources.Load<Texture2D>(face);
-            FaceAssetPath = face;
-            BackgroundColor = backC;
-            BorderColor = bordC;
-        }
-    }
-
-    public struct S_ShapeInfos
-    {
-        public Texture Shape;
-        public string ShapeAssetPath;
-        public float ImageScale;
-        public float ImageXOffset;
-        public float ImageYOffset;
-        public float BorderXOffset;
-        public float BorderYOffset;
-
-        public S_ShapeInfos(string shape, float imgS, float ixo, float iyo, float bxo, float byo)
-        {
-            Shape = Resources.Load<Texture2D>(shape);
-            ShapeAssetPath = shape;
-            ImageScale = imgS;
-            ImageXOffset = ixo;
-            ImageYOffset = iyo;
-            BorderXOffset = bxo;
-            BorderYOffset = byo;
-        }
-    }
-    #endregion
-
     [SerializeField]
     private ToggleGroup m_facesToggles;
     [SerializeField]
@@ -97,7 +97,7 @@ public class PieceCreationManager : MonoBehaviour
         if (!m_facesToggles.transform.GetChild(e).GetComponent<Toggle>().isOn) return;
 
         _currentFace = (E_PieceFace)e;
-        _piecesManager.ApplyPropertiesOnSelection(CreateMaterialPropertiesBlock());
+        _piecesManager.ApplyFaceOnSelection(_faces[_currentFace]);
     }
 
     public void ChangePieceShape(int e)
@@ -105,29 +105,11 @@ public class PieceCreationManager : MonoBehaviour
         if (!m_shapesToggles.transform.GetChild(e).GetComponent<Toggle>().isOn) return;
 
         _currentShape = (E_PieceShape)e;
-        _piecesManager.ApplyPropertiesOnSelection(CreateMaterialPropertiesBlock());
+        _piecesManager.ApplyShapeOnSelection(_shapes[_currentShape]);
     }
 
     public void CreatePiece()
     {
-        _piecesManager.CreatePiece(CreateMaterialPropertiesBlock());
-    }
-
-    private MaterialPropertyBlock CreateMaterialPropertiesBlock()
-    {
-        MaterialPropertyBlock properties = new MaterialPropertyBlock();
-
-        properties.SetTexture("_MainTex", _faces[_currentFace].Face);
-        properties.SetColor("_BackgroundColor", _faces[_currentFace].BackgroundColor);
-        properties.SetColor("_BorderColor", _faces[_currentFace].BorderColor);
-        properties.SetFloat("_BorderWidth", 0.1f);
-        properties.SetTexture("_ShapeMask", _shapes[_currentShape].Shape);
-        properties.SetFloat("_ImageScale", _shapes[_currentShape].ImageScale);
-        properties.SetFloat("_ImageXOffset", _shapes[_currentShape].ImageXOffset);
-        properties.SetFloat("_ImageYOffset", _shapes[_currentShape].ImageYOffset);
-        properties.SetFloat("_BorderXOffset", _shapes[_currentShape].BorderXOffset);
-        properties.SetFloat("_BorderYOffset", _shapes[_currentShape].BorderYOffset);
-
-        return (properties);
+        _piecesManager.CreatePiece(_faces[_currentFace], _shapes[_currentShape]);
     }
 }

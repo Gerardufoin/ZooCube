@@ -5,6 +5,7 @@ public class MovablePiece : MonoBehaviour
 {
     public int Id;
     //public int Id { get; set; }
+    public PieceInfos PieceInfos;
 
     private bool selected;
     private bool reseting;
@@ -13,19 +14,20 @@ public class MovablePiece : MonoBehaviour
     private Vector3 basePosition;
 
     private RecepterManager _recepterManager;
-    private SpriteRenderer _spriteRenderer;
+    private Renderer _renderer;
 
     void Start()
     {
         basePosition = transform.position;
         _recepterManager = FindObjectOfType<RecepterManager>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _renderer = GetComponent<Renderer>();
+        SetShader();
     }
 
 	// Update is called once per frame
 	void Update ()
     {
-	    if (selected)
+        if (selected)
         {
             Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             position.z = 0;
@@ -49,7 +51,7 @@ public class MovablePiece : MonoBehaviour
         if (!placed && !reseting)
         {
             selected = true;
-            _spriteRenderer.sortingLayerName = "Selected";
+            _renderer.sortingLayerName = "Selected";
         }
     }
     
@@ -58,7 +60,7 @@ public class MovablePiece : MonoBehaviour
         if (selected)
         {
             selected = false;
-            _spriteRenderer.sortingLayerName = "Middleground";
+            _renderer.sortingLayerName = "Middleground";
 
             Recepter recptr = _recepterManager.Fit(Id);
             if (recptr != null)
@@ -71,5 +73,24 @@ public class MovablePiece : MonoBehaviour
                 reseting = true;
             }
         }
+    }
+
+    private void SetShader()
+    {
+        MaterialPropertyBlock properties = new MaterialPropertyBlock();
+        _renderer.GetPropertyBlock(properties);
+
+        properties.SetTexture("_MainTex", Resources.Load<Texture2D>(PieceInfos.FacePath));
+        properties.SetTexture("_ShapeMask", Resources.Load<Texture2D>(PieceInfos.ShapePath));
+        properties.SetColor("_BackgroundColor", PieceInfos.BackgroundColor);
+        properties.SetColor("_BorderColor", PieceInfos.BorderColor);
+        properties.SetFloat("_ImageScale", PieceInfos.ImageScale);
+        properties.SetFloat("_BorderWidth", PieceInfos.BorderWidth);
+        properties.SetFloat("_BorderXOffset", PieceInfos.BorderXOffset);
+        properties.SetFloat("_BorderYOffset", PieceInfos.BorderYOffset);
+        properties.SetFloat("_ImageXOffset", PieceInfos.ImageXOffset);
+        properties.SetFloat("_ImageYOffset", PieceInfos.ImageYOffset);
+
+        _renderer.SetPropertyBlock(properties);
     }
 }

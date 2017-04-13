@@ -534,6 +534,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 0
+  PieceInfos:
+    FacePath: 
+    ShapePath: 
+    BackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    BorderColor: {r: 0, g: 0, b: 0, a: 0}
+    Position: {x: 0, y: 0}
+    Scale: {x: 0, y: 0}
+    ImageScale: 0
+    ImageXOffset: 0
+    ImageYOffset: 0
+    BorderWidth: 0
+    BorderXOffset: 0
+    BorderYOffset: 0
 --- !u!65 &210537189
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -645,6 +658,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 0
+  PieceInfos:
+    FacePath: 
+    ShapePath: 
+    BackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    BorderColor: {r: 0, g: 0, b: 0, a: 0}
+    Position: {x: 0, y: 0}
+    Scale: {x: 0, y: 0}
+    ImageScale: 0
+    ImageXOffset: 0
+    ImageYOffset: 0
+    BorderWidth: 0
+    BorderXOffset: 0
+    BorderYOffset: 0
 --- !u!65 &229286515
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2169,6 +2195,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 1
+  PieceInfos:
+    FacePath: 
+    ShapePath: 
+    BackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    BorderColor: {r: 0, g: 0, b: 0, a: 0}
+    Position: {x: 0, y: 0}
+    Scale: {x: 0, y: 0}
+    ImageScale: 0
+    ImageXOffset: 0
+    ImageYOffset: 0
+    BorderWidth: 0
+    BorderXOffset: 0
+    BorderYOffset: 0
 --- !u!65 &1513098081
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2674,7 +2713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_recepterPrefab: {fileID: 114809896142761406, guid: 41ee5698daeb47642958f7edc0a2d24d,
     type: 2}
-  m_piecePrefab: {fileID: 114047180807834804, guid: 717e600de3a4541478af630eae0ee534,
+  m_piecePrefab: {fileID: 114047180807834804, guid: b312311db3275de4eb99b0c824ec1b64,
     type: 2}
   m_playzone: {fileID: 62292673}
   m_spawns:
@@ -2752,6 +2791,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 1
+  PieceInfos:
+    FacePath: 
+    ShapePath: 
+    BackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    BorderColor: {r: 0, g: 0, b: 0, a: 0}
+    Position: {x: 0, y: 0}
+    Scale: {x: 0, y: 0}
+    ImageScale: 0
+    ImageXOffset: 0
+    ImageYOffset: 0
+    BorderWidth: 0
+    BorderXOffset: 0
+    BorderYOffset: 0
 --- !u!65 &1748759245
 BoxCollider:
   m_ObjectHideFlags: 0

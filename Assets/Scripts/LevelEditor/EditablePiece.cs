@@ -10,22 +10,25 @@ public class EditablePiece : MonoBehaviour {
     private bool _placedOnce = false;
     private Vector3 _placedPosition;
 
-    private MaterialPropertyBlock _properties = null;
+    private S_FaceInfos _faceInfos;
+    private S_ShapeInfos _shapeInfos;
+
+    private MaterialPropertyBlock _properties;
+    private PieceInfos _infos;
 
     private bool _reseting;
 
-    public void PresetProperties(MaterialPropertyBlock properties)
+    public void PresetProperties(S_FaceInfos face, S_ShapeInfos shape)
     {
-        _properties = properties;
+        _faceInfos = face;
+        _shapeInfos = shape;
     }
 
     private void Start()
     {
+        _properties = new MaterialPropertyBlock();
         _renderer = GetComponent<SpriteRenderer>();
-        if (_properties != null)
-        {
-            _renderer.SetPropertyBlock(_properties);
-        }
+        SetShaderProperties();
     }
 
     private void Update()
@@ -66,14 +69,55 @@ public class EditablePiece : MonoBehaviour {
         }
     }
 
-    public void SetShaderProperties(MaterialPropertyBlock properties)
+    public void SetFaceInfos(S_FaceInfos face)
     {
-        _properties = properties;
+        _faceInfos = face;
+        SetShaderProperties();
+    }
+
+    public void SetShapeInfos(S_ShapeInfos shape)
+    {
+        _shapeInfos = shape;
+        SetShaderProperties();
+    }
+
+    void SetShaderProperties()
+    {
+        _renderer.GetPropertyBlock(_properties);
+
+        _properties.SetTexture("_MainTex", _faceInfos.Face);
+        _properties.SetColor("_BackgroundColor", _faceInfos.BackgroundColor);
+        _properties.SetColor("_BorderColor", _faceInfos.BorderColor);
+        _properties.SetFloat("_BorderWidth", 0.1f);
+        _properties.SetTexture("_ShapeMask", _shapeInfos.Shape);
+        _properties.SetFloat("_ImageScale", _shapeInfos.ImageScale);
+        _properties.SetFloat("_ImageXOffset", _shapeInfos.ImageXOffset);
+        _properties.SetFloat("_ImageYOffset", _shapeInfos.ImageYOffset);
+        _properties.SetFloat("_BorderXOffset", _shapeInfos.BorderXOffset);
+        _properties.SetFloat("_BorderYOffset", _shapeInfos.BorderYOffset);
+
         _renderer.SetPropertyBlock(_properties);
     }
 
-    public MaterialPropertyBlock GetShaderProperties()
+    public PieceInfos GetPieceInfos(BoxCollider2D zone)
     {
-        return _properties;
+        _infos.FacePath = _faceInfos.FaceAssetPath;
+        _infos.BackgroundColor = _faceInfos.BackgroundColor;
+        _infos.BorderColor = _faceInfos.BorderColor;
+
+        _infos.ShapePath = _shapeInfos.ShapeAssetPath;
+        _infos.ImageScale = _shapeInfos.ImageScale;
+        _infos.ImageXOffset = _shapeInfos.ImageXOffset;
+        _infos.ImageYOffset = _shapeInfos.ImageYOffset;
+        _infos.BorderWidth = 0.1f;
+        _infos.BorderXOffset = _shapeInfos.BorderXOffset;
+        _infos.BorderYOffset = _shapeInfos.BorderYOffset;
+
+        _infos.Position.x = (transform.position.x - zone.bounds.min.x) / zone.bounds.size.x;
+        _infos.Position.y = (transform.position.y - zone.bounds.min.y) / zone.bounds.size.y;
+
+        _infos.Scale.x = transform.localScale.x / zone.bounds.size.x;
+        _infos.Scale.y = transform.localScale.y / zone.bounds.size.y;
+        return (_infos);
     }
 }
