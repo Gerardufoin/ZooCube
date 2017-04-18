@@ -42,7 +42,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 7
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -2717,29 +2717,32 @@ MonoBehaviour:
     type: 2}
   m_playzone: {fileID: 62292673}
   m_spawns:
-  - {fileID: 244179389}
-  - {fileID: 512440187}
-  - {fileID: 948057730}
-  - {fileID: 595639993}
-  - {fileID: 1930195781}
-  - {fileID: 191215939}
-  - {fileID: 548894173}
-  - {fileID: 1889804051}
-  - {fileID: 1581566625}
-  - {fileID: 146041258}
-  - {fileID: 851206126}
-  - {fileID: 1615446251}
-  - {fileID: 1078119564}
-  - {fileID: 719460866}
-  - {fileID: 1627812907}
-  - {fileID: 743542615}
-  - {fileID: 1832968528}
-  - {fileID: 1145175495}
-  - {fileID: 1052664963}
-  - {fileID: 617395091}
-  - {fileID: 1124947134}
-  - {fileID: 811162505}
-  - {fileID: 321989427}
+  - Spawns:
+    - {fileID: 244179389}
+    - {fileID: 512440187}
+    - {fileID: 948057730}
+    - {fileID: 595639993}
+    - {fileID: 1930195781}
+    - {fileID: 191215939}
+    - {fileID: 548894173}
+    - {fileID: 1889804051}
+  - Spawns:
+    - {fileID: 1581566625}
+    - {fileID: 146041258}
+    - {fileID: 851206126}
+    - {fileID: 1615446251}
+    - {fileID: 1078119564}
+    - {fileID: 719460866}
+    - {fileID: 1627812907}
+    - {fileID: 743542615}
+  - Spawns:
+    - {fileID: 1832968528}
+    - {fileID: 1145175495}
+    - {fileID: 1052664963}
+    - {fileID: 617395091}
+    - {fileID: 1124947134}
+    - {fileID: 811162505}
+    - {fileID: 321989427}
 --- !u!1 &1748759242
 GameObject:
   m_ObjectHideFlags: 0

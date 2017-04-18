@@ -29,6 +29,12 @@ public class LevelInfos
 
 public class LevelLoader : MonoBehaviour
 {
+    [System.Serializable]
+    public class SpawnWrapper
+    {
+        public List<Transform> Spawns = new List<Transform>();
+    }
+
     [SerializeField]
     private Recepter m_recepterPrefab;
     [SerializeField]
@@ -36,7 +42,7 @@ public class LevelLoader : MonoBehaviour
     [SerializeField]
     private BoxCollider2D m_playzone;
     [SerializeField]
-    private List<Transform> m_spawns = new List<Transform>();
+    private List<SpawnWrapper> m_spawns = new List<SpawnWrapper>();
 
     private Vector3 _recepterScale = new Vector3(0.0f, 0.0f, 1.0f);
     private Vector3 _pieceScale = new Vector3(0.0f, 0.0f, 0.1f);
@@ -44,18 +50,24 @@ public class LevelLoader : MonoBehaviour
     private Vector3 _zonePosition;
     private Vector3 _zoneSize;
 
+    private int _spawnsSize;
+
     // Use this for initialization
     void Start ()
     {
         // Shuffle !
         for (int i = 0; i < m_spawns.Count; ++i)
         {
-            int j = Random.Range(0, i);
-            if (j != i)
+            _spawnsSize += m_spawns[i].Spawns.Count;
+            for (int j = 0; j < m_spawns[i].Spawns.Count; ++j)
             {
-                Transform tmp = m_spawns[i];
-                m_spawns[i] = m_spawns[j];
-                m_spawns[j] = tmp;
+                int r = Random.Range(0, j);
+                if (r != j)
+                {
+                    Transform tmp = m_spawns[i].Spawns[j];
+                    m_spawns[i].Spawns[j] = m_spawns[i].Spawns[r];
+                    m_spawns[i].Spawns[r] = tmp;
+                }
             }
         }
         _zonePosition = m_playzone.bounds.min;
@@ -67,24 +79,36 @@ public class LevelLoader : MonoBehaviour
     {
         LevelInfos infos = JsonUtility.FromJson<LevelInfos>(json);
 
-        for (int i = 0; i < infos.Pieces.Count && i < m_spawns.Count; ++i)
+        int colIdx = 0;
+        int rowIdx = 0;
+
+        for (int i = 0; i < infos.Pieces.Count && i < _spawnsSize; )
         {
-            Vector3 position = new Vector3(_zonePosition.x + _zoneSize.x * infos.Pieces[i].Position.x, _zonePosition.y + _zoneSize.y * infos.Pieces[i].Position.y, 0f);
-            Vector3 scale = _recepterScale + (Vector3)infos.Pieces[i].Scale;
-            scale.x *= _zoneSize.x;
-            scale.y *= _zoneSize.y;
+            if (rowIdx < m_spawns[colIdx].Spawns.Count)
+            {
+                Vector3 position = new Vector3(_zonePosition.x + _zoneSize.x * infos.Pieces[i].Position.x, _zonePosition.y + _zoneSize.y * infos.Pieces[i].Position.y, -1f);
+                Vector3 scale = _recepterScale + (Vector3)infos.Pieces[i].Scale;
+                scale.x *= _zoneSize.x;
+                scale.y *= _zoneSize.y;
 
-            Recepter recepter = Instantiate(m_recepterPrefab);
-            recepter.Id = i;
-            recepter.transform.localScale = scale;
-            recepter.transform.position = position;
-            recepter.PieceInfos = infos.Pieces[i];
+                Recepter recepter = Instantiate(m_recepterPrefab);
+                recepter.Id = i;
+                recepter.transform.localScale = scale;
+                recepter.transform.position = position;
+                recepter.PieceInfos = infos.Pieces[i];
 
-            MovablePiece piece = Instantiate(m_piecePrefab);
-            piece.Id = i;
-            piece.transform.localScale = scale;
-            piece.transform.position = m_spawns[i].position;
-            piece.PieceInfos = infos.Pieces[i];
+                MovablePiece piece = Instantiate(m_piecePrefab);
+                piece.Id = i;
+                piece.transform.localScale = scale;
+                piece.transform.position = m_spawns[colIdx].Spawns[rowIdx].position;
+                piece.PieceInfos = infos.Pieces[i];
+                ++i;
+            }
+            if (++colIdx > m_spawns.Count)
+            {
+                colIdx = 0;
+                rowIdx++;
+            }
         }
     }
 }
