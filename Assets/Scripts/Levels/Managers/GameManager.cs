@@ -4,31 +4,44 @@ using System.Collections;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject curtains;
+    private GameObject m_curtains;
 
-    private Vector3 curtainsDest;
+    private RecepterManager _recepterManager;
 
-    private float startTimer = 0.0f;
+    private Vector3 _curtainsDest;
+    private float _startTimer = 0.0f;
+
+    private int _placedPieces;
 
 	// Use this for initialization
 	void Start ()
     {
-        curtainsDest = curtains.transform.position;
-        curtainsDest.y = 11.0f;
+        _recepterManager = FindObjectOfType<RecepterManager>();
+        _curtainsDest = m_curtains.transform.position;
+        _curtainsDest.y = 11.0f;
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (startTimer < 1.0f)
+        if (_startTimer < 1.0f)
         {
-            startTimer += Time.deltaTime;
+            _startTimer += Time.deltaTime;
             return ;
         }
 
-	    if (curtains.transform.position != curtainsDest)
+	    if (m_curtains.transform.position != _curtainsDest)
         {
-            curtains.transform.position = Vector3.MoveTowards(curtains.transform.position, curtainsDest, 8.0f * Time.deltaTime);
+            m_curtains.transform.position = Vector3.MoveTowards(m_curtains.transform.position, _curtainsDest, 8.0f * Time.deltaTime);
         }
 	}
+
+    public void PlacePiece()
+    {
+        _placedPieces++;
+        if (_placedPieces >= _recepterManager.RecepterCount)
+        {
+            Debug.Log("FINISHED :D");
+        }
+    }
 }

@@ -3,32 +3,39 @@ using System.Collections;
 
 public class Recepter : MonoBehaviour
 {
+    // Id of the receter, should match a MovablePiece
     public int Id;
-    //public int Id { get; set; }
+    // Contains the info needed for the shader, loaded from the level's json
     public PieceInfos PieceInfos;
 
-    private RecepterManager recepterManager;
+    // Reference to the RecepterManager
+    private RecepterManager _recepterManager;
 
+    // Reference to the renderer
     private Renderer _renderer;
 
-	// Use this for initialization
 	void Start ()
     {
         _renderer = GetComponent<Renderer>();
         SetShader();
-        recepterManager = FindObjectOfType<RecepterManager>();
+        _recepterManager = FindObjectOfType<RecepterManager>();
+        // Increase the recepter count
+        _recepterManager.RecepterCount++;
 	}
 	
+    // When the mouse enter the recepter, we signal it to the RecepterManager
     void OnMouseEnter()
     {
-        recepterManager.AddRecepter(this);
+        _recepterManager.AddRecepter(this);
     }
 
+    // When the mouse leaves the recepter, we signal it to the RecepterManager
     void OnMouseExit()
     {
-        recepterManager.RemoveRecepter(this);
+        _recepterManager.RemoveRecepter(this);
     }
 
+    // Set the shape map of the recepter shader
     void SetShader()
     {
         MaterialPropertyBlock properties = new MaterialPropertyBlock();

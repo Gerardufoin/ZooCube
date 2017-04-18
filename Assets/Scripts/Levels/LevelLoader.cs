@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 #region Json Structure
+// Structure containing all the needed info for a specific piece
 [System.Serializable]
 public struct PieceInfos
 {
@@ -20,6 +21,7 @@ public struct PieceInfos
     public float BorderYOffset;
 }
 
+// Class containing all the infos to save/load for a level
 [System.Serializable]
 public class LevelInfos
 {
@@ -27,29 +29,38 @@ public class LevelInfos
 }
 #endregion
 
+// Load the pieces of a specific level
 public class LevelLoader : MonoBehaviour
 {
+    // Used to display list of list in the editor
     [System.Serializable]
     public class SpawnWrapper
     {
         public List<Transform> Spawns = new List<Transform>();
     }
 
+    // Recepter prefab to instantiate at runtime
     [SerializeField]
     private Recepter m_recepterPrefab;
+    // MovablePiece prefab to instantiate at runtime
     [SerializeField]
     private MovablePiece m_piecePrefab;
+    // Reference to the playzone
     [SerializeField]
     private BoxCollider2D m_playzone;
+    // Piece spawners separated in different lists to vary positions
     [SerializeField]
     private List<SpawnWrapper> m_spawns = new List<SpawnWrapper>();
 
-    private Vector3 _recepterScale = new Vector3(0.0f, 0.0f, 1.0f);
-    private Vector3 _pieceScale = new Vector3(0.0f, 0.0f, 0.1f);
+    // Default scale of a piece/recepter
+    private Vector3 _defaultScale = new Vector3(0.0f, 0.0f, 1.0f);
 
+    // Shortcut to the position of the playzone
     private Vector3 _zonePosition;
+    // Shortcut to the size of the playzone
     private Vector3 _zoneSize;
 
+    // Amount of spawners in all the different lists
     private int _spawnsSize;
 
     // Use this for initialization
@@ -87,7 +98,7 @@ public class LevelLoader : MonoBehaviour
             if (rowIdx < m_spawns[colIdx].Spawns.Count)
             {
                 Vector3 position = new Vector3(_zonePosition.x + _zoneSize.x * infos.Pieces[i].Position.x, _zonePosition.y + _zoneSize.y * infos.Pieces[i].Position.y, -1f);
-                Vector3 scale = _recepterScale + (Vector3)infos.Pieces[i].Scale;
+                Vector3 scale = _defaultScale + (Vector3)infos.Pieces[i].Scale;
                 scale.x *= _zoneSize.x;
                 scale.y *= _zoneSize.y;
 

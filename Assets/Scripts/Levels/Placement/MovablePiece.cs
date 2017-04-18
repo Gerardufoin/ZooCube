@@ -4,7 +4,6 @@ using System.Collections;
 public class MovablePiece : MonoBehaviour
 {
     public int Id;
-    //public int Id { get; set; }
     public PieceInfos PieceInfos;
 
     private bool selected;
@@ -13,12 +12,14 @@ public class MovablePiece : MonoBehaviour
 
     private Vector3 basePosition;
 
+    private GameManager _gameManager;
     private RecepterManager _recepterManager;
     private Renderer _renderer;
 
     void Start()
     {
         basePosition = transform.position;
+        _gameManager = FindObjectOfType<GameManager>();
         _recepterManager = FindObjectOfType<RecepterManager>();
         _renderer = GetComponent<Renderer>();
         SetShader();
@@ -67,6 +68,7 @@ public class MovablePiece : MonoBehaviour
             {
                 placed = true;
                 transform.position = recptr.transform.position;
+                _gameManager.PlacePiece();
             }
             else
             {

@@ -92,6 +92,7 @@ public class PiecesManager : MonoBehaviour
 
     private bool GetMouseButtonUp(int button)
     {
+        // Commented Part: Enable mouse release on GUI so the selection area can end
         return (/*!EventSystem.current.IsPointerOverGameObject() && */Input.GetMouseButtonUp(button));
     }
 

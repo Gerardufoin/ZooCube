@@ -4,39 +4,46 @@ using System.Collections.Generic;
 
 public class RecepterManager : MonoBehaviour
 {
-    private List<Recepter> hover = new List<Recepter>();
+    // When the mouse hover above a recepter, it is temporarily added to this list
+    private List<Recepter> _hover = new List<Recepter>();
+    // Number of recepter in the scene
+    [HideInInspector]
+    public int RecepterCount;
 
+    // Check a recepter in the _hover list matches a given id
     public Recepter Fit(int id)
     {
-        for (int i = 0; i < hover.Count; ++i)
+        for (int i = 0; i < _hover.Count; ++i)
         {
-            if (id == hover[i].Id)
+            if (id == _hover[i].Id)
             {
-                return hover[i];
+                return _hover[i];
             }
         }
         return null;
     }
 
+    // Add a recepter to the _hover list (called in Recepter)
     public void AddRecepter(Recepter recepter)
     {
-        for (int i = 0; i < hover.Count; ++i)
+        for (int i = 0; i < _hover.Count; ++i)
         {
-            if (hover[i].Id == recepter.Id)
+            if (_hover[i].Id == recepter.Id)
             {
                 return ;
             }
         }
-        hover.Add(recepter);
+        _hover.Add(recepter);
     }
 
+    // Remove a recepter to the _hover list (called in Recepter)
     public void RemoveRecepter(Recepter recepter)
     {
-        for (int i = 0; i < hover.Count; ++i)
+        for (int i = 0; i < _hover.Count; ++i)
         {
-            if (hover[i].Id == recepter.Id)
+            if (_hover[i].Id == recepter.Id)
             {
-                hover.RemoveAt(i);
+                _hover.RemoveAt(i);
                 return ;
             }
         }
