@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 // Shader created with Shader Forge v1.34 
 // Shader Forge (c) Neat Corporation / Joachim Holmer - http://www.acegikmo.com/shaderforge/
 // Note: Manually altering this data may prevent you from opening it in Shader Forge
@@ -69,7 +71,7 @@ Shader "Shader Forge/Blocks" {
                 o.uv0 = v.texcoord0;
                 float3 recipObjScale = float3( length(unity_WorldToObject[0].xyz), length(unity_WorldToObject[1].xyz), length(unity_WorldToObject[2].xyz) );
                 float3 objScale = 1.0/recipObjScale;
-                o.pos = mul(UNITY_MATRIX_MVP, v.vertex );
+                o.pos = UnityObjectToClipPos(v.vertex );
                 #ifdef PIXELSNAP_ON
                     o.pos = UnityPixelSnap(o.pos);
                 #endif

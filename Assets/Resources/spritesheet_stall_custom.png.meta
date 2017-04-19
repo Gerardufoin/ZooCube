@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 8342b3c55d1e8ed418349eade2d06418
-timeCreated: 1489096798
+timeCreated: 1492632077
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -267,10 +267,10 @@ TextureImporter:
       name: spritesheet_stall_custom_13
       rect:
         serializedVersion: 2
-        x: 358
-        y: 35
-        width: 512
-        height: 512
+        x: 359
+        y: 36
+        width: 510
+        height: 510
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
