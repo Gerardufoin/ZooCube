@@ -524,6 +524,23 @@ Transform:
 GameObject:
   m_PrefabParentObject: {fileID: 123346, guid: 9bc73650da8f9c44c8f1b85b8428d2d6, type: 2}
   m_PrefabInternal: {fileID: 384230266}
+--- !u!95 &344146869
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 344146868}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d27b42ccfd8ff9a4d809e7a52404262c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1001 &384230266
 Prefab:
   m_ObjectHideFlags: 0
@@ -2370,7 +2387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de6fdc9bb5bf1664da7cdb5807feefa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_curtains: {fileID: 344146868}
+  m_curtains: {fileID: 344146869}
 --- !u!114 &1741040721
 MonoBehaviour:
   m_ObjectHideFlags: 0
