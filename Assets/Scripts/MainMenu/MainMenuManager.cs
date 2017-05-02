@@ -23,4 +23,9 @@ public class MainMenuManager : MonoBehaviour
     {
         Debug.Log("CREDITS");
     }
+
+    public void Quit()
+    {
+        Debug.Log("QUIT");
+    }
 }
