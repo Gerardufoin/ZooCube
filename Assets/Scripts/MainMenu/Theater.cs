@@ -8,6 +8,9 @@ public class Theater : MonoBehaviour
     [SerializeField]
     private GameObject _loadingText;
 
+    public delegate void Callback();
+    public Callback CurtainCloseActions;
+
     public void ShowLoading()
     {
         _loadingText.SetActive(true);
@@ -16,5 +19,15 @@ public class Theater : MonoBehaviour
     public void HideLoading()
     {
         _loadingText.SetActive(false);
+    }
+
+    // Animation callback
+    public void CurtainClosed()
+    {
+        if (CurtainCloseActions != null)
+        {
+            CurtainCloseActions();
+            CurtainCloseActions = null;
+        }
     }
 }
