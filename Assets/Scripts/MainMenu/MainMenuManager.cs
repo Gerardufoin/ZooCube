@@ -36,7 +36,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void Play()
     {
-        Debug.Log("PLAY");
         _theater.CurtainCloseActions += () => {
             SceneManager.LoadSceneAsync("Levels");
             _theater.ShowLoading();
@@ -47,7 +46,10 @@ public class MainMenuManager : MonoBehaviour
 
     public void Editor()
     {
-        Debug.Log("EDITOR");
+        _theater.CurtainCloseActions += () => {
+            SceneManager.LoadSceneAsync("LevelEditor");
+            _theater.ShowLoading();
+        };
         _theaterAnim.SetTrigger("SlideIn");
         _theaterAnim.SetTrigger("Close");
     }

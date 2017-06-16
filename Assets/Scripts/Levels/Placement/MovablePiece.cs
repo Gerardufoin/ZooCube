@@ -22,7 +22,7 @@ public class MovablePiece : MonoBehaviour
         _gameManager = FindObjectOfType<GameManager>();
         _recepterManager = FindObjectOfType<RecepterManager>();
         _renderer = GetComponent<Renderer>();
-        SetShader();
+        StartCoroutine(SetShader());
     }
 
 	// Update is called once per frame
@@ -77,8 +77,9 @@ public class MovablePiece : MonoBehaviour
         }
     }
 
-    private void SetShader()
+    private IEnumerator SetShader()
     {
+        yield return new WaitForFixedUpdate();
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(properties);
 

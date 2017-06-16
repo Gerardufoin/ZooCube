@@ -14,15 +14,15 @@ public class Recepter : MonoBehaviour
     // Reference to the renderer
     private Renderer _renderer;
 
-	void Start ()
+    private void Start()
     {
         _renderer = GetComponent<Renderer>();
-        SetShader();
         _recepterManager = FindObjectOfType<RecepterManager>();
         // Increase the recepter count
         _recepterManager.RecepterCount++;
-	}
-	
+        StartCoroutine(SetShader());
+    }
+
     // When the mouse enter the recepter, we signal it to the RecepterManager
     void OnMouseEnter()
     {
@@ -36,8 +36,9 @@ public class Recepter : MonoBehaviour
     }
 
     // Set the shape map of the recepter shader
-    void SetShader()
+    IEnumerator SetShader()
     {
+        yield return new WaitForFixedUpdate();
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(properties);
         properties.SetTexture("_MainTex", Resources.Load<Texture2D>(PieceInfos.ShapePath));

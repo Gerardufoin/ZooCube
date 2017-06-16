@@ -807,7 +807,7 @@ GameObject:
   - component: {fileID: 327877772}
   - component: {fileID: 327877771}
   - component: {fileID: 327877770}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Stars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -845,9 +845,9 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1093054169
-  m_SortingLayer: 5
-  m_SortingOrder: 0
+  m_SortingLayerID: 554295591
+  m_SortingLayer: 6
+  m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -922,7 +922,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1057506372
+  randomSeed: -1040986925
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3952,8 +3952,8 @@ Canvas:
   m_GameObject: {fileID: 411306708}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 818049769}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -3961,8 +3961,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 27
-  m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingLayerID: 554295591
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!224 &411306712
 RectTransform:
@@ -6202,6 +6202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de6fdc9bb5bf1664da7cdb5807feefa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_camera: {fileID: 818049769}
   m_victoryScreen: {fileID: 192693571}
   m_starParticles: {fileID: 327877771}
 --- !u!114 &1741040721
@@ -6215,7 +6216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1ab6d4cb115f0449068003a71aed03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_recepterPrefab: {fileID: 0}
+  m_recepterPrefab: {fileID: 114809896142761406, guid: 012f15a31ab52694985f7ea66d27d82b,
+    type: 2}
   m_piecePrefab: {fileID: 114047180807834804, guid: b312311db3275de4eb99b0c824ec1b64,
     type: 2}
   m_playzone: {fileID: 62292673}

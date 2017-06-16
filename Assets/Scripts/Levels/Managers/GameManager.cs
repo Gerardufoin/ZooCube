@@ -3,6 +3,9 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
+    // Reference to the main camera
+    [SerializeField]
+    private Camera m_camera;
     // Reference to the victory screen in the canvas
     [SerializeField]
     private Animator m_victoryScreen;
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour
         if (theater != null)
         {
             _curtains = theater.GetComponent<Animator>();
+            _curtains.transform.parent.GetComponent<Canvas>().worldCamera = m_camera;
             _curtains.SetTrigger("Open");
         }
         _recepterManager = FindObjectOfType<RecepterManager>();
