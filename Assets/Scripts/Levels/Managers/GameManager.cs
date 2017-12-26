@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
             _curtains.SetTrigger("Open");
         }
         _recepterManager = FindObjectOfType<RecepterManager>();
-        // Opening of the curtains
 	}
 
     // Called when the player place a piece. If all the pieces are placed, we call the victory screen and close the curtains
