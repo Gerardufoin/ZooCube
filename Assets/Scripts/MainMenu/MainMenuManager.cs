@@ -14,8 +14,6 @@ public class MainMenuManager : MonoBehaviour
 
     // Reference to the theater script
     private Theater _theater;
-    // Reference to the theater animator
-    private Animator _theaterAnim;
 
     // If true, pressing escape bring the player back to the main menu
     private bool _enableEscMenu;
@@ -23,7 +21,10 @@ public class MainMenuManager : MonoBehaviour
     private void Start()
     {
         _theater = GameObject.FindGameObjectWithTag("Theater").GetComponent<Theater>();
-        _theaterAnim = _theater.GetComponent<Animator>();
+        if (!_theater.IsOpen)
+        {
+            _theater.OpenCurtains();
+        }
     }
 
     private void Update()
@@ -40,8 +41,7 @@ public class MainMenuManager : MonoBehaviour
             SceneManager.LoadSceneAsync("Levels");
             _theater.ShowLoading();
         };
-        _theaterAnim.SetTrigger("SlideIn");
-        _theaterAnim.SetTrigger("Close");
+        _theater.CloseCurtains();
     }
 
     public void Editor()
@@ -50,8 +50,7 @@ public class MainMenuManager : MonoBehaviour
             SceneManager.LoadSceneAsync("LevelEditor");
             _theater.ShowLoading();
         };
-        _theaterAnim.SetTrigger("SlideIn");
-        _theaterAnim.SetTrigger("Close");
+        _theater.CloseCurtains();
     }
 
     public void Options()
@@ -61,12 +60,11 @@ public class MainMenuManager : MonoBehaviour
 
     public void Credits()
     {
-        _theaterAnim.SetTrigger("SlideIn");
-        _theaterAnim.SetTrigger("Close");
+        _theater.CloseCurtains();
         _theater.CurtainCloseActions += () => {
             m_mainUI.SetActive(false);
             m_credits.SetActive(true);
-            _theaterAnim.SetTrigger("Open");
+            _theater.OpenCurtains(false);
             _enableEscMenu = true;
         };
     }
@@ -74,12 +72,11 @@ public class MainMenuManager : MonoBehaviour
     public void ReturnMenu()
     {
         _enableEscMenu = false;
-        _theaterAnim.SetTrigger("Close");
+        _theater.CloseCurtains(false);
         _theater.CurtainCloseActions += () => {
             m_credits.SetActive(false);
             m_mainUI.SetActive(true);
-            _theaterAnim.SetTrigger("Open");
-            _theaterAnim.SetTrigger("SlideOut");
+            _theater.OpenCurtains();
         };
     }
 
