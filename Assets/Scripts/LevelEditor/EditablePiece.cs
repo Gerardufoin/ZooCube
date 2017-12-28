@@ -85,7 +85,7 @@ public class EditablePiece : MonoBehaviour {
     {
         _renderer.GetPropertyBlock(_properties);
 
-        _properties.SetTexture("_MainTex", _faceInfos.Face);
+        _properties.SetTexture("_Face", _faceInfos.Face);
         _properties.SetColor("_BackgroundColor", _faceInfos.BackgroundColor);
         _properties.SetColor("_BorderColor", _faceInfos.BorderColor);
         _properties.SetFloat("_BorderWidth", 0.1f);

@@ -83,7 +83,7 @@ public class MovablePiece : MonoBehaviour
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(properties);
 
-        properties.SetTexture("_MainTex", Resources.Load<Texture2D>(PieceInfos.FacePath));
+        properties.SetTexture("_Face", Resources.Load<Texture2D>(PieceInfos.FacePath));
         properties.SetTexture("_ShapeMask", Resources.Load<Texture2D>(PieceInfos.ShapePath));
         properties.SetColor("_BackgroundColor", PieceInfos.BackgroundColor);
         properties.SetColor("_BorderColor", PieceInfos.BorderColor);

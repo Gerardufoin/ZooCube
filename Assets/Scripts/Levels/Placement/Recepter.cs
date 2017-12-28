@@ -41,7 +41,7 @@ public class Recepter : MonoBehaviour
         yield return new WaitForFixedUpdate();
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(properties);
-        properties.SetTexture("_MainTex", Resources.Load<Texture2D>(PieceInfos.ShapePath));
+        properties.SetTexture("_Map", Resources.Load<Texture2D>(PieceInfos.ShapePath));
         _renderer.SetPropertyBlock(properties);
     }
 }
