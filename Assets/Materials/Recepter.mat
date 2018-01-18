@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Recepter
-  m_Shader: {fileID: 4800000, guid: be36142d8e30f3d4c9f4095a37d71734, type: 3}
+  m_Shader: {fileID: 4800000, guid: 412ff97d26625474fb68f2fc37a1839c, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
