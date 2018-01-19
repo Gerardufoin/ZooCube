@@ -11,6 +11,9 @@ public class MainMenuManager : MonoBehaviour
     // Reference to the credits UI
     [SerializeField]
     private GameObject m_credits;
+    // Reference to the level selection UI
+    [SerializeField]
+    private GameObject m_levelSelection;
 
     // Reference to the theater script
     private Theater _theater;
@@ -56,6 +59,17 @@ public class MainMenuManager : MonoBehaviour
     public void Options()
     {
         Debug.Log("OPTIONS");
+    }
+
+    public void LevelSelect()
+    {
+        _theater.CloseCurtains();
+        _theater.CurtainCloseActions += () => {
+            m_mainUI.SetActive(false);
+            m_levelSelection.SetActive(true);
+            _theater.OpenCurtains(false);
+            _enableEscMenu = true;
+        };
     }
 
     public void Credits()
