@@ -8,13 +8,13 @@ Shader "ZooCube/Recepter"
 		_Color ("Tint", Color) = (1,1,1,1)
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 		[PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
-		_ShapeMask("ShapeMask", 2D) = "white" {}
-		_BackgroundColor("BackgroundColor", Color) = (0,0,0,1)
 		[Header(AddBorder)]
+		_ShapeMask("ShapeMask", 2D) = "white" {}
 		_BorderColor("BorderColor", Color) = (0.3843138,0.2196079,0.1058824,1)
 		_BorderWidth("BorderWidth", Range( 0 , 1)) = 0.1
 		_BorderXOffset("BorderXOffset", Range( -0.1 , 0.1)) = 0
 		_BorderYOffset("BorderYOffset", Range( -0.1 , 0.1)) = 0
+		_BackgroundColor("BackgroundColor", Color) = (0,0,0,1)
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 	}
 
@@ -110,20 +110,18 @@ Shader "ZooCube/Recepter"
 				float4 temp_output_6_0_g2 = _BackgroundColor;
 				float2 uv11_g2 = IN.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
 				float3 ase_objectScale = float3( length( unity_ObjectToWorld[ 0 ].xyz ), length( unity_ObjectToWorld[ 1 ].xyz ), length( unity_ObjectToWorld[ 2 ].xyz ) );
-				float clampResult2_g1 = clamp( ase_objectScale.x , 0.0 , 1.0 );
-				float clampResult3_g1 = clamp( ase_objectScale.y , 0.0 , 1.0 );
-				float temp_output_4_0_g1 = ( clampResult2_g1 - clampResult3_g1 );
-				float clampResult9_g1 = clamp( temp_output_4_0_g1 , 0.0 , 1.0 );
-				float temp_output_10_0_g1 = ceil( clampResult9_g1 );
-				float clampResult12_g1 = clamp( ( floor( clampResult2_g1 ) + temp_output_10_0_g1 ) , 0.0 , 1.0 );
-				float temp_output_16_0_g1 = ( pow( ase_objectScale.x , clampResult12_g1 ) / pow( ( clampResult2_g1 - temp_output_4_0_g1 ) , temp_output_10_0_g1 ) );
-				float temp_output_5_0_g1 = ( clampResult3_g1 - clampResult2_g1 );
-				float clampResult18_g1 = clamp( temp_output_5_0_g1 , 0.0 , 1.0 );
-				float temp_output_20_0_g1 = ceil( clampResult18_g1 );
-				float clampResult23_g1 = clamp( ( temp_output_20_0_g1 + floor( clampResult3_g1 ) ) , 0.0 , 1.0 );
-				float temp_output_26_0_g1 = ( pow( ase_objectScale.y , clampResult23_g1 ) / pow( ( clampResult3_g1 - temp_output_5_0_g1 ) , temp_output_20_0_g1 ) );
-				float2 appendResult17_g1 = (float2(temp_output_16_0_g1 , temp_output_26_0_g1));
-				float2 ScaleRatio8_g2 = appendResult17_g1;
+				float clampResult49_g3 = clamp( ase_objectScale.x , 0.0 , 1.0 );
+				float clampResult50_g3 = clamp( ase_objectScale.y , 0.0 , 1.0 );
+				float2 appendResult57_g3 = (float2(( ase_objectScale.x / clampResult50_g3 ) , 1.0));
+				float2 appendResult58_g3 = (float2(1.0 , ( ase_objectScale.y / clampResult49_g3 )));
+				float2 ifLocalVar47_g3 = 0;
+				if( clampResult49_g3 > clampResult50_g3 )
+				ifLocalVar47_g3 = appendResult57_g3;
+				else if( clampResult49_g3 == clampResult50_g3 )
+				ifLocalVar47_g3 = (ase_objectScale).xy;
+				else if( clampResult49_g3 < clampResult50_g3 )
+				ifLocalVar47_g3 = appendResult58_g3;
+				float2 ScaleRatio8_g2 = ifLocalVar47_g3;
 				float2 temp_output_10_0_g2 = ( _BorderWidth / ScaleRatio8_g2 );
 				float2 appendResult17_g2 = (float2(( uv11_g2.x * ( temp_output_10_0_g2 + float2( 1,1 ) ).x ) , ( uv11_g2.y * ( temp_output_10_0_g2 + float2( 1,1 ) ).y )));
 				float2 appendResult18_g2 = (float2(_BorderXOffset , _BorderYOffset));
@@ -143,13 +141,13 @@ Shader "ZooCube/Recepter"
 }
 /*ASEBEGIN
 Version=14201
--1750;172;1637;872;818.5;436;1;True;False
-Node;AmplifyShaderEditor.ColorNode;2;-442.5,-119;Float;False;Property;_BackgroundColor;BackgroundColor;0;0;Create;0,0,0,1;0,0,0,0;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.FunctionNode;3;-428.5,157;Float;False;ScalingRatio;-1;;1;096dc3062cc962b49b5311cdb37df263;0;3;FLOAT2;0;FLOAT;27;FLOAT;28
+-1781;84;1627;890;1068.5;393;1;True;False
+Node;AmplifyShaderEditor.FunctionNode;5;-428.5,157;Float;False;ScalingRatio;-1;;3;096dc3062cc962b49b5311cdb37df263;0;3;FLOAT2;0;FLOAT;27;FLOAT;28
+Node;AmplifyShaderEditor.ColorNode;2;-442.5,-119;Float;False;Property;_BackgroundColor;BackgroundColor;6;0;Create;0,0,0,1;0,0,0,0;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.FunctionNode;4;-177.5,19;Float;False;AddBorder;0;;2;e22a0ad25ec970f4d94f3a43eb80ec65;2;6;COLOR;0,0,0,0;False;7;FLOAT2;1,1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;5
 Node;AmplifyShaderEditor.TemplateMasterNode;1;14,19;Float;False;True;2;Float;ASEMaterialInspector;0;4;ZooCube/Recepter;0f8ba0101102bb14ebf021ddadce9b49;Sprites Default;3;One;OneMinusSrcAlpha;0;One;Zero;Off;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
 WireConnection;4;6;2;0
-WireConnection;4;7;3;0
+WireConnection;4;7;5;0
 WireConnection;1;0;4;0
 ASEEND*/
-//CHKSM=5F08D75B6EA3BC5339391C67ADAFD866C0F4288F
+//CHKSM=A1EFD6CFD8678A20D67F4FED6FDC9CE443FC1EA9
