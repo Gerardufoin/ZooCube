@@ -41,7 +41,7 @@ Shader "ZooCube/Recepter"
 		CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			#pragma target 2.0
+			#pragma target 3.0
 			#pragma multi_compile _ PIXELSNAP_ON
 			#pragma multi_compile _ ETC1_EXTERNAL_ALPHA
 			#include "UnityCG.cginc"
@@ -107,8 +107,8 @@ Shader "ZooCube/Recepter"
 			
 			fixed4 frag(v2f IN  ) : SV_Target
 			{
-				float4 temp_output_6_0_g2 = _BackgroundColor;
-				float2 uv11_g2 = IN.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float4 temp_output_6_0_g4 = _BackgroundColor;
+				float2 uv11_g4 = IN.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
 				float3 ase_objectScale = float3( length( unity_ObjectToWorld[ 0 ].xyz ), length( unity_ObjectToWorld[ 1 ].xyz ), length( unity_ObjectToWorld[ 2 ].xyz ) );
 				float clampResult49_g3 = clamp( ase_objectScale.x , 0.0 , 1.0 );
 				float clampResult50_g3 = clamp( ase_objectScale.y , 0.0 , 1.0 );
@@ -121,16 +121,17 @@ Shader "ZooCube/Recepter"
 				ifLocalVar47_g3 = (ase_objectScale).xy;
 				else if( clampResult49_g3 < clampResult50_g3 )
 				ifLocalVar47_g3 = appendResult58_g3;
-				float2 ScaleRatio8_g2 = ifLocalVar47_g3;
-				float2 temp_output_10_0_g2 = ( _BorderWidth / ScaleRatio8_g2 );
-				float2 appendResult17_g2 = (float2(( uv11_g2.x * ( temp_output_10_0_g2 + float2( 1,1 ) ).x ) , ( uv11_g2.y * ( temp_output_10_0_g2 + float2( 1,1 ) ).y )));
-				float2 appendResult18_g2 = (float2(_BorderXOffset , _BorderYOffset));
-				float4 tex2DNode24_g2 = tex2D( _ShapeMask, ( ( appendResult17_g2 - ( temp_output_10_0_g2 / float2( 2,2 ) ) ) + ( appendResult18_g2 / ScaleRatio8_g2 ) ) );
+				float2 ScaleRatio8_g4 = ifLocalVar47_g3;
+				float2 temp_output_10_0_g4 = ( _BorderWidth / ScaleRatio8_g4 );
+				float2 appendResult17_g4 = (float2(( uv11_g4.x * ( temp_output_10_0_g4 + 1.0 ).x ) , ( uv11_g4.y * ( temp_output_10_0_g4 + 1.0 ).y )));
+				float2 appendResult18_g4 = (float2(_BorderXOffset , _BorderYOffset));
+				float2 temp_output_23_0_g4 = ( ( appendResult17_g4 - ( temp_output_10_0_g4 / 2.0 ) ) + ( appendResult18_g4 / ScaleRatio8_g4 ) );
+				float clampResult68_g4 = clamp( ( tex2D( _ShapeMask, temp_output_23_0_g4 ).r + ( 1.0 - ( step( float2( 0,0 ) , ( 1.0 - temp_output_23_0_g4 ) ).x * step( float2( 0,0 ) , ( 1.0 - temp_output_23_0_g4 ) ).y * step( float2( 0,0 ) , temp_output_23_0_g4 ).x * step( float2( 0,0 ) , temp_output_23_0_g4 ).y ) ) ) , 0.0 , 1.0 );
 				float2 uv_ShapeMask = IN.texcoord.xy * _ShapeMask_ST.xy + _ShapeMask_ST.zw;
-				float clampResult34_g2 = clamp( ( (temp_output_6_0_g2).a * ( 1.0 - tex2D( _ShapeMask, uv_ShapeMask ).r ) * _BorderColor.a ) , 0.0 , 1.0 );
-				float4 appendResult38_g2 = (float4((( float4( ( (temp_output_6_0_g2).rgb * ( 1.0 - tex2DNode24_g2.r ) ) , 0.0 ) + ( _BorderColor * tex2DNode24_g2 ) )).rgb , clampResult34_g2));
+				float clampResult34_g4 = clamp( ( (temp_output_6_0_g4).a * ( 1.0 - tex2D( _ShapeMask, uv_ShapeMask ).r ) * _BorderColor.a ) , 0.0 , 1.0 );
+				float4 appendResult38_g4 = (float4((( float4( ( (temp_output_6_0_g4).rgb * ( 1.0 - clampResult68_g4 ) ) , 0.0 ) + ( _BorderColor * clampResult68_g4 ) )).rgb , clampResult34_g4));
 				
-				fixed4 c = appendResult38_g2;
+				fixed4 c = appendResult38_g4;
 				c.rgb *= c.a;
 				return c;
 			}
@@ -140,14 +141,14 @@ Shader "ZooCube/Recepter"
 	CustomEditor "ASEMaterialInspector"
 }
 /*ASEBEGIN
-Version=14201
--1781;84;1627;890;1068.5;393;1;True;False
-Node;AmplifyShaderEditor.FunctionNode;5;-428.5,157;Float;False;ScalingRatio;-1;;3;096dc3062cc962b49b5311cdb37df263;0;3;FLOAT2;0;FLOAT;27;FLOAT;28
-Node;AmplifyShaderEditor.ColorNode;2;-442.5,-119;Float;False;Property;_BackgroundColor;BackgroundColor;6;0;Create;0,0,0,1;0,0,0,0;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.FunctionNode;4;-177.5,19;Float;False;AddBorder;0;;2;e22a0ad25ec970f4d94f3a43eb80ec65;2;6;COLOR;0,0,0,0;False;7;FLOAT2;1,1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;5
-Node;AmplifyShaderEditor.TemplateMasterNode;1;14,19;Float;False;True;2;Float;ASEMaterialInspector;0;4;ZooCube/Recepter;0f8ba0101102bb14ebf021ddadce9b49;Sprites Default;3;One;OneMinusSrcAlpha;0;One;Zero;Off;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
+Version=14301
+2097;77;1666;915;1068.5;393;1;True;True
+Node;AmplifyShaderEditor.FunctionNode;5;-428.5,157;Float;False;ScalingRatio;-1;;3;096dc3062cc962b49b5311cdb37df263;0;0;3;FLOAT2;0;FLOAT;27;FLOAT;28
+Node;AmplifyShaderEditor.ColorNode;2;-442.5,-119;Float;False;Property;_BackgroundColor;BackgroundColor;6;0;Create;True;0,0,0,1;0,0,0,0;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.FunctionNode;4;-177.5,19;Float;False;AddBorder;0;;4;e22a0ad25ec970f4d94f3a43eb80ec65;0;2;6;COLOR;0,0,0,0;False;7;FLOAT2;1,1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;5
+Node;AmplifyShaderEditor.TemplateMasterNode;1;14,19;Float;False;True;2;Float;ASEMaterialInspector;0;4;ZooCube/Recepter;0f8ba0101102bb14ebf021ddadce9b49;Sprites Default;3;One;OneMinusSrcAlpha;0;One;Zero;Off;2;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
 WireConnection;4;6;2;0
 WireConnection;4;7;5;0
 WireConnection;1;0;4;0
 ASEEND*/
-//CHKSM=A1EFD6CFD8678A20D67F4FED6FDC9CE443FC1EA9
+//CHKSM=04D2ABBBC0C23BD0E51DE621BF917425D5A34D84
