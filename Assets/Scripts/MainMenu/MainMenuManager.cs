@@ -89,6 +89,7 @@ public class MainMenuManager : MonoBehaviour
         _theater.CloseCurtains(false);
         _theater.CurtainCloseActions += () => {
             m_credits.SetActive(false);
+            m_levelSelection.SetActive(false);
             m_mainUI.SetActive(true);
             _theater.OpenCurtains();
         };
