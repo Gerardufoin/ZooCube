@@ -97,6 +97,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void Quit()
     {
-        Debug.Log("QUIT");
+        Application.Quit();
     }
 }
