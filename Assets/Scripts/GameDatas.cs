@@ -6,14 +6,25 @@ using System.IO;
 
 public class GameDatas : MonoBehaviour
 {
+    public enum UserIcon
+    {
+        NONE = 0,
+        MONKEY
+    }
+
     [System.Serializable]
     public struct UserDatas
     {
         public string Username;
+        public UserIcon Icon;
+        // Hash of the completed levels
+        public List<string> FinishedLevels;
 
-        public UserDatas(string name = "")
+        public UserDatas(string name, UserIcon icon)
         {
             Username = name;
+            Icon = icon;
+            FinishedLevels = new List<string>();
         }
     }
 
@@ -21,13 +32,15 @@ public class GameDatas : MonoBehaviour
     public struct LevelDatas
     {
         public string Name;
+        public string Hash;
+        // level infos
     }
 
     public const string UsersFilename = "Users.dat";
     public const string LevelsFilename = "Levels.dat";
 
-    private List<UserDatas> _users = new List<UserDatas>();
-    private List<LevelDatas> _levels = new List<LevelDatas>();
+    public List<UserDatas> Users = new List<UserDatas>();
+    public List<LevelDatas> Levels = new List<LevelDatas>();
 
     public static GameDatas Instance;
     private void Awake()
@@ -53,12 +66,12 @@ public class GameDatas : MonoBehaviour
 
     public void SaveUsers()
     {
-        Save(UsersFilename, _users);
+        Save(UsersFilename, Users);
     }
 
     public void SaveCustomLevels()
     {
-        Save(LevelsFilename, _levels);
+        Save(LevelsFilename, Levels);
     }
 
     public void SaveAll()
@@ -80,12 +93,12 @@ public class GameDatas : MonoBehaviour
 
     public void LoadUsers()
     {
-        Load<List<UserDatas>>(UsersFilename, ref _users);
+        Load<List<UserDatas>>(UsersFilename, ref Users);
     }
 
     public void LoadCustomLevels()
     {
-        Load<List<LevelDatas>>(LevelsFilename, ref _levels);
+        Load<List<LevelDatas>>(LevelsFilename, ref Levels);
     }
 
     public void LoadAll()

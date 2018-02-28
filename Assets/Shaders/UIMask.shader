@@ -17,7 +17,6 @@ Shader "ZooCube/UIMask"
 
 		[Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
 		_Mask("Mask", 2D) = "white" {}
-		_MaskColor("MaskColor", Color) = (0,0,0,1)
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 	}
 
@@ -87,7 +86,6 @@ Shader "ZooCube/UIMask"
 			uniform float4 _ClipRect;
 			uniform sampler2D _MainTex;
 			uniform float4 _MainTex_ST;
-			uniform float4 _MaskColor;
 			uniform sampler2D _Mask;
 			uniform float4 _Mask_ST;
 			
@@ -111,9 +109,9 @@ Shader "ZooCube/UIMask"
 			{
 				float2 uv_MainTex = IN.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
 				float2 uv_Mask = IN.texcoord.xy * _Mask_ST.xy + _Mask_ST.zw;
-				float4 lerpResult9 = lerp( tex2D( _MainTex, uv_MainTex ) , _MaskColor , tex2D( _Mask, uv_Mask ).r);
+				float4 lerpResult9 = lerp( tex2D( _MainTex, uv_MainTex ) , IN.color , tex2D( _Mask, uv_Mask ).r);
 				
-				half4 color = ( lerpResult9 * _Color );
+				half4 color = lerpResult9;
 				
 				color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
 				
@@ -132,19 +130,15 @@ Shader "ZooCube/UIMask"
 Version=14301
 -1801;92;1627;892;1539.809;284.2285;1;True;False
 Node;AmplifyShaderEditor.TemplateShaderPropertyNode;2;-1215.5,-119;Float;False;_MainTex;0;5;SAMPLER2D;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.ColorNode;7;-937.5,85;Float;False;Property;_MaskColor;MaskColor;1;0;Create;True;0,0,0,1;0,0,0,0;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.VertexColorNode;10;-915.809,92.77151;Float;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;6;-1023.5,276;Float;True;Property;_Mask;Mask;0;0;Create;True;None;878e1e521b239a04fa549ec6749af28a;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0.0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1.0;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.SamplerNode;3;-1018.5,-124;Float;True;Property;_Sprite;Sprite;0;0;Create;True;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0.0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1.0;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;6;-1023.5,276;Float;True;Property;_Mask;Mask;0;0;Create;True;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0.0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1.0;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.LerpOp;9;-538.5,61;Float;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0.0;False;2;FLOAT;0.0;False;1;COLOR;0
-Node;AmplifyShaderEditor.TemplateShaderPropertyNode;8;-506.5,191;Float;False;_Color;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;5;-358.5,104;Float;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.TemplateMasterNode;1;-178,106;Float;False;True;2;Float;ASEMaterialInspector;0;3;ZooCube/UIMask;5056123faa0c79b47ab6ad7e8bf059a4;ASETemplateShaders/UIDefault;2;SrcAlpha;OneMinusSrcAlpha;0;One;Zero;Off;0;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
+Node;AmplifyShaderEditor.LerpOp;9;-538.5,61;Float;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0.0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.TemplateMasterNode;1;-371,61;Float;False;True;2;Float;ASEMaterialInspector;0;3;ZooCube/UIMask;5056123faa0c79b47ab6ad7e8bf059a4;ASETemplateShaders/UIDefault;2;SrcAlpha;OneMinusSrcAlpha;0;One;Zero;Off;0;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
 WireConnection;3;0;2;0
 WireConnection;9;0;3;0
-WireConnection;9;1;7;0
+WireConnection;9;1;10;0
 WireConnection;9;2;6;1
-WireConnection;5;0;9;0
-WireConnection;5;1;8;0
-WireConnection;1;0;5;0
+WireConnection;1;0;9;0
 ASEEND*/
-//CHKSM=C3EC539815178844C8A0264111CCF3642F399ACB
+//CHKSM=5AF2514042596A009BCC8F885A5378F0DD273AFA
