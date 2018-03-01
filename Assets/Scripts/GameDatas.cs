@@ -9,7 +9,9 @@ public class GameDatas : MonoBehaviour
     public enum UserIcon
     {
         NONE = 0,
-        MONKEY
+        MONKEY,
+        RABBIT,
+        PENGUIN
     }
 
     [System.Serializable]
