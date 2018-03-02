@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee092b77804d0ee47be254b09df25e87, type: 3}
+  m_Name: Pig
+  m_EditorClassIdentifier: 
+  Type: 4
+  Face: {fileID: 21300000, guid: 5419b78be08dc81479f5eb4457b355b9, type: 3}
+  Color: {r: 0.9333334, g: 0.62352943, b: 0.9333334, a: 1}

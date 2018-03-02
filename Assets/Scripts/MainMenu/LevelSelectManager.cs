@@ -7,11 +7,12 @@ public class LevelSelectManager : MonoBehaviour
     [SerializeField]
     private Animator m_animator;
 
-    private UsersManagement _usersManagement;
+    private UserCreation _userCreation;
+    private UserSelect _userSelect;
 
     private void Start()
     {
-        _usersManagement = GameObject.FindObjectOfType<UsersManagement>();
+        _userCreation = GetComponentInChildren<UserCreation>(true);
     }
 
     public void NewUserPanel(bool state)
@@ -19,7 +20,7 @@ public class LevelSelectManager : MonoBehaviour
         m_animator.SetBool("NewUserPanel", state);
         if (state == false)
         {
-            _usersManagement.ResetProfile();
+            _userCreation.ResetProfile();
         }
     }
 

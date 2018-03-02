@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class UsersManagement : MonoBehaviour
+public class UserCreation : MonoBehaviour
 {
     private const int MAX_USERNAME_LENGTH = 35;
 
@@ -13,7 +13,7 @@ public class UsersManagement : MonoBehaviour
     private LevelSelectManager _levelSelectManager;
 
     private string _currentUsername;
-    private GameDatas.UserIcon _currentIcon;
+    private GameDatas.AnimalType _currentIcon;
 
     private void Start()
     {
@@ -23,7 +23,7 @@ public class UsersManagement : MonoBehaviour
     public void ResetProfile()
     {
         _currentUsername = "";
-        _currentIcon = GameDatas.UserIcon.NONE;
+        _currentIcon = GameDatas.AnimalType.NONE;
         m_usernameInputField.text = "";
     }
 
@@ -39,7 +39,7 @@ public class UsersManagement : MonoBehaviour
 
     public void SelectIcon(int icon)
     {
-        _currentIcon = (GameDatas.UserIcon)icon;
+        _currentIcon = (GameDatas.AnimalType)icon;
     }
 
     public void CreateUser()
@@ -48,7 +48,7 @@ public class UsersManagement : MonoBehaviour
         {
             Debug.Log("No username provided.");
         }
-        else if (_currentIcon == GameDatas.UserIcon.NONE)
+        else if (_currentIcon == GameDatas.AnimalType.NONE)
         {
             Debug.Log("No avatar selected.");
         }
@@ -56,8 +56,8 @@ public class UsersManagement : MonoBehaviour
         {
             GameDatas.Instance.Users.Add(new GameDatas.UserDatas(_currentUsername, _currentIcon));
             GameDatas.Instance.SaveUsers();
-            _levelSelectManager.NewUserPanel(false);
             Debug.Log("User '" + _currentUsername + "' added.");
+            _levelSelectManager.NewUserPanel(false);
         }
     }
 }

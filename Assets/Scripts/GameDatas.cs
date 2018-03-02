@@ -6,23 +6,24 @@ using System.IO;
 
 public class GameDatas : MonoBehaviour
 {
-    public enum UserIcon
+    public enum AnimalType
     {
         NONE = 0,
         MONKEY,
         RABBIT,
-        PENGUIN
+        PENGUIN,
+        PIG
     }
 
     [System.Serializable]
     public struct UserDatas
     {
         public string Username;
-        public UserIcon Icon;
+        public AnimalType Icon;
         // Hash of the completed levels
         public List<string> FinishedLevels;
 
-        public UserDatas(string name, UserIcon icon)
+        public UserDatas(string name, AnimalType icon)
         {
             Username = name;
             Icon = icon;
@@ -38,8 +39,12 @@ public class GameDatas : MonoBehaviour
         // level infos
     }
 
+    [HideInInspector]
     public const string UsersFilename = "Users.dat";
+    [HideInInspector]
     public const string LevelsFilename = "Levels.dat";
+
+    public List<ScriptableAnimal> ZooAnimals = new List<ScriptableAnimal>();
 
     public List<UserDatas> Users = new List<UserDatas>();
     public List<LevelDatas> Levels = new List<LevelDatas>();
@@ -107,5 +112,19 @@ public class GameDatas : MonoBehaviour
     {
         LoadUsers();
         LoadCustomLevels();
+    }
+
+    public ScriptableAnimal GetAnimalData(AnimalType animal)
+    {
+        if (ZooAnimals.Count == 0)
+                return null;
+        for (int i = 0; i < ZooAnimals.Count; ++i)
+        {
+            if (ZooAnimals[i].Type == animal)
+            {
+                return ZooAnimals[i];
+            }
+        }
+        return ZooAnimals[0];
     }
 }
