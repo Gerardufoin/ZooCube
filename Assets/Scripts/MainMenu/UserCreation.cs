@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UserCreation : MonoBehaviour
 {
     private const int MAX_USERNAME_LENGTH = 35;
 
+    [SerializeField]
+    private GameObject m_iconPrefab;
+    [SerializeField]
+    private Transform m_avatarPanel;
     [SerializeField]
     private TMP_InputField m_usernameInputField;
 
@@ -18,6 +23,14 @@ public class UserCreation : MonoBehaviour
     private void Start()
     {
         _levelSelectManager = GameObject.FindObjectOfType<LevelSelectManager>();
+        for (int i = 0; i < GameDatas.Instance.ZooAnimals.Count; ++i)
+        {
+            ScriptableAnimal animal = GameDatas.Instance.ZooAnimals[i];
+            GameObject newIcon = GameObject.Instantiate(m_iconPrefab, m_avatarPanel);
+            newIcon.GetComponent<Image>().color = animal.Color;
+            newIcon.GetComponent<Button>().onClick.AddListener(() => { SelectIcon(animal.Type); });
+            newIcon.transform.Find("Avatar").GetComponent<Image>().sprite = animal.Face;
+        }
     }
 
     public void ResetProfile()
@@ -37,9 +50,9 @@ public class UserCreation : MonoBehaviour
         _currentUsername = username;
     }
 
-    public void SelectIcon(int icon)
+    public void SelectIcon(GameDatas.AnimalType icon)
     {
-        _currentIcon = (GameDatas.AnimalType)icon;
+        _currentIcon = icon;
     }
 
     public void CreateUser()

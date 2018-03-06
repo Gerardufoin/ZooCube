@@ -46,6 +46,7 @@ public class GameDatas : MonoBehaviour
 
     public List<ScriptableAnimal> ZooAnimals = new List<ScriptableAnimal>();
 
+    public int CurrentUserIdx;
     public List<UserDatas> Users = new List<UserDatas>();
     public List<LevelDatas> Levels = new List<LevelDatas>();
 
