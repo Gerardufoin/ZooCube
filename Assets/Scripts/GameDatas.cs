@@ -20,19 +20,21 @@ public class GameDatas : MonoBehaviour
     {
         public string Username;
         public AnimalType Icon;
-        // Hash of the completed levels
-        public List<string> FinishedLevels;
+        public int OfficialLevelsProgression;
+        // Hash of the completed custom levels
+        public List<string> FinishedCustomLevels;
 
         public UserDatas(string name, AnimalType icon)
         {
             Username = name;
             Icon = icon;
-            FinishedLevels = new List<string>();
+            OfficialLevelsProgression = 0;
+            FinishedCustomLevels = new List<string>();
         }
     }
 
     [System.Serializable]
-    public struct LevelDatas
+    public struct CustomLevelDatas
     {
         public string Name;
         public string Hash;
@@ -42,13 +44,13 @@ public class GameDatas : MonoBehaviour
     [HideInInspector]
     public const string UsersFilename = "Users.dat";
     [HideInInspector]
-    public const string LevelsFilename = "Levels.dat";
+    public const string CustomLevelsFilename = "CustomLevels.dat";
 
     public List<ScriptableAnimal> ZooAnimals = new List<ScriptableAnimal>();
 
     public int CurrentUserIdx;
     public List<UserDatas> Users = new List<UserDatas>();
-    public List<LevelDatas> Levels = new List<LevelDatas>();
+    public List<CustomLevelDatas> Levels = new List<CustomLevelDatas>();
 
     public static GameDatas Instance;
     private void Awake()
@@ -79,7 +81,7 @@ public class GameDatas : MonoBehaviour
 
     public void SaveCustomLevels()
     {
-        Save(LevelsFilename, Levels);
+        Save(CustomLevelsFilename, Levels);
     }
 
     public void SaveAll()
@@ -106,7 +108,7 @@ public class GameDatas : MonoBehaviour
 
     public void LoadCustomLevels()
     {
-        Load<List<LevelDatas>>(LevelsFilename, ref Levels);
+        Load<List<CustomLevelDatas>>(CustomLevelsFilename, ref Levels);
     }
 
     public void LoadAll()
