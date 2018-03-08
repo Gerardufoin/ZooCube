@@ -6,6 +6,7 @@ using System.IO;
 
 public class GameDatas : MonoBehaviour
 {
+    #region DataTypes
     public enum AnimalType
     {
         NONE = 0,
@@ -13,6 +14,15 @@ public class GameDatas : MonoBehaviour
         RABBIT,
         PENGUIN,
         PIG
+    }
+
+    public enum ShapeType
+    {
+        NONE = 0,
+        CIRCLE,
+        SQUARE,
+        TRIANGLE,
+        SQUARE_ALT
     }
 
     [System.Serializable]
@@ -40,14 +50,16 @@ public class GameDatas : MonoBehaviour
         public string Hash;
         // level infos
     }
+    #endregion
 
     [HideInInspector]
     public const string UsersFilename = "Users.dat";
     [HideInInspector]
     public const string CustomLevelsFilename = "CustomLevels.dat";
 
-    public List<ScriptableAnimal> ZooAnimals = new List<ScriptableAnimal>();
+    public List<Animal> ZooAnimals = new List<Animal>();
 
+    [HideInInspector]
     public int CurrentUserIdx;
     public List<UserDatas> Users = new List<UserDatas>();
     public List<CustomLevelDatas> Levels = new List<CustomLevelDatas>();
@@ -117,7 +129,7 @@ public class GameDatas : MonoBehaviour
         LoadCustomLevels();
     }
 
-    public ScriptableAnimal GetAnimalData(AnimalType animal)
+    public Animal GetAnimalData(AnimalType animal)
     {
         if (ZooAnimals.Count == 0)
                 return null;

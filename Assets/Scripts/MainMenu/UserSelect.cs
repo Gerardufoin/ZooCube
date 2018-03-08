@@ -43,7 +43,7 @@ public class UserSelect : MonoBehaviour
         {
             int idx = _slotPageIdx * MAX_SLOTS_BY_PANEL + i;
             GameDatas.UserDatas user = GameDatas.Instance.Users[idx];
-            ScriptableAnimal animal = GameDatas.Instance.GetAnimalData(user.Icon);
+            Animal animal = GameDatas.Instance.GetAnimalData(user.Icon);
             GameObject newSlot = GameObject.Instantiate(m_userSlotPrefab, m_slotsPanel);
             Transform avatarPanel = newSlot.transform.Find("AvatarPanel");
 

@@ -25,7 +25,7 @@ public class UserCreation : MonoBehaviour
         _levelSelectManager = GameObject.FindObjectOfType<LevelSelectManager>();
         for (int i = 0; i < GameDatas.Instance.ZooAnimals.Count; ++i)
         {
-            ScriptableAnimal animal = GameDatas.Instance.ZooAnimals[i];
+            Animal animal = GameDatas.Instance.ZooAnimals[i];
             GameObject newIcon = GameObject.Instantiate(m_iconPrefab, m_avatarPanel);
             newIcon.GetComponent<Image>().color = animal.Color;
             newIcon.GetComponent<Button>().onClick.AddListener(() => { SelectIcon(animal.Type); });

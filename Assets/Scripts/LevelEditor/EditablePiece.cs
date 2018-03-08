@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class EditablePiece : MonoBehaviour {
-
+public class EditablePiece : MonoBehaviour
+{
     private SpriteRenderer _renderer;
 
     private bool _placedOnce = false;
