@@ -6,7 +6,7 @@ using UnityEngine;
 public class Shape : ScriptableObject
 {
     public GameDatas.ShapeType Type;
-    public Sprite Map;
+    public Sprite Mask;
     public float FaceScale = 1.0f;
     public Vector2 FaceOffset;
     public float BorderWidth = 0.1f;

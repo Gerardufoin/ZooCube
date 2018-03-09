@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: Circle
   m_EditorClassIdentifier: 
   Type: 1
-  Map: {fileID: 21300000, guid: 4f9aa590ffa5c5f4eb66d6bf9c21c2c7, type: 3}
-  BorderWidth: 0.1
-  BorderOffset: {x: 0, y: 0}
+  Mask: {fileID: 21300000, guid: 4f9aa590ffa5c5f4eb66d6bf9c21c2c7, type: 3}
   FaceScale: 1
   FaceOffset: {x: 0, y: 0}
+  BorderWidth: 0.1
+  BorderOffset: {x: 0, y: 0}

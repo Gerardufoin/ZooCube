@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Available actions using the mouse.
+/// </summary>
 public enum E_MouseActions
 {
     IDLING = 0,
@@ -11,6 +14,10 @@ public enum E_MouseActions
     SELECTING
 }
 
+/// <summary>
+/// PiecesManager class. The manager class used to allow the user to manipulate EditablePieces in the level editor.
+/// Unique in a scene.
+/// </summary>
 public class PiecesManager : MonoBehaviour
 {
     #region Properties
@@ -233,7 +240,7 @@ public class PiecesManager : MonoBehaviour
     {
         for (int i = 0; i < _selectedPieces.Count; ++i)
         {
-            _selectedPieces[i].SetFaceInfos(face);
+            //_selectedPieces[i].SetFaceInfos(face);
         }
     }
 
@@ -241,7 +248,7 @@ public class PiecesManager : MonoBehaviour
     {
         for (int i = 0; i < _selectedPieces.Count; ++i)
         {
-            _selectedPieces[i].SetShapeInfos(shape);
+            //_selectedPieces[i].SetShapeInfos(shape);
         }
     }
 
@@ -252,7 +259,7 @@ public class PiecesManager : MonoBehaviour
         _selectionMove.transform.position = _selectionStart;
 
         GameObject piece = Instantiate(m_editablePiece.gameObject, _selectionStart, m_editablePiece.transform.rotation);
-        piece.GetComponent<EditablePiece>().PresetProperties(face, shape);
+        //piece.GetComponent<EditablePiece>().PresetProperties(face, shape);
 
         AddPieceToSelection(piece);
         piece.transform.parent = _selectionMove.transform;

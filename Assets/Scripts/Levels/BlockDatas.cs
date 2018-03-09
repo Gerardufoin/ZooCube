@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// BlockDatas class.
+/// Used to manipulate the values of the ZooCube/Block shader through the use of the Animal and Shape ScriptableObjects.
+/// This is mostly a test class used to manipulate the EditablePieces while not in play mode.
+/// </summary>
 [ExecuteInEditMode]
 [RequireComponent(typeof(SpriteRenderer))]
 [System.Serializable]
 public class BlockDatas : MonoBehaviour
 {
+    /// <summary>
+    /// SpriteRenderer getter. The SpriteRenderer is stored for optimization. Uses a getter to be usable in EditMode
+    /// </summary>
     private SpriteRenderer _sprite_renderer = null;
     private SpriteRenderer SpriteRenderer
     {
@@ -19,139 +27,33 @@ public class BlockDatas : MonoBehaviour
         set { }
     }
 
+    /// <summary>
+    /// Animal data. When set, the shader's properties are updated.
+    /// </summary>
     [SerializeField]
-    private Texture _shape_mask;
-    public Texture ShapeMask
+    private Animal _animal;
+    public Animal Animal
     {
-        get { return _shape_mask; }
+        get { return _animal; }
         set
         {
-            _shape_mask = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            if (_shape_mask != null)
-                properties.SetTexture("_ShapeMask", _shape_mask);
-            SpriteRenderer.SetPropertyBlock(properties);
+            _animal = value;
+            ApplyAnimalToShader();
         }
     }
 
+    /// <summary>
+    /// Shape data. When set, the shader's properties are updated.
+    /// </summary>
     [SerializeField]
-    private float _image_scale = 1.0f;
-    public float ImageScale
+    private Shape _shape;
+    public Shape Shape
     {
-        get { return _image_scale; }
+        get { return _shape; }
         set
         {
-            _image_scale = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            properties.SetFloat("_ImageScale", _image_scale);
-            SpriteRenderer.SetPropertyBlock(properties);
-        }
-    }
-
-    [SerializeField]
-    private Color _background_color;
-    public Color BackgroundColor
-    {
-        get { return _background_color; }
-        set
-        {
-            _background_color = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            properties.SetColor("_BackgroundColor", _background_color);
-            SpriteRenderer.SetPropertyBlock(properties);
-        }
-    }
-
-    [SerializeField]
-    private Color _border_color;
-    public Color BorderColor
-    {
-        get { return _border_color; }
-        set
-        {
-            _border_color = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            properties.SetColor("_BorderColor", _border_color);
-            SpriteRenderer.SetPropertyBlock(properties);
-        }
-    }
-
-    [SerializeField]
-    private float _border_width = 0.1f;
-    public float BorderWidth
-    {
-        get { return _border_width; }
-        set
-        {
-            _border_width = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            properties.SetFloat("_BorderWidth", _border_width);
-            SpriteRenderer.SetPropertyBlock(properties);
-        }
-    }
-
-    [SerializeField]
-    private float _border_x_offset;
-    public float BorderXOffset
-    {
-        get { return _border_x_offset; }
-        set
-        {
-            _border_x_offset = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            properties.SetFloat("_BorderXOffset", _border_x_offset);
-            SpriteRenderer.SetPropertyBlock(properties);
-        }
-    }
-
-    [SerializeField]
-    private float _border_y_offset;
-    public float BorderYOffset
-    {
-        get { return _border_y_offset; }
-        set
-        {
-            _border_y_offset = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            properties.SetFloat("_BorderYOffset", _border_y_offset);
-            SpriteRenderer.SetPropertyBlock(properties);
-        }
-    }
-
-    [SerializeField]
-    private float _image_x_offset;
-    public float ImageXOffset
-    {
-        get { return _image_x_offset; }
-        set
-        {
-            _image_x_offset = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            properties.SetFloat("_ImageXOffset", _image_x_offset);
-            SpriteRenderer.SetPropertyBlock(properties);
-        }
-    }
-
-    [SerializeField]
-    private float _image_y_offset;
-    public float ImageYOffset
-    {
-        get { return _image_y_offset; }
-        set
-        {
-            _image_y_offset = value;
-            MaterialPropertyBlock properties = new MaterialPropertyBlock();
-            SpriteRenderer.GetPropertyBlock(properties);
-            properties.SetFloat("_ImageYOffset", _image_y_offset);
-            SpriteRenderer.SetPropertyBlock(properties);
+            _shape = value;
+            ApplyShapeToShader();
         }
     }
 
@@ -160,20 +62,48 @@ public class BlockDatas : MonoBehaviour
         ApplyPropertiesToShader();
     }
 
+    /// <summary>
+    /// Apply the values stored in _shape to the shader's properties.
+    /// </summary>
+    private void ApplyShapeToShader()
+    {
+        if (_shape != null)
+        {
+            MaterialPropertyBlock properties = new MaterialPropertyBlock();
+            SpriteRenderer.GetPropertyBlock(properties);
+            properties.SetFloat("_FaceScale", _shape.FaceScale);
+            properties.SetTexture("_ShapeMask", _shape.Mask.texture);
+            properties.SetFloat("_BorderWidth", _shape.BorderWidth);
+            properties.SetFloat("_BorderXOffset", _shape.BorderOffset.x);
+            properties.SetFloat("_BorderYOffset", _shape.BorderOffset.y);
+            properties.SetFloat("_FaceXOffset", _shape.FaceOffset.x);
+            properties.SetFloat("_FaceYOffset", _shape.FaceOffset.y);
+            SpriteRenderer.SetPropertyBlock(properties);
+        }
+    }
+
+    /// <summary>
+    /// Apply the values stored in _animal to the shader's properties.
+    /// </summary>
+    private void ApplyAnimalToShader()
+    {
+        if (_animal != null)
+        {
+            MaterialPropertyBlock properties = new MaterialPropertyBlock();
+            SpriteRenderer.GetPropertyBlock(properties);
+            properties.SetTexture("_Face", _animal.Face.texture);
+            properties.SetColor("_BackgroundColor", _animal.Color);
+            properties.SetColor("_BorderColor", _animal.BorderColor);
+            SpriteRenderer.SetPropertyBlock(properties);
+        }
+    }
+
+    /// <summary>
+    /// Apply both the animal and shape datas at the same time.
+    /// </summary>
     private void ApplyPropertiesToShader()
     {
-        MaterialPropertyBlock properties = new MaterialPropertyBlock();
-        SpriteRenderer.GetPropertyBlock(properties);
-        properties.SetFloat("_ImageScale", _image_scale);
-        if (_shape_mask != null)
-            properties.SetTexture("_ShapeMask", _shape_mask);
-        properties.SetColor("_BackgroundColor", _background_color);
-        properties.SetColor("_BorderColor", _border_color);
-        properties.SetFloat("_BorderWidth", _border_width);
-        properties.SetFloat("_BorderXOffset", _border_x_offset);
-        properties.SetFloat("_BorderYOffset", _border_y_offset);
-        properties.SetFloat("_ImageXOffset", _image_x_offset);
-        properties.SetFloat("_ImageYOffset", _image_y_offset);
-        SpriteRenderer.SetPropertyBlock(properties);
+        ApplyAnimalToShader();
+        ApplyShapeToShader();
     }
 }

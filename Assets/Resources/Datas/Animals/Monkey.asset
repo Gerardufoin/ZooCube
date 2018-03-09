@@ -14,3 +14,4 @@ MonoBehaviour:
   Type: 1
   Face: {fileID: 21300000, guid: 2e5f3a3c9a063494b924449bc184dd90, type: 3}
   Color: {r: 0.6313726, g: 0.40000004, b: 0.22352943, a: 1}
+  BorderColor: {r: 0.3803922, g: 0.21960786, b: 0.10588236, a: 1}

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: Square_Alt
   m_EditorClassIdentifier: 
   Type: 4
-  Map: {fileID: 21300000, guid: 6d492f15dd2f99148b7782e4a7f6b352, type: 3}
-  BorderWidth: 0.1
-  BorderOffset: {x: 0, y: 0}
+  Mask: {fileID: 21300000, guid: 6d492f15dd2f99148b7782e4a7f6b352, type: 3}
   FaceScale: 1
   FaceOffset: {x: 0, y: 0}
+  BorderWidth: 0.1
+  BorderOffset: {x: 0, y: 0}

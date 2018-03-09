@@ -58,6 +58,7 @@ public class GameDatas : MonoBehaviour
     public const string CustomLevelsFilename = "CustomLevels.dat";
 
     public List<Animal> ZooAnimals = new List<Animal>();
+    public List<Shape> ZooShapes = new List<Shape>();
 
     [HideInInspector]
     public int CurrentUserIdx;

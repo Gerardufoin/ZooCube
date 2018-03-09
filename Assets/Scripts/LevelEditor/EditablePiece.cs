@@ -2,33 +2,68 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// EditablePiece class. Attached to the block pieces when in the level editor.
+/// Contains information about the piece it is currently attached to.
+/// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
 public class EditablePiece : MonoBehaviour
 {
+    // Reference to the SpriteRenderer
     private SpriteRenderer _renderer;
 
+    // Set to true once the piece has been placed once. Used in the Reset method.
     private bool _placedOnce = false;
+    // Position where the piece has been placed.
     private Vector3 _placedPosition;
 
-    private S_FaceInfos _faceInfos;
-    private S_ShapeInfos _shapeInfos;
+    // Animal displayed by the piece.
+    private Animal _animal;
+    public Animal Aninal
+    {
+        get { return _animal; }
+        set
+        {
+            _animal = value;
+            ApplyAnimalToShader();
+        }
+    }
+    // Shape of the piece.
+    private Shape _shape;
+    public Shape Shape
+    {
+        get { return _shape; }
+        set
+        {
+            _shape = value;
+            ApplyShapeToShader();
+        }
+    }
 
+    // PropertyBlock used to modify shader (to avoid creating a new one every time).
     private MaterialPropertyBlock _properties;
+    // Informations about the piece (used when saving).
     private PieceInfos _infos;
 
+    // Is the piece currently being reset ?
     private bool _reseting;
 
-    public void PresetProperties(S_FaceInfos face, S_ShapeInfos shape)
+    /// <summary>
+    /// Used when the piece is created to preset the Animal and Shape datas.
+    /// </summary>
+    /// <param name="animal">ScriptableObject Animal datas</param>
+    /// <param name="shape">ScriptableObject Shape datas</param>
+    public void PresetProperties(Animal animal, Shape shape)
     {
-        _faceInfos = face;
-        _shapeInfos = shape;
+        _animal = animal;
+        _shape = shape;
     }
 
     private void Start()
     {
         _properties = new MaterialPropertyBlock();
         _renderer = GetComponent<SpriteRenderer>();
-        SetShaderProperties();
+        ApplyPropertiesToShader();
     }
 
     private void Update()
@@ -46,17 +81,28 @@ public class EditablePiece : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called to move the piece.
+    /// </summary>
+    /// <param name="position">Destination</param>
+    /// <param name="speed">Movement speed</param>
     public void Move(Vector3 position, float speed)
     {
         transform.position = Vector3.MoveTowards(transform.position, position, speed * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Called when placing the piece (once the user is done moving it).
+    /// </summary>
     public void Place()
     {
         _placedOnce = true;
         _placedPosition = transform.position;
     }
 
+    /// <summary>
+    /// Called when the user cancels a movement. The piece is destroyed if it was never placed before.
+    /// </summary>
     public void Reset()
     {
         if (!_placedOnce)
@@ -69,49 +115,68 @@ public class EditablePiece : MonoBehaviour
         }
     }
 
-    public void SetFaceInfos(S_FaceInfos face)
+    /// <summary>
+    /// Apply the values stored in _shape to the shader's properties.
+    /// </summary>
+    private void ApplyShapeToShader()
     {
-        _faceInfos = face;
-        SetShaderProperties();
+        if (_shape != null)
+        {
+            _renderer.GetPropertyBlock(_properties);
+            _properties.SetFloat("_FaceScale", _shape.FaceScale);
+            _properties.SetTexture("_ShapeMask", _shape.Mask.texture);
+            _properties.SetFloat("_BorderWidth", _shape.BorderWidth);
+            _properties.SetFloat("_BorderXOffset", _shape.BorderOffset.x);
+            _properties.SetFloat("_BorderYOffset", _shape.BorderOffset.y);
+            _properties.SetFloat("_FaceXOffset", _shape.FaceOffset.x);
+            _properties.SetFloat("_FaceYOffset", _shape.FaceOffset.y);
+            _renderer.SetPropertyBlock(_properties);
+        }
     }
 
-    public void SetShapeInfos(S_ShapeInfos shape)
+    /// <summary>
+    /// Apply the values stored in _animal to the shader's properties.
+    /// </summary>
+    private void ApplyAnimalToShader()
     {
-        _shapeInfos = shape;
-        SetShaderProperties();
+        if (_animal != null)
+        {
+            _renderer.GetPropertyBlock(_properties);
+            _properties.SetTexture("_Face", _animal.Face.texture);
+            _properties.SetColor("_BackgroundColor", _animal.Color);
+            _properties.SetColor("_BorderColor", _animal.BorderColor);
+            _renderer.SetPropertyBlock(_properties);
+        }
     }
 
-    void SetShaderProperties()
+    /// <summary>
+    /// Apply both the animal and shape datas at the same time.
+    /// </summary>
+    private void ApplyPropertiesToShader()
     {
-        _renderer.GetPropertyBlock(_properties);
-
-        _properties.SetTexture("_Face", _faceInfos.Face);
-        _properties.SetColor("_BackgroundColor", _faceInfos.BackgroundColor);
-        _properties.SetColor("_BorderColor", _faceInfos.BorderColor);
-        _properties.SetFloat("_BorderWidth", 0.1f);
-        _properties.SetTexture("_ShapeMask", _shapeInfos.Shape);
-        _properties.SetFloat("_ImageScale", _shapeInfos.ImageScale);
-        _properties.SetFloat("_ImageXOffset", _shapeInfos.ImageXOffset);
-        _properties.SetFloat("_ImageYOffset", _shapeInfos.ImageYOffset);
-        _properties.SetFloat("_BorderXOffset", _shapeInfos.BorderXOffset);
-        _properties.SetFloat("_BorderYOffset", _shapeInfos.BorderYOffset);
-
-        _renderer.SetPropertyBlock(_properties);
+        ApplyAnimalToShader();
+        ApplyShapeToShader();
     }
 
+    /// <summary>
+    /// Used to get the informations of the piece when saving.
+    /// </summary>
+    /// <param name="zone">Collider of the play zone. Used to get the relative size of the piece</param>
+    /// <returns></returns>
     public PieceInfos GetPieceInfos(BoxCollider2D zone)
     {
-        _infos.FacePath = _faceInfos.FaceAssetPath;
-        _infos.BackgroundColor = _faceInfos.BackgroundColor;
-        _infos.BorderColor = _faceInfos.BorderColor;
+        // TMP while transitionning from old data system to new one
+        _infos.FacePath = "";
+        _infos.BackgroundColor = _animal.Color;
+        _infos.BorderColor = _animal.BorderColor;
 
-        _infos.ShapePath = _shapeInfos.ShapeAssetPath;
-        _infos.ImageScale = _shapeInfos.ImageScale;
-        _infos.ImageXOffset = _shapeInfos.ImageXOffset;
-        _infos.ImageYOffset = _shapeInfos.ImageYOffset;
-        _infos.BorderWidth = 0.1f;
-        _infos.BorderXOffset = _shapeInfos.BorderXOffset;
-        _infos.BorderYOffset = _shapeInfos.BorderYOffset;
+        _infos.ShapePath = "";
+        _infos.ImageScale = _shape.FaceScale;
+        _infos.ImageXOffset = _shape.FaceOffset.x;
+        _infos.ImageYOffset = _shape.FaceOffset.y;
+        _infos.BorderWidth = _shape.BorderWidth;
+        _infos.BorderXOffset = _shape.BorderOffset.x;
+        _infos.BorderYOffset = _shape.BorderOffset.y;
 
         _infos.Position.x = (transform.position.x - zone.bounds.min.x) / zone.bounds.size.x;
         _infos.Position.y = (transform.position.y - zone.bounds.min.y) / zone.bounds.size.y;

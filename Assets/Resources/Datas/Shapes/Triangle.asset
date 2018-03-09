@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Triangle
   m_EditorClassIdentifier: 
   Type: 3
-  Map: {fileID: 21300000, guid: 318ddbf2214537a43945a8ddd30d1a57, type: 3}
+  Mask: {fileID: 21300000, guid: 318ddbf2214537a43945a8ddd30d1a57, type: 3}
   FaceScale: 0.6
   FaceOffset: {x: 0, y: -0.35}
   BorderWidth: 0.1
