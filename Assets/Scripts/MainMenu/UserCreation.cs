@@ -18,7 +18,7 @@ public class UserCreation : MonoBehaviour
     private LevelSelectManager _levelSelectManager;
 
     private string _currentUsername;
-    private GameDatas.AnimalType _currentIcon;
+    private GameDatas.E_AnimalType _currentIcon;
 
     private void Start()
     {
@@ -36,7 +36,7 @@ public class UserCreation : MonoBehaviour
     public void ResetProfile()
     {
         _currentUsername = "";
-        _currentIcon = GameDatas.AnimalType.NONE;
+        _currentIcon = GameDatas.E_AnimalType.NONE;
         m_usernameInputField.text = "";
     }
 
@@ -50,7 +50,7 @@ public class UserCreation : MonoBehaviour
         _currentUsername = username;
     }
 
-    public void SelectIcon(GameDatas.AnimalType icon)
+    public void SelectIcon(GameDatas.E_AnimalType icon)
     {
         _currentIcon = icon;
     }
@@ -61,7 +61,7 @@ public class UserCreation : MonoBehaviour
         {
             Debug.Log("No username provided.");
         }
-        else if (_currentIcon == GameDatas.AnimalType.NONE)
+        else if (_currentIcon == GameDatas.E_AnimalType.NONE)
         {
             Debug.Log("No avatar selected.");
         }

@@ -3,113 +3,62 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum E_PieceFace
-{
-    MONKEY = 0,
-    RABBIT,
-    PENGUIN
-}
-
-public enum E_PieceShape
-{
-    SQUARE = 0,
-    CIRCLE,
-    TRIANGLE
-}
-
-#region Structures
-public struct S_FaceInfos
-{
-    public Texture Face;
-    public string FaceAssetPath;
-    public Color BackgroundColor;
-    public Color BorderColor;
-
-    public S_FaceInfos(string face, Color backC, Color bordC)
-    {
-        Face = Resources.Load<Texture2D>(face);
-        FaceAssetPath = face;
-        BackgroundColor = backC;
-        BorderColor = bordC;
-    }
-}
-
-public struct S_ShapeInfos
-{
-    public Texture Shape;
-    public string ShapeAssetPath;
-    public float ImageScale;
-    public float ImageXOffset;
-    public float ImageYOffset;
-    public float BorderXOffset;
-    public float BorderYOffset;
-
-    public S_ShapeInfos(string shape, float imgS, float ixo, float iyo, float bxo, float byo)
-    {
-        Shape = Resources.Load<Texture2D>(shape);
-        ShapeAssetPath = shape;
-        ImageScale = imgS;
-        ImageXOffset = ixo;
-        ImageYOffset = iyo;
-        BorderXOffset = bxo;
-        BorderYOffset = byo;
-    }
-}
-#endregion
-
+/// <summary>
+/// PieceCreationManager class. Manage the creation menu accessible by the user, from the creation of the toggles to their callbacks.
+/// </summary>
 public class PieceCreationManager : MonoBehaviour
 {
+    // ToggleGroup managing the animals type
     [SerializeField]
     private ToggleGroup m_facesToggles;
+    // ToggleGroup managing the shapes
     [SerializeField]
     private ToggleGroup m_shapesToggles;
 
-    [SerializeField]
-    private List<Color> m_backgroundColors = new List<Color>();
-    [SerializeField]
-    private List<Color> m_borderColors = new List<Color>();
+    // Current animal
+    private Animal _currentAnimal;
+    // Current shape
+    private Shape _currentShape;
 
+    // Reference to the PiecesManager
     private PiecesManager _piecesManager;
-
-    private Dictionary<E_PieceFace, S_FaceInfos> _faces = new Dictionary<E_PieceFace, S_FaceInfos>();
-    private Dictionary<E_PieceShape, S_ShapeInfos> _shapes = new Dictionary<E_PieceShape, S_ShapeInfos>();
-
-    private E_PieceFace _currentFace = E_PieceFace.MONKEY;
-    private E_PieceShape _currentShape = E_PieceShape.SQUARE;
 
     private void Start()
     {
         _piecesManager = FindObjectOfType<PiecesManager>();
-
-        // Faces informations
-        _faces.Add(E_PieceFace.MONKEY, new S_FaceInfos("Faces/Monkey_Face", m_backgroundColors[(int)E_PieceFace.MONKEY], m_borderColors[(int)E_PieceFace.MONKEY]));
-        _faces.Add(E_PieceFace.RABBIT, new S_FaceInfos("Faces/Rabbit_Face", m_backgroundColors[(int)E_PieceFace.RABBIT], m_borderColors[(int)E_PieceFace.RABBIT]));
-        _faces.Add(E_PieceFace.PENGUIN, new S_FaceInfos("Faces/Penguin_Face", m_backgroundColors[(int)E_PieceFace.PENGUIN], m_borderColors[(int)E_PieceFace.PENGUIN]));
-
-        // Shapes informations
-        _shapes.Add(E_PieceShape.SQUARE, new S_ShapeInfos("Maps/White_BG/Square_Map", 1f, 0, 0, 0, 0));
-        _shapes.Add(E_PieceShape.CIRCLE, new S_ShapeInfos("Maps/White_BG/Circle_Map", 1f, 0, 0, 0, 0));
-        _shapes.Add(E_PieceShape.TRIANGLE, new S_ShapeInfos("Maps/White_BG/Triangle_Map", 0.6f, 0, -0.35f, 0, 0.02f));
+        _currentAnimal = GameDatas.Instance.ZooAnimals[0];
+        _currentShape = GameDatas.Instance.ZooShapes[0];
     }
 
+    /// <summary>
+    /// Toggle callback allowing to change the current piece animal type.
+    /// </summary>
+    /// <param name="e">GameDatas.E_AnimalType enum passed as an int</param>
     public void ChangePieceFace(int e)
     {
-        if (!m_facesToggles.transform.GetChild(e).GetComponent<Toggle>().isOn) return;
+        if (!m_facesToggles.transform.GetChild(e - 1).GetComponent<Toggle>().isOn) return;
 
-        _currentFace = (E_PieceFace)e;
-        _piecesManager.ApplyFaceOnSelection(_faces[_currentFace]);
+        _currentAnimal = GameDatas.Instance.GetAnimalData((GameDatas.E_AnimalType)e);
+        _piecesManager.ApplyFaceOnSelection(_currentAnimal);
     }
 
+    /// <summary>
+    /// Toggle callback allowing to change the current piece shape type.
+    /// </summary>
+    /// <param name="e">GameDatas.E_ShapeType enum passed as an int</param>
     public void ChangePieceShape(int e)
     {
-        if (!m_shapesToggles.transform.GetChild(e).GetComponent<Toggle>().isOn) return;
+        if (!m_shapesToggles.transform.GetChild(e - 1).GetComponent<Toggle>().isOn) return;
 
-        _currentShape = (E_PieceShape)e;
-        _piecesManager.ApplyShapeOnSelection(_shapes[_currentShape]);
+        _currentShape = GameDatas.Instance.GetShapeData((GameDatas.E_ShapeType)e);
+        _piecesManager.ApplyShapeOnSelection(_currentShape);
     }
 
+    /// <summary>
+    /// Callback to the create button, create a new piece with _currentAnimal as face and _currentShape as shape.
+    /// </summary>
     public void CreatePiece()
     {
-        _piecesManager.CreatePiece(_faces[_currentFace], _shapes[_currentShape]);
+        _piecesManager.CreatePiece(_currentAnimal, _currentShape);
     }
 }

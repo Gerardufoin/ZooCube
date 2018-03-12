@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Shape", menuName = "ZooCube/Shape")]
 public class Shape : ScriptableObject
 {
-    public GameDatas.ShapeType Type;
+    public GameDatas.E_ShapeType Type;
     public Sprite Mask;
     public float FaceScale = 1.0f;
     public Vector2 FaceOffset;

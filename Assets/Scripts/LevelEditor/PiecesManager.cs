@@ -236,30 +236,30 @@ public class PiecesManager : MonoBehaviour
         _selectionMesh.uv = _uvs;
     }
 
-    public void ApplyFaceOnSelection(S_FaceInfos face)
+    public void ApplyFaceOnSelection(Animal animal)
     {
         for (int i = 0; i < _selectedPieces.Count; ++i)
         {
-            //_selectedPieces[i].SetFaceInfos(face);
+            _selectedPieces[i].Animal = animal;
         }
     }
 
-    public void ApplyShapeOnSelection(S_ShapeInfos shape)
+    public void ApplyShapeOnSelection(Shape shape)
     {
         for (int i = 0; i < _selectedPieces.Count; ++i)
         {
-            //_selectedPieces[i].SetShapeInfos(shape);
+            _selectedPieces[i].Shape = shape;
         }
     }
 
-    public void CreatePiece(S_FaceInfos face, S_ShapeInfos shape)
+    public void CreatePiece(Animal face, Shape shape)
     {
         ClearSelection();
         _selectionStart = GetMouseCoordinates();
         _selectionMove.transform.position = _selectionStart;
 
         GameObject piece = Instantiate(m_editablePiece.gameObject, _selectionStart, m_editablePiece.transform.rotation);
-        //piece.GetComponent<EditablePiece>().PresetProperties(face, shape);
+        piece.GetComponent<EditablePiece>().PresetProperties(face, shape);
 
         AddPieceToSelection(piece);
         piece.transform.parent = _selectionMove.transform;

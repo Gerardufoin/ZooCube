@@ -2,17 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// LevelSaver class. Used to save a custom level created through the level editor.
+/// </summary>
 public class LevelSaver : MonoBehaviour
 {
     // Creation zone. Will be scaled to the zone in the play level at load time
     [SerializeField]
     BoxCollider2D m_editZone;
 
-    // Called to save the level
+    /// <summary>
+    /// Called to save the level. When called, the function will collect all the EditablePieces in the scene and save their informations using the GameDatas singleton.
+    /// </summary>
     public void SaveLevel()
     {
-        // Class to transform into a json
-        LevelInfos levelInfos = new LevelInfos();
+        // We get the edited level using its hash (will be used when the load is implemented in the level editor)
+        GameDatas.LevelDatas levelInfos = GameDatas.Instance.GetLevelByHash("");
+        if (levelInfos.Hash == "")
+        {
+            levelInfos.Pieces = new List<GameDatas.PieceInfos>();
+            levelInfos.Hash = System.DateTime.Now.Millisecond.ToString();
+        }
+
         // Getting all the pieces of the scene
         EditablePiece[] _pieces = FindObjectsOfType<EditablePiece>();
 
@@ -23,12 +34,13 @@ public class LevelSaver : MonoBehaviour
             return;
         }
 
-        // We add all the pieces infos to the LevelInfos
+        // We add all the pieces infos to the recepter
         for (int i = 0; i < _pieces.Length; ++i)
         {
             levelInfos.Pieces.Add(_pieces[i].GetPieceInfos(m_editZone));
         }
-        // We write the json to the save file
-        System.IO.File.WriteAllText(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/test.json", JsonUtility.ToJson(levelInfos));
+        // Save. Will have to do some checks when the loading will be available
+        GameDatas.Instance.Levels.Add(levelInfos);
+        GameDatas.Instance.SaveCustomLevels();
     }
 }

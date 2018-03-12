@@ -19,7 +19,7 @@ public class EditablePiece : MonoBehaviour
 
     // Animal displayed by the piece.
     private Animal _animal;
-    public Animal Aninal
+    public Animal Animal
     {
         get { return _animal; }
         set
@@ -42,8 +42,6 @@ public class EditablePiece : MonoBehaviour
 
     // PropertyBlock used to modify shader (to avoid creating a new one every time).
     private MaterialPropertyBlock _properties;
-    // Informations about the piece (used when saving).
-    private PieceInfos _infos;
 
     // Is the piece currently being reset ?
     private bool _reseting;
@@ -163,26 +161,19 @@ public class EditablePiece : MonoBehaviour
     /// </summary>
     /// <param name="zone">Collider of the play zone. Used to get the relative size of the piece</param>
     /// <returns></returns>
-    public PieceInfos GetPieceInfos(BoxCollider2D zone)
+    public GameDatas.PieceInfos GetPieceInfos(BoxCollider2D zone)
     {
-        // TMP while transitionning from old data system to new one
-        _infos.FacePath = "";
-        _infos.BackgroundColor = _animal.Color;
-        _infos.BorderColor = _animal.BorderColor;
+        GameDatas.PieceInfos piece;
 
-        _infos.ShapePath = "";
-        _infos.ImageScale = _shape.FaceScale;
-        _infos.ImageXOffset = _shape.FaceOffset.x;
-        _infos.ImageYOffset = _shape.FaceOffset.y;
-        _infos.BorderWidth = _shape.BorderWidth;
-        _infos.BorderXOffset = _shape.BorderOffset.x;
-        _infos.BorderYOffset = _shape.BorderOffset.y;
+        piece.Animal = _animal.Type;
+        piece.Shape = _shape.Type;
 
-        _infos.Position.x = (transform.position.x - zone.bounds.min.x) / zone.bounds.size.x;
-        _infos.Position.y = (transform.position.y - zone.bounds.min.y) / zone.bounds.size.y;
+        piece.Position.x = (transform.position.x - zone.bounds.min.x) / zone.bounds.size.x;
+        piece.Position.y = (transform.position.y - zone.bounds.min.y) / zone.bounds.size.y;
 
-        _infos.Scale.x = transform.localScale.x / zone.bounds.size.x;
-        _infos.Scale.y = transform.localScale.y / zone.bounds.size.y;
-        return (_infos);
+        piece.Scale.x = transform.localScale.x / zone.bounds.size.x;
+        piece.Scale.y = transform.localScale.y / zone.bounds.size.y;
+
+        return (piece);
     }
 }
