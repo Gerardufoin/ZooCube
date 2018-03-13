@@ -4,7 +4,8 @@ using System.Collections;
 public class MovablePiece : MonoBehaviour
 {
     public int Id;
-    public PieceInfos PieceInfos;
+    public Animal Animal;
+    public Shape Shape;
 
     private bool selected;
     private bool reseting;
@@ -83,16 +84,16 @@ public class MovablePiece : MonoBehaviour
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(properties);
 
-        properties.SetTexture("_Face", Resources.Load<Texture2D>(PieceInfos.FacePath));
-        properties.SetTexture("_ShapeMask", Resources.Load<Texture2D>(PieceInfos.ShapePath));
-        properties.SetColor("_BackgroundColor", PieceInfos.BackgroundColor);
-        properties.SetColor("_BorderColor", PieceInfos.BorderColor);
-        properties.SetFloat("_ImageScale", PieceInfos.ImageScale);
-        properties.SetFloat("_BorderWidth", PieceInfos.BorderWidth);
-        properties.SetFloat("_BorderXOffset", PieceInfos.BorderXOffset);
-        properties.SetFloat("_BorderYOffset", PieceInfos.BorderYOffset);
-        properties.SetFloat("_ImageXOffset", PieceInfos.ImageXOffset);
-        properties.SetFloat("_ImageYOffset", PieceInfos.ImageYOffset);
+        properties.SetTexture("_Face", Animal.Face.texture);
+        properties.SetColor("_BackgroundColor", Animal.Color);
+        properties.SetColor("_BorderColor", Animal.BorderColor);
+        properties.SetFloat("_FaceScale", Shape.FaceScale);
+        properties.SetTexture("_ShapeMask", Shape.Mask.texture);
+        properties.SetFloat("_BorderWidth", Shape.BorderWidth);
+        properties.SetFloat("_BorderXOffset", Shape.BorderOffset.x);
+        properties.SetFloat("_BorderYOffset", Shape.BorderOffset.y);
+        properties.SetFloat("_FaceXOffset", Shape.FaceOffset.x);
+        properties.SetFloat("_FaceYOffset", Shape.FaceOffset.y);
 
         _renderer.SetPropertyBlock(properties);
     }

@@ -19,10 +19,20 @@ public class LevelSelect : MonoBehaviour
             Transform levelNumber = level.GetChild(0);
             Transform levelLock = level.GetChild(1);
             Transform levelStar = level.GetChild(2);
+            Button btn = level.GetComponent<Button>();
             bool levelAvailable = (i <= user.OfficialLevelsProgression);
 
             level.GetComponent<Image>().color = (levelAvailable ? m_difficultyColors[(i / 10 < m_difficultyColors.Count ? i / 10 : m_difficultyColors.Count)] : Color.white);
-            level.GetComponent<Button>().enabled = levelAvailable;
+            btn.enabled = levelAvailable;
+            btn.onClick.RemoveAllListeners();
+            if (levelAvailable)
+            {
+                btn.onClick.AddListener(() =>
+                {
+                    GameDatas.Instance.CurrentLevel = (i < GameDatas.Instance.ZooLevels.Count ? GameDatas.Instance.ZooLevels[i] : GameDatas.Instance.ZooLevels[0]);
+                    FindObjectOfType<MainMenuManager>().Play();
+                });
+            }
             levelNumber.gameObject.SetActive(levelAvailable);
             levelLock.gameObject.SetActive(!levelAvailable);
             levelStar.gameObject.SetActive(user.OfficialLevelsProgression > i);

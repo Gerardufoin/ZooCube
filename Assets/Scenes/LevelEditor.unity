@@ -1808,6 +1808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c880cdbc56794408dbea8aa098f9a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_outputJson: 1
   m_editZone: {fileID: 844452121}
 --- !u!114 &1156213579
 MonoBehaviour:

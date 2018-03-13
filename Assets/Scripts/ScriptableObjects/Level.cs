@@ -6,5 +6,6 @@ using UnityEngine;
 public class Level : ScriptableObject
 {
     public int Number;
+    [TextArea]
     public string JsonData;
 }

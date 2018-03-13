@@ -69,11 +69,14 @@ public class GameDatas : MonoBehaviour
 
     public List<Animal> ZooAnimals = new List<Animal>();
     public List<Shape> ZooShapes = new List<Shape>();
+    public List<Level> ZooLevels = new List<Level>();
 
     [HideInInspector]
     public int CurrentUserIdx;
+    [HideInInspector]
+    public Level CurrentLevel;
     public List<UserDatas> Users = new List<UserDatas>();
-    public List<LevelDatas> Levels = new List<LevelDatas>();
+    public List<LevelDatas> CustomLevels = new List<LevelDatas>();
 
     public static GameDatas Instance;
     private void Awake()
@@ -104,7 +107,7 @@ public class GameDatas : MonoBehaviour
 
     public void SaveCustomLevels()
     {
-        Save(CustomLevelsFilename, Levels);
+        Save(CustomLevelsFilename, CustomLevels);
     }
 
     public void SaveAll()
@@ -131,7 +134,7 @@ public class GameDatas : MonoBehaviour
 
     public void LoadCustomLevels()
     {
-        Load<List<LevelDatas>>(CustomLevelsFilename, ref Levels);
+        Load<List<LevelDatas>>(CustomLevelsFilename, ref CustomLevels);
     }
 
     public void LoadAll()
@@ -170,13 +173,16 @@ public class GameDatas : MonoBehaviour
 
     public LevelDatas GetLevelByHash(string hash)
     {
-        for (int i = 0; i < Levels.Count; ++i)
+        for (int i = 0; i < CustomLevels.Count; ++i)
         {
-            if (Levels[i].Hash == hash)
+            if (CustomLevels[i].Hash == hash)
             {
-                return Levels[i];
+                return CustomLevels[i];
             }
         }
-        return new LevelDatas();
+        LevelDatas level = new LevelDatas();
+        level.Hash = System.DateTime.Now.Millisecond.ToString();
+        level.Pieces = new List<GameDatas.PieceInfos>();
+        return level;
     }
 }

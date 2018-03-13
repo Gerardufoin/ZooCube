@@ -6,7 +6,7 @@ public class Recepter : MonoBehaviour
     // Id of the receter, should match a MovablePiece
     public int Id;
     // Contains the info needed for the shader, loaded from the level's json
-    public PieceInfos PieceInfos;
+    public Shape Shape;
 
     // Reference to the RecepterManager
     private RecepterManager _recepterManager;
@@ -41,7 +41,7 @@ public class Recepter : MonoBehaviour
         yield return new WaitForFixedUpdate();
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(properties);
-        properties.SetTexture("_Map", Resources.Load<Texture2D>(PieceInfos.ShapePath));
+        properties.SetTexture("_ShapeMask", Shape.Mask.texture);
         _renderer.SetPropertyBlock(properties);
     }
 }

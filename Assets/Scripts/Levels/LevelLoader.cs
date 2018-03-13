@@ -2,34 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#region Json Structure
-// Structure containing all the needed info for a specific piece
-[System.Serializable]
-public struct PieceInfos
-{
-    public string FacePath;
-    public string ShapePath;
-    public Color BackgroundColor;
-    public Color BorderColor;
-    public Vector2 Position;
-    public Vector2 Scale;
-    public float ImageScale;
-    public float ImageXOffset;
-    public float ImageYOffset;
-    public float BorderWidth;
-    public float BorderXOffset;
-    public float BorderYOffset;
-}
-
-// Class containing all the infos to save/load for a level
-[System.Serializable]
-public class LevelInfos
-{
-    public List<PieceInfos> Pieces = new List<PieceInfos>();
-}
-#endregion
-
-// Load the pieces of a specific level
+/// <summary>
+/// LevelLoader class. Load the pieces of the selected level.
+/// </summary>
 public class LevelLoader : MonoBehaviour
 {
     // Used to display list of list in the editor
@@ -83,12 +58,12 @@ public class LevelLoader : MonoBehaviour
         }
         _zonePosition = m_playzone.bounds.min;
         _zoneSize = m_playzone.bounds.size;
-        this.LoadLevel(System.IO.File.ReadAllText(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/test.json"));
+        this.LoadLevel(GameDatas.Instance.CurrentLevel.JsonData);
     }
 
     public void LoadLevel(string json)
     {
-        LevelInfos infos = JsonUtility.FromJson<LevelInfos>(json);
+        GameDatas.LevelDatas infos = JsonUtility.FromJson<GameDatas.LevelDatas>(json);
 
         int colIdx = 0;
         int rowIdx = 0;
@@ -97,6 +72,8 @@ public class LevelLoader : MonoBehaviour
         {
             if (rowIdx < m_spawns[colIdx].Spawns.Count)
             {
+                Animal animal = GameDatas.Instance.GetAnimalData(infos.Pieces[i].Animal);
+                Shape shape = GameDatas.Instance.GetShapeData(infos.Pieces[i].Shape);
                 Vector3 position = new Vector3(_zonePosition.x + _zoneSize.x * infos.Pieces[i].Position.x, _zonePosition.y + _zoneSize.y * infos.Pieces[i].Position.y, -1f);
                 Vector3 scale = _defaultScale + (Vector3)infos.Pieces[i].Scale;
                 scale.x *= _zoneSize.x;
@@ -106,13 +83,14 @@ public class LevelLoader : MonoBehaviour
                 recepter.Id = i;
                 recepter.transform.localScale = scale;
                 recepter.transform.position = position;
-                recepter.PieceInfos = infos.Pieces[i];
+                recepter.Shape = shape;
 
                 MovablePiece piece = Instantiate(m_piecePrefab);
                 piece.Id = i;
                 piece.transform.localScale = scale;
                 piece.transform.position = m_spawns[colIdx].Spawns[rowIdx].position;
-                piece.PieceInfos = infos.Pieces[i];
+                piece.Animal = animal;
+                piece.Shape = shape;
                 ++i;
             }
             if (++colIdx > m_spawns.Count)

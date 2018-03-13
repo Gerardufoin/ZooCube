@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: Level1
   m_EditorClassIdentifier: 
   Number: 1
-  JsonData: 
+  JsonData: '{"Name":"","Hash":"284","Pieces":[{"Animal":3,"Shape":2,"Position":{"x":0.7935854196548462,"y":0.8001561164855957},"Scale":{"x":0.19531242549419404,"y":0.1953125}},{"Animal":2,"Shape":2,"Position":{"x":0.745512843132019,"y":0.25254306197166445},"Scale":{"x":0.19531242549419404,"y":0.1953125}},{"Animal":1,"Shape":1,"Position":{"x":0.2501528561115265,"y":0.7479029893875122},"Scale":{"x":0.19531242549419404,"y":0.1953125}}]}'

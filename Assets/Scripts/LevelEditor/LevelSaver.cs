@@ -7,9 +7,19 @@ using UnityEngine;
 /// </summary>
 public class LevelSaver : MonoBehaviour
 {
+    // Output the level's json in the console instead of saving the data as a custom level. (Editor only)
+    [SerializeField]
+    private bool m_outputJson;
     // Creation zone. Will be scaled to the zone in the play level at load time
     [SerializeField]
     BoxCollider2D m_editZone;
+
+#if !UNITY_EDITOR
+    private void Start()
+    {
+        m_outputJson = false;
+    }
+#endif
 
     /// <summary>
     /// Called to save the level. When called, the function will collect all the EditablePieces in the scene and save their informations using the GameDatas singleton.
@@ -18,11 +28,6 @@ public class LevelSaver : MonoBehaviour
     {
         // We get the edited level using its hash (will be used when the load is implemented in the level editor)
         GameDatas.LevelDatas levelInfos = GameDatas.Instance.GetLevelByHash("");
-        if (levelInfos.Hash == "")
-        {
-            levelInfos.Pieces = new List<GameDatas.PieceInfos>();
-            levelInfos.Hash = System.DateTime.Now.Millisecond.ToString();
-        }
 
         // Getting all the pieces of the scene
         EditablePiece[] _pieces = FindObjectsOfType<EditablePiece>();
@@ -33,14 +38,21 @@ public class LevelSaver : MonoBehaviour
             Debug.Log("Empty level");
             return;
         }
-
+        
         // We add all the pieces infos to the recepter
         for (int i = 0; i < _pieces.Length; ++i)
         {
             levelInfos.Pieces.Add(_pieces[i].GetPieceInfos(m_editZone));
         }
-        // Save. Will have to do some checks when the loading will be available
-        GameDatas.Instance.Levels.Add(levelInfos);
-        GameDatas.Instance.SaveCustomLevels();
+        if (m_outputJson)
+        {
+            Debug.Log(JsonUtility.ToJson(levelInfos));
+        }
+        else
+        {
+            // Save. Will have to do some checks when the loading will be available
+            GameDatas.Instance.CustomLevels.Add(levelInfos);
+            GameDatas.Instance.SaveCustomLevels();
+        }
     }
 }
