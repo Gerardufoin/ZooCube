@@ -29,7 +29,7 @@ public class LevelSelect : MonoBehaviour
             {
                 btn.onClick.AddListener(() =>
                 {
-                    GameDatas.Instance.CurrentLevel = (i < GameDatas.Instance.ZooLevels.Count ? GameDatas.Instance.ZooLevels[i] : GameDatas.Instance.ZooLevels[0]);
+                    GameDatas.Instance.CurrentLevel = GameDatas.Instance.GetLevel(i + 1);
                     FindObjectOfType<MainMenuManager>().Play();
                 });
             }

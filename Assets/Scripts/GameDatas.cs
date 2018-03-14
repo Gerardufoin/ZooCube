@@ -26,7 +26,7 @@ public class GameDatas : MonoBehaviour
     }
 
     [System.Serializable]
-    public struct UserDatas
+    public class UserDatas
     {
         public string Username;
         public E_AnimalType Icon;
@@ -54,7 +54,7 @@ public class GameDatas : MonoBehaviour
     }
 
     [System.Serializable]
-    public struct LevelDatas
+    public class LevelDatas
     {
         public string Name;
         public string Hash;
@@ -184,5 +184,11 @@ public class GameDatas : MonoBehaviour
         level.Hash = System.DateTime.Now.Millisecond.ToString();
         level.Pieces = new List<GameDatas.PieceInfos>();
         return level;
+    }
+
+    public Level GetLevel(int nb)
+    {
+        nb -= 1;
+        return (nb < ZooLevels.Count ? ZooLevels[nb] : ZooLevels[0]);
     }
 }
