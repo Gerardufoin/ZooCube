@@ -9,7 +9,7 @@ public class EditorManager : MonoBehaviour
         GameObject theater = GameObject.FindGameObjectWithTag("Theater");
         if (theater != null)
         {
-            theater.GetComponent<Theater>().OpenCurtains();
+            theater.GetComponent<Theater>().OpenCurtains(true);
         }
     }
 }

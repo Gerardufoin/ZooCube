@@ -26,7 +26,7 @@ public class MainMenuManager : MonoBehaviour
         _theater = GameObject.FindGameObjectWithTag("Theater").GetComponent<Theater>();
         if (!_theater.IsOpen)
         {
-            _theater.OpenCurtains();
+            _theater.OpenCurtains(true);
         }
     }
 
@@ -67,7 +67,7 @@ public class MainMenuManager : MonoBehaviour
         _theater.CurtainCloseActions += () => {
             m_mainUI.SetActive(false);
             m_levelSelection.SetActive(true);
-            _theater.OpenCurtains(false);
+            _theater.OpenCurtains();
             _enableEscMenu = true;
         };
     }
@@ -78,7 +78,7 @@ public class MainMenuManager : MonoBehaviour
         _theater.CurtainCloseActions += () => {
             m_mainUI.SetActive(false);
             m_credits.SetActive(true);
-            _theater.OpenCurtains(false);
+            _theater.OpenCurtains();
             _enableEscMenu = true;
         };
     }
@@ -86,12 +86,12 @@ public class MainMenuManager : MonoBehaviour
     public void ReturnMenu()
     {
         _enableEscMenu = false;
-        _theater.CloseCurtains(false);
+        _theater.CloseCurtains();
         _theater.CurtainCloseActions += () => {
             m_credits.SetActive(false);
             m_levelSelection.SetActive(false);
             m_mainUI.SetActive(true);
-            _theater.OpenCurtains();
+            _theater.OpenCurtains(true);
         };
     }
 

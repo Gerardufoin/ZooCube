@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         if (theater != null)
         {
             _theater = theater.GetComponent<Theater>();
-            _theater.OpenCurtains(false);
+            _theater.OpenCurtains();
         }
         _recepterManager = FindObjectOfType<RecepterManager>();
 	}
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
                 GameDatas.Instance.Users[GameDatas.Instance.CurrentUserIdx].OfficialLevelsProgression = _currentLevel.Number;
                 GameDatas.Instance.SaveUsers();
             }
-            if (_theater) _theater.CloseCurtains(false);
+            if (_theater) _theater.CloseCurtains();
             Debug.Log("FINISHED :D");
         }
     }
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadSceneAsync("MainMenu");
                 _theater.ShowLoading();
             };
-            _theater.CloseCurtains(false);
+            _theater.CloseCurtains();
         }
         else
         {
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadSceneAsync("Levels");
                 _theater.ShowLoading();
             };
-            _theater.CloseCurtains(false);
+            _theater.CloseCurtains();
         }
         else
         {
