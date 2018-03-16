@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222225294702619564}
   - component: {fileID: 114883478769167220}
   - component: {fileID: 114017548774700004}
+  - component: {fileID: 114453210098261746}
   m_Layer: 5
   m_Name: LevelSlot
   m_TagString: Untagged
@@ -260,6 +261,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114453210098261746
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1062886671287084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5287d0e567c102e429e66ad1c84d4144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114579793026896756
 MonoBehaviour:
   m_ObjectHideFlags: 1
