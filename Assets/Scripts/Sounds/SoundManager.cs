@@ -27,9 +27,15 @@ public class SoundManager : MonoBehaviour
         THEATER
     }
 
+    // Reference to the "mute fx" toggle
+    [SerializeField]
+    private ToggleIcon m_muteFXToggle;
+    // Reference to the "mute BGM" toggle
+    [SerializeField]
+    private ToggleIcon m_muteBGMToggle;
     // List of FXs
     [SerializeField]
-    private Dictionary<E_FX, AudioClip> m_fxList = new Dictionary<E_FX, AudioClip>();
+    private List<FX> m_fxList = new List<FX>();
 
     // Reference to the BGM source (camera)
     private AudioSource _bgmSource;
@@ -42,8 +48,10 @@ public class SoundManager : MonoBehaviour
         _fxSource = GetComponent<AudioSource>();
         _bgmSource.volume = PlayerPrefs.HasKey(BGM_VOLUME_KEY) ? PlayerPrefs.GetFloat(BGM_VOLUME_KEY) : 1f;
         _bgmSource.mute = PlayerPrefs.HasKey(BGM_MUTE_KEY) ? (PlayerPrefs.GetInt(BGM_MUTE_KEY) != 0) : false;
+        m_muteBGMToggle.SetState(!_bgmSource.mute);
         _fxSource.volume = PlayerPrefs.HasKey(FX_VOLUME_KEY) ? PlayerPrefs.GetFloat(FX_VOLUME_KEY) : 1f;
         _fxSource.mute = PlayerPrefs.HasKey(FX_MUTE_KEY) ? (PlayerPrefs.GetInt(FX_MUTE_KEY) != 0) : false;
+        m_muteFXToggle.SetState(!_fxSource.mute);
     }
 
     /// <summary>
@@ -54,6 +62,15 @@ public class SoundManager : MonoBehaviour
     {
         _bgmSource.mute = state;
         PlayerPrefs.SetInt(BGM_MUTE_KEY, state ? 1 : 0);
+        m_muteBGMToggle.SetState(!state);
+    }
+
+    /// <summary>
+    /// Toggles the mute state of the BGM
+    /// </summary>
+    public void ToggleBGM()
+    {
+        MuteBGM(!_bgmSource.mute);
     }
 
     /// <summary>
@@ -64,6 +81,15 @@ public class SoundManager : MonoBehaviour
     {
         _fxSource.mute = state;
         PlayerPrefs.SetInt(FX_MUTE_KEY, state ? 1 : 0);
+        m_muteFXToggle.SetState(!_fxSource.mute);
+    }
+
+    /// <summary>
+    /// Toggles the mute state of the FXs
+    /// </summary>
+    public void ToggleFX()
+    {
+        MuteFX(!_fxSource.mute);
     }
 
     /// <summary>
@@ -95,6 +121,13 @@ public class SoundManager : MonoBehaviour
     /// <returns></returns>
     public AudioClip GetFX(E_FX fx)
     {
+        foreach (FX data in m_fxList)
+        {
+            if (data.FXType == fx)
+            {
+                return data.Clip;
+            }
+        }
         return null;
     }
 }
