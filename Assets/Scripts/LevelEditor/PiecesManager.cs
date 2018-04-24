@@ -27,6 +27,17 @@ public class PiecesManager : MonoBehaviour
     private GameObject m_areaSelection;
     [SerializeField]
     private EditablePiece m_editablePiece;
+
+    [SerializeField]
+    private Texture2D m_cursorVertical;
+    [SerializeField]
+    private Texture2D m_cursorHorizontal;
+    [SerializeField]
+    private Texture2D m_cursorDiagonalLeft;
+    [SerializeField]
+    private Texture2D m_cursorDiagonalRight;
+    [SerializeField]
+    private Vector2 m_cursorOffset;
     #endregion
 
     #region SelectionMesh
@@ -150,6 +161,7 @@ public class PiecesManager : MonoBehaviour
                 UpdateSelectionMesh();
             }
         }
+        UpdateCursor();
     }
 
     private void CreatingUpdate()
@@ -234,6 +246,33 @@ public class PiecesManager : MonoBehaviour
         _selectionMesh.vertices = _vertices;
         _selectionMesh.triangles = _tris;
         _selectionMesh.uv = _uvs;
+    }
+
+    private void UpdateCursor()
+    {
+        Vector2 mousePosition = GetMouseCoordinates();
+        Collider2D result = Physics2D.OverlapPoint(mousePosition, _editableLayer);
+        if (result)
+        {
+            bool up = mousePosition.y >= result.bounds.max.y - 0.1f && mousePosition.y <= result.bounds.max.y;
+            bool down = mousePosition.y <= result.bounds.min.y + 0.1f && mousePosition.y >= result.bounds.min.y;
+            bool left = mousePosition.x <= result.bounds.min.x + 0.1f && mousePosition.x >= result.bounds.min.x;
+            bool right = mousePosition.x >= result.bounds.max.x - 0.1f && mousePosition.x <= result.bounds.max.x;
+            if ((up && left) || (down && right))
+                Cursor.SetCursor(m_cursorDiagonalLeft, m_cursorOffset, CursorMode.Auto);
+            else if ((down && left) || (up && right))
+                Cursor.SetCursor(m_cursorDiagonalRight, m_cursorOffset, CursorMode.Auto);
+            else if (up || down)
+                Cursor.SetCursor(m_cursorVertical, m_cursorOffset, CursorMode.Auto);
+            else if (left || right)
+                Cursor.SetCursor(m_cursorHorizontal, m_cursorOffset, CursorMode.Auto);
+            else
+                Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
+        else
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
     }
 
     public void ApplyFaceOnSelection(Animal animal)
