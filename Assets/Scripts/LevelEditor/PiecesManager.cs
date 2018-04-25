@@ -11,7 +11,20 @@ public enum E_MouseActions
     IDLING = 0,
     CREATING,
     MOVING,
-    SELECTING
+    SELECTING,
+    SCALING
+}
+
+/// <summary>
+/// Possible directions of the scaling. Used as flags, can be combined.
+/// </summary>
+public enum E_ScaleDirections
+{
+    NONE    = 0,
+    LEFT    = 1,
+    RIGHT   = 2,
+    UP      = 4,
+    DOWN    = 8
 }
 
 /// <summary>
@@ -50,6 +63,7 @@ public class PiecesManager : MonoBehaviour
     #endregion
 
     private E_MouseActions _currentAction;
+    private E_ScaleDirections _scaleDirection;
 
     private delegate void D_CurrentAction();
     private Dictionary<E_MouseActions, D_CurrentAction> _actionUpdate = new Dictionary<E_MouseActions, D_CurrentAction>();
@@ -96,6 +110,7 @@ public class PiecesManager : MonoBehaviour
         _actionUpdate.Add(E_MouseActions.CREATING, new D_CurrentAction(CreatingUpdate));
         _actionUpdate.Add(E_MouseActions.MOVING, new D_CurrentAction(MovingUpdate));
         _actionUpdate.Add(E_MouseActions.SELECTING, new D_CurrentAction(SelectingUpdate));
+        _actionUpdate.Add(E_MouseActions.SCALING, new D_CurrentAction(ScalingUpdate));
     }
 
     void Update ()
@@ -121,8 +136,40 @@ public class PiecesManager : MonoBehaviour
         return (coord);
     }
 
+    /// <summary>
+    /// Position _selectionMove at the right place based on _scaleDirection
+    /// If _scaleDirection is none, _selectionMove has to be place under the cursor. Otherwise, it has to be placed at the opposite bound of the scaling direction.
+    /// Eg: If we are scaling left, _selectionMove has to be place at the center-right bound of the selection
+    /// </summary>
+    private void SelectionPosition()
+    {
+        _selectionMove.transform.position = _selectionStart;
+        if (_scaleDirection != E_ScaleDirections.NONE)
+        {
+            Rect bounds = new Rect();
+            for (int i = 0; i < _selectedPieces.Count; ++i)
+            {
+                Collider2D col = _selectedPieces[i].GetComponent<Collider2D>();
+                bounds.xMin = Mathf.Min(bounds.xMin, col.bounds.min.x);
+                bounds.xMax = Mathf.Max(bounds.xMax, col.bounds.max.x);
+                bounds.yMin = Mathf.Min(bounds.yMin, col.bounds.min.y);
+                bounds.yMax = Mathf.Max(bounds.yMax, col.bounds.max.y);
+            }
+            if ((_scaleDirection & E_ScaleDirections.LEFT) != 0)
+                _selectionMove.transform.position = new Vector3(bounds.xMax, _selectionMove.transform.position.y, _selectionMove.transform.position.z);
+            else if ((_scaleDirection & E_ScaleDirections.RIGHT) != 0)
+                _selectionMove.transform.position = new Vector3(bounds.xMin, _selectionMove.transform.position.y, _selectionMove.transform.position.z);
+
+            if ((_scaleDirection & E_ScaleDirections.UP) != 0)
+                _selectionMove.transform.position = new Vector3(_selectionMove.transform.position.x, bounds.yMax, _selectionMove.transform.position.z);
+            else if ((_scaleDirection & E_ScaleDirections.DOWN) != 0)
+                _selectionMove.transform.position = new Vector3(_selectionMove.transform.position.x, bounds.yMin, _selectionMove.transform.position.z);
+        }
+    }
+
     private void IdlingUpdate()
     {
+        UpdateCursor();
         // Selection
         if (GetMouseButtonDown(0))
         {
@@ -130,7 +177,6 @@ public class PiecesManager : MonoBehaviour
             Collider2D result = Physics2D.OverlapPoint(_selectionStart, _editableLayer);
             if (result != null)
             {
-                // MOVING
                 // Multi selection check
                 bool selected = false;
                 for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -145,12 +191,12 @@ public class PiecesManager : MonoBehaviour
                     ClearSelection();
                     AddPieceToSelection(result.gameObject);
                 }
-                _selectionMove.transform.position = _selectionStart;
+                SelectionPosition();
                 for (int i = 0; i < _selectedPieces.Count; ++i)
                 {
                     _selectedPieces[i].transform.parent = _selectionMove.transform;
                 }
-                _currentAction = E_MouseActions.MOVING;
+                _currentAction = (_scaleDirection != E_ScaleDirections.NONE ? E_MouseActions.SCALING : E_MouseActions.MOVING);
             }
             else
             {
@@ -161,7 +207,6 @@ public class PiecesManager : MonoBehaviour
                 UpdateSelectionMesh();
             }
         }
-        UpdateCursor();
     }
 
     private void CreatingUpdate()
@@ -206,6 +251,21 @@ public class PiecesManager : MonoBehaviour
             return;
         }
         UpdateSelectionMesh();
+    }
+
+    private void ScalingUpdate()
+    {
+        Vector2 mouse = GetMouseCoordinates();
+        _selectionMove.transform.localScale = new Vector3(1 + _selectionStart.x - mouse.x, 1, 1);
+        if (GetMouseButtonUp(0))
+        {
+            for (int i = 0; i < _selectedPieces.Count; ++i)
+            {
+                _selectedPieces[i].transform.parent = null;
+            }
+            _selectionMove.transform.localScale = Vector3.one;
+            _currentAction = E_MouseActions.IDLING;
+        }
     }
 
     private void AddPieceToSelection(GameObject piece)
@@ -268,9 +328,11 @@ public class PiecesManager : MonoBehaviour
                 Cursor.SetCursor(m_cursorHorizontal, m_cursorOffset, CursorMode.Auto);
             else
                 Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            _scaleDirection = (up ? E_ScaleDirections.UP : 0) | (down ? E_ScaleDirections.DOWN : 0) | (left ? E_ScaleDirections.LEFT : 0) | (right ? E_ScaleDirections.RIGHT : 0);
         }
-        else
+        else if (_scaleDirection != E_ScaleDirections.NONE)
         {
+            _scaleDirection = E_ScaleDirections.NONE;
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         }
     }
