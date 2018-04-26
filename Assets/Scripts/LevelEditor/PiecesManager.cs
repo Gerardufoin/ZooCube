@@ -16,7 +16,7 @@ public enum E_MouseActions
 }
 
 /// <summary>
-/// Possible directions of the scaling. Used as flags, can be combined.
+/// Available directions of the scaling. Used as flags, can be combined.
 /// </summary>
 public enum E_ScaleDirections
 {
@@ -56,7 +56,7 @@ public class PiecesManager : MonoBehaviour
     #region SelectionMesh
     private Mesh _selectionMesh;
 
-    private Rect _selectionBounds = new Rect();
+    private Rect _meshBounds = new Rect();
     private Vector3[] _vertices = new Vector3[4];
     private Vector2[] _uvs = new Vector2[4];
     private int[] _tris = new int[6];
@@ -71,7 +71,9 @@ public class PiecesManager : MonoBehaviour
     private List<EditablePiece> _selectedPieces = new List<EditablePiece>();
 
     private Vector3 _selectionStart;
-    private GameObject _selectionMove;
+    private GameObject _selectionContainer;
+    private Rect _selectionBounds;
+
 
     private int _editableLayer = 1 << 9;
 
@@ -103,8 +105,9 @@ public class PiecesManager : MonoBehaviour
         m_areaSelection.GetComponent<MeshFilter>().mesh = _selectionMesh;
         m_areaSelection.GetComponent<MeshRenderer>().sortingLayerName = "Forground";
 
-        _selectionMove = new GameObject("SelectionMoveParent");
-        _selectionMove.transform.position = Vector3.zero;
+        _selectionContainer = new GameObject("SelectionContainer");
+        _selectionContainer.transform.position = Vector3.zero;
+        _selectionBounds = new Rect();
 
         _actionUpdate.Add(E_MouseActions.IDLING, new D_CurrentAction(IdlingUpdate));
         _actionUpdate.Add(E_MouseActions.CREATING, new D_CurrentAction(CreatingUpdate));
@@ -137,33 +140,24 @@ public class PiecesManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Position _selectionMove at the right place based on _scaleDirection
-    /// If _scaleDirection is none, _selectionMove has to be place under the cursor. Otherwise, it has to be placed at the opposite bound of the scaling direction.
-    /// Eg: If we are scaling left, _selectionMove has to be place at the center-right bound of the selection
+    /// Position _selectionContainer at the right place based on _scaleDirection
+    /// If _scaleDirection is none, _selectionContainer has to be place under the cursor. Otherwise, it has to be placed at the opposite bound of the scaling direction.
+    /// Eg: If we are scaling left, _selectionContainer has to be place at the center-right bound of the selection
     /// </summary>
     private void SelectionPosition()
     {
-        _selectionMove.transform.position = _selectionStart;
+        _selectionContainer.transform.position = _selectionStart;
         if (_scaleDirection != E_ScaleDirections.NONE)
         {
-            Rect bounds = new Rect();
-            for (int i = 0; i < _selectedPieces.Count; ++i)
-            {
-                Collider2D col = _selectedPieces[i].GetComponent<Collider2D>();
-                bounds.xMin = Mathf.Min(bounds.xMin, col.bounds.min.x);
-                bounds.xMax = Mathf.Max(bounds.xMax, col.bounds.max.x);
-                bounds.yMin = Mathf.Min(bounds.yMin, col.bounds.min.y);
-                bounds.yMax = Mathf.Max(bounds.yMax, col.bounds.max.y);
-            }
             if ((_scaleDirection & E_ScaleDirections.LEFT) != 0)
-                _selectionMove.transform.position = new Vector3(bounds.xMax, _selectionMove.transform.position.y, _selectionMove.transform.position.z);
+                _selectionContainer.transform.position = new Vector3(_selectionBounds.xMax, _selectionContainer.transform.position.y, _selectionContainer.transform.position.z);
             else if ((_scaleDirection & E_ScaleDirections.RIGHT) != 0)
-                _selectionMove.transform.position = new Vector3(bounds.xMin, _selectionMove.transform.position.y, _selectionMove.transform.position.z);
+                _selectionContainer.transform.position = new Vector3(_selectionBounds.xMin, _selectionContainer.transform.position.y, _selectionContainer.transform.position.z);
 
             if ((_scaleDirection & E_ScaleDirections.UP) != 0)
-                _selectionMove.transform.position = new Vector3(_selectionMove.transform.position.x, bounds.yMax, _selectionMove.transform.position.z);
+                _selectionContainer.transform.position = new Vector3(_selectionContainer.transform.position.x, _selectionBounds.yMax, _selectionContainer.transform.position.z);
             else if ((_scaleDirection & E_ScaleDirections.DOWN) != 0)
-                _selectionMove.transform.position = new Vector3(_selectionMove.transform.position.x, bounds.yMin, _selectionMove.transform.position.z);
+                _selectionContainer.transform.position = new Vector3(_selectionContainer.transform.position.x, _selectionBounds.yMin, _selectionContainer.transform.position.z);
         }
     }
 
@@ -194,7 +188,7 @@ public class PiecesManager : MonoBehaviour
                 SelectionPosition();
                 for (int i = 0; i < _selectedPieces.Count; ++i)
                 {
-                    _selectedPieces[i].transform.parent = _selectionMove.transform;
+                    _selectedPieces[i].transform.parent = _selectionContainer.transform;
                 }
                 _currentAction = (_scaleDirection != E_ScaleDirections.NONE ? E_MouseActions.SCALING : E_MouseActions.MOVING);
             }
@@ -211,7 +205,7 @@ public class PiecesManager : MonoBehaviour
 
     private void CreatingUpdate()
     {
-        _selectionMove.transform.position = GetMouseCoordinates();
+        _selectionContainer.transform.position = GetMouseCoordinates();
         if (GetMouseButtonDown(0))
         {
             for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -224,7 +218,7 @@ public class PiecesManager : MonoBehaviour
 
     private void MovingUpdate()
     {
-        _selectionMove.transform.position = GetMouseCoordinates();
+        _selectionContainer.transform.position = GetMouseCoordinates();
         if (GetMouseButtonUp(0))
         {
             for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -256,14 +250,14 @@ public class PiecesManager : MonoBehaviour
     private void ScalingUpdate()
     {
         Vector2 mouse = GetMouseCoordinates();
-        _selectionMove.transform.localScale = new Vector3(1 + _selectionStart.x - mouse.x, 1, 1);
+        _selectionContainer.transform.localScale = new Vector3(1 + _selectionStart.x - mouse.x, 1, 1);
         if (GetMouseButtonUp(0))
         {
             for (int i = 0; i < _selectedPieces.Count; ++i)
             {
                 _selectedPieces[i].transform.parent = null;
             }
-            _selectionMove.transform.localScale = Vector3.one;
+            _selectionContainer.transform.localScale = Vector3.one;
             _currentAction = E_MouseActions.IDLING;
         }
     }
@@ -272,10 +266,29 @@ public class PiecesManager : MonoBehaviour
     {
         piece.GetComponent<SpriteRenderer>().sortingOrder = 2;
         _selectedPieces.Add(piece.GetComponent<EditablePiece>());
+        Collider2D collider = piece.GetComponent<Collider2D>();
+        if (collider)
+        {
+            if (_selectedPieces.Count > 1)
+            {
+                _selectionBounds.xMin = Mathf.Min(_selectionBounds.xMin, collider.bounds.min.x);
+                _selectionBounds.xMax = Mathf.Max(_selectionBounds.xMax, collider.bounds.max.x);
+                _selectionBounds.yMin = Mathf.Min(_selectionBounds.yMin, collider.bounds.min.y);
+                _selectionBounds.yMax = Mathf.Max(_selectionBounds.yMax, collider.bounds.max.y);
+            }
+            else
+            {
+                _selectionBounds.xMin = collider.bounds.min.x;
+                _selectionBounds.xMax = collider.bounds.max.x;
+                _selectionBounds.yMin = collider.bounds.min.y;
+                _selectionBounds.yMax = collider.bounds.max.y;
+            }
+        }
     }
 
     private void ClearSelection()
     {
+        _selectionBounds = new Rect();
         for (int i = 0; i < _selectedPieces.Count; ++i)
         {
             _selectedPieces[i].GetComponent<SpriteRenderer>().sortingOrder = 1;
@@ -289,19 +302,19 @@ public class PiecesManager : MonoBehaviour
 
         Vector3 selectionEnd = GetMouseCoordinates();
 
-        _selectionBounds.x = Mathf.Min(_selectionStart.x, selectionEnd.x);
-        _selectionBounds.y = Mathf.Max(_selectionStart.y, selectionEnd.y);
-        _selectionBounds.width = Mathf.Abs(_selectionStart.x - selectionEnd.x);
-        _selectionBounds.height = Mathf.Abs(_selectionStart.y - selectionEnd.y);
+        _meshBounds.x = Mathf.Min(_selectionStart.x, selectionEnd.x);
+        _meshBounds.y = Mathf.Max(_selectionStart.y, selectionEnd.y);
+        _meshBounds.width = Mathf.Abs(_selectionStart.x - selectionEnd.x);
+        _meshBounds.height = Mathf.Abs(_selectionStart.y - selectionEnd.y);
 
-        _vertices[0].x = _selectionBounds.x;
-        _vertices[0].y = _selectionBounds.y;
-        _vertices[1].x = _selectionBounds.x + _selectionBounds.width;
-        _vertices[1].y = _selectionBounds.y;
-        _vertices[2].x = _selectionBounds.x + _selectionBounds.width;
-        _vertices[2].y = _selectionBounds.y - _selectionBounds.height;
-        _vertices[3].x = _selectionBounds.x;
-        _vertices[3].y = _selectionBounds.y - _selectionBounds.height;
+        _vertices[0].x = _meshBounds.x;
+        _vertices[0].y = _meshBounds.y;
+        _vertices[1].x = _meshBounds.x + _meshBounds.width;
+        _vertices[1].y = _meshBounds.y;
+        _vertices[2].x = _meshBounds.x + _meshBounds.width;
+        _vertices[2].y = _meshBounds.y - _meshBounds.height;
+        _vertices[3].x = _meshBounds.x;
+        _vertices[3].y = _meshBounds.y - _meshBounds.height;
 
         _selectionMesh.vertices = _vertices;
         _selectionMesh.triangles = _tris;
@@ -357,13 +370,13 @@ public class PiecesManager : MonoBehaviour
     {
         ClearSelection();
         _selectionStart = GetMouseCoordinates();
-        _selectionMove.transform.position = _selectionStart;
+        _selectionContainer.transform.position = _selectionStart;
 
         GameObject piece = Instantiate(m_editablePiece.gameObject, _selectionStart, m_editablePiece.transform.rotation);
         piece.GetComponent<EditablePiece>().PresetProperties(face, shape);
 
         AddPieceToSelection(piece);
-        piece.transform.parent = _selectionMove.transform;
+        piece.transform.parent = _selectionContainer.transform;
         _currentAction = E_MouseActions.CREATING;
     }
 }
