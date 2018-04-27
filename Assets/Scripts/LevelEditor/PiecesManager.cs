@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 public enum E_MouseActions
 {
     IDLING = 0,
-    CREATING,
     MOVING,
     SELECTING,
     SCALING
@@ -38,6 +37,8 @@ public class PiecesManager : MonoBehaviour
     #region Editor
     [SerializeField]
     private GameObject m_areaSelection;
+    [SerializeField]
+    private LineRenderer m_selectionBorders;
     [SerializeField]
     private EditablePiece m_editablePiece;
 
@@ -110,7 +111,6 @@ public class PiecesManager : MonoBehaviour
         _selectionBounds = new Rect();
 
         _actionUpdate.Add(E_MouseActions.IDLING, new D_CurrentAction(IdlingUpdate));
-        _actionUpdate.Add(E_MouseActions.CREATING, new D_CurrentAction(CreatingUpdate));
         _actionUpdate.Add(E_MouseActions.MOVING, new D_CurrentAction(MovingUpdate));
         _actionUpdate.Add(E_MouseActions.SELECTING, new D_CurrentAction(SelectingUpdate));
         _actionUpdate.Add(E_MouseActions.SCALING, new D_CurrentAction(ScalingUpdate));
@@ -154,9 +154,9 @@ public class PiecesManager : MonoBehaviour
             else if ((_scaleDirection & E_ScaleDirections.RIGHT) != 0)
                 _selectionContainer.transform.position = new Vector3(_selectionBounds.xMin, _selectionContainer.transform.position.y, _selectionContainer.transform.position.z);
 
-            if ((_scaleDirection & E_ScaleDirections.UP) != 0)
+            if ((_scaleDirection & E_ScaleDirections.DOWN) != 0)
                 _selectionContainer.transform.position = new Vector3(_selectionContainer.transform.position.x, _selectionBounds.yMax, _selectionContainer.transform.position.z);
-            else if ((_scaleDirection & E_ScaleDirections.DOWN) != 0)
+            else if ((_scaleDirection & E_ScaleDirections.UP) != 0)
                 _selectionContainer.transform.position = new Vector3(_selectionContainer.transform.position.x, _selectionBounds.yMin, _selectionContainer.transform.position.z);
         }
     }
@@ -203,22 +203,15 @@ public class PiecesManager : MonoBehaviour
         }
     }
 
-    private void CreatingUpdate()
-    {
-        _selectionContainer.transform.position = GetMouseCoordinates();
-        if (GetMouseButtonDown(0))
-        {
-            for (int i = 0; i < _selectedPieces.Count; ++i)
-            {
-                _selectedPieces[i].transform.parent = null;
-            }
-            _currentAction = E_MouseActions.IDLING;
-        }
-    }
-
     private void MovingUpdate()
     {
-        _selectionContainer.transform.position = GetMouseCoordinates();
+        Vector2 mouse = GetMouseCoordinates();
+        _selectionBounds.position += (mouse - (Vector2)_selectionContainer.transform.position);
+        _selectionContainer.transform.position = mouse;
+        m_selectionBorders.SetPosition(0, new Vector3(_selectionBounds.xMin, _selectionBounds.yMin, 0));
+        m_selectionBorders.SetPosition(1, new Vector3(_selectionBounds.xMin, _selectionBounds.yMax, 0));
+        m_selectionBorders.SetPosition(2, new Vector3(_selectionBounds.xMax, _selectionBounds.yMax, 0));
+        m_selectionBorders.SetPosition(3, new Vector3(_selectionBounds.xMax, _selectionBounds.yMin, 0));
         if (GetMouseButtonUp(0))
         {
             for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -250,7 +243,16 @@ public class PiecesManager : MonoBehaviour
     private void ScalingUpdate()
     {
         Vector2 mouse = GetMouseCoordinates();
-        _selectionContainer.transform.localScale = new Vector3(1 + _selectionStart.x - mouse.x, 1, 1);
+        Vector3 scale = Vector3.one;
+        if ((_scaleDirection & E_ScaleDirections.LEFT) != 0)
+            scale.x += _selectionStart.x - mouse.x;
+        else if ((_scaleDirection & E_ScaleDirections.RIGHT) != 0)
+            scale.x -= _selectionStart.x - mouse.x;
+        if ((_scaleDirection & E_ScaleDirections.UP) != 0)
+            scale.y -= _selectionStart.y - mouse.y;
+        else if ((_scaleDirection & E_ScaleDirections.DOWN) != 0)
+            scale.y += _selectionStart.y - mouse.y;
+        _selectionContainer.transform.localScale = scale;
         if (GetMouseButtonUp(0))
         {
             for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -282,13 +284,19 @@ public class PiecesManager : MonoBehaviour
                 _selectionBounds.xMax = collider.bounds.max.x;
                 _selectionBounds.yMin = collider.bounds.min.y;
                 _selectionBounds.yMax = collider.bounds.max.y;
+                m_selectionBorders.gameObject.SetActive(true);
             }
+            m_selectionBorders.SetPosition(0, new Vector3(_selectionBounds.xMin, _selectionBounds.yMin, 0));
+            m_selectionBorders.SetPosition(1, new Vector3(_selectionBounds.xMin, _selectionBounds.yMax, 0));
+            m_selectionBorders.SetPosition(2, new Vector3(_selectionBounds.xMax, _selectionBounds.yMax, 0));
+            m_selectionBorders.SetPosition(3, new Vector3(_selectionBounds.xMax, _selectionBounds.yMin, 0));
         }
     }
 
     private void ClearSelection()
     {
         _selectionBounds = new Rect();
+        m_selectionBorders.gameObject.SetActive(false);
         for (int i = 0; i < _selectedPieces.Count; ++i)
         {
             _selectedPieces[i].GetComponent<SpriteRenderer>().sortingOrder = 1;
@@ -377,6 +385,6 @@ public class PiecesManager : MonoBehaviour
 
         AddPieceToSelection(piece);
         piece.transform.parent = _selectionContainer.transform;
-        _currentAction = E_MouseActions.CREATING;
+        _currentAction = E_MouseActions.MOVING;
     }
 }
