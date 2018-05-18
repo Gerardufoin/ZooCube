@@ -72,6 +72,7 @@ public class PiecesManager : MonoBehaviour
     private List<EditablePiece> _selectedPieces = new List<EditablePiece>();
 
     private Vector3 _selectionStart;
+    private Vector3 _lastMousePosition;
     private GameObject _selectionContainer;
     private Rect _selectionBounds;
 
@@ -119,6 +120,7 @@ public class PiecesManager : MonoBehaviour
     void Update ()
     {
         _actionUpdate[_currentAction]();
+        _lastMousePosition = GetMouseCoordinates();
 	}
 
     private bool GetMouseButtonDown(int button)
@@ -161,6 +163,19 @@ public class PiecesManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Prepare the selection for the move or scale action
+    /// </summary>
+    private void PrepareSelection()
+    {
+        SelectionPosition();
+        for (int i = 0; i < _selectedPieces.Count; ++i)
+        {
+            _selectedPieces[i].transform.parent = _selectionContainer.transform;
+        }
+        _currentAction = (_scaleDirection != E_ScaleDirections.NONE ? E_MouseActions.SCALING : E_MouseActions.MOVING);
+    }
+
     private void IdlingUpdate()
     {
         UpdateCursor();
@@ -168,29 +183,16 @@ public class PiecesManager : MonoBehaviour
         if (GetMouseButtonDown(0))
         {
             _selectionStart = GetMouseCoordinates();
-            Collider2D result = Physics2D.OverlapPoint(_selectionStart, _editableLayer);
-            if (result != null)
+            Collider2D result;
+            if (_selectionBounds.Contains(_selectionStart))
             {
-                // Multi selection check
-                bool selected = false;
-                for (int i = 0; i < _selectedPieces.Count; ++i)
-                {
-                    if (_selectedPieces[i].gameObject == result.gameObject)
-                    {
-                        selected = true;
-                    }
-                }
-                if (!selected)
-                {
-                    ClearSelection();
-                    AddPieceToSelection(result.gameObject);
-                }
-                SelectionPosition();
-                for (int i = 0; i < _selectedPieces.Count; ++i)
-                {
-                    _selectedPieces[i].transform.parent = _selectionContainer.transform;
-                }
-                _currentAction = (_scaleDirection != E_ScaleDirections.NONE ? E_MouseActions.SCALING : E_MouseActions.MOVING);
+                PrepareSelection();
+            }
+            else if ((result = Physics2D.OverlapPoint(_selectionStart, _editableLayer)) != null)
+            {
+                ClearSelection();
+                AddPieceToSelection(result.gameObject);
+                PrepareSelection();
             }
             else
             {
@@ -208,10 +210,7 @@ public class PiecesManager : MonoBehaviour
         Vector2 mouse = GetMouseCoordinates();
         _selectionBounds.position += (mouse - (Vector2)_selectionContainer.transform.position);
         _selectionContainer.transform.position = mouse;
-        m_selectionBorders.SetPosition(0, new Vector3(_selectionBounds.xMin, _selectionBounds.yMin, 0));
-        m_selectionBorders.SetPosition(1, new Vector3(_selectionBounds.xMin, _selectionBounds.yMax, 0));
-        m_selectionBorders.SetPosition(2, new Vector3(_selectionBounds.xMax, _selectionBounds.yMax, 0));
-        m_selectionBorders.SetPosition(3, new Vector3(_selectionBounds.xMax, _selectionBounds.yMin, 0));
+        UpdateSelectionBorders();
         if (GetMouseButtonUp(0))
         {
             for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -243,16 +242,22 @@ public class PiecesManager : MonoBehaviour
     private void ScalingUpdate()
     {
         Vector2 mouse = GetMouseCoordinates();
-        Vector3 scale = Vector3.one;
+        Vector2 bounds = new Vector2(_selectionBounds.width, _selectionBounds.height);
+
         if ((_scaleDirection & E_ScaleDirections.LEFT) != 0)
-            scale.x += _selectionStart.x - mouse.x;
+            _selectionBounds.xMin += (mouse.x - _lastMousePosition.x);
         else if ((_scaleDirection & E_ScaleDirections.RIGHT) != 0)
-            scale.x -= _selectionStart.x - mouse.x;
+            _selectionBounds.xMax += (mouse.x - _lastMousePosition.x);
         if ((_scaleDirection & E_ScaleDirections.UP) != 0)
-            scale.y -= _selectionStart.y - mouse.y;
+            _selectionBounds.yMax += (mouse.y - _lastMousePosition.y);
         else if ((_scaleDirection & E_ScaleDirections.DOWN) != 0)
-            scale.y += _selectionStart.y - mouse.y;
-        _selectionContainer.transform.localScale = scale;
+            _selectionBounds.yMin += (mouse.y - _lastMousePosition.y);
+
+        float scaleX = _selectionContainer.transform.localScale.x + _selectionContainer.transform.localScale.x * ((_selectionBounds.width - bounds.x) / bounds.x);
+        float scaleY = _selectionContainer.transform.localScale.y + _selectionContainer.transform.localScale.y * ((_selectionBounds.height - bounds.y) / bounds.y);
+        _selectionContainer.transform.localScale = new Vector3(scaleX, scaleY, 1);
+        UpdateSelectionBorders();
+
         if (GetMouseButtonUp(0))
         {
             for (int i = 0; i < _selectedPieces.Count; ++i)
@@ -262,6 +267,14 @@ public class PiecesManager : MonoBehaviour
             _selectionContainer.transform.localScale = Vector3.one;
             _currentAction = E_MouseActions.IDLING;
         }
+    }
+
+    private void UpdateSelectionBorders()
+    {
+        m_selectionBorders.SetPosition(0, new Vector3(_selectionBounds.xMin, _selectionBounds.yMin, 0));
+        m_selectionBorders.SetPosition(1, new Vector3(_selectionBounds.xMin, _selectionBounds.yMax, 0));
+        m_selectionBorders.SetPosition(2, new Vector3(_selectionBounds.xMax, _selectionBounds.yMax, 0));
+        m_selectionBorders.SetPosition(3, new Vector3(_selectionBounds.xMax, _selectionBounds.yMin, 0));
     }
 
     private void AddPieceToSelection(GameObject piece)
@@ -286,10 +299,7 @@ public class PiecesManager : MonoBehaviour
                 _selectionBounds.yMax = collider.bounds.max.y;
                 m_selectionBorders.gameObject.SetActive(true);
             }
-            m_selectionBorders.SetPosition(0, new Vector3(_selectionBounds.xMin, _selectionBounds.yMin, 0));
-            m_selectionBorders.SetPosition(1, new Vector3(_selectionBounds.xMin, _selectionBounds.yMax, 0));
-            m_selectionBorders.SetPosition(2, new Vector3(_selectionBounds.xMax, _selectionBounds.yMax, 0));
-            m_selectionBorders.SetPosition(3, new Vector3(_selectionBounds.xMax, _selectionBounds.yMin, 0));
+            UpdateSelectionBorders();
         }
     }
 

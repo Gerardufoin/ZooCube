@@ -44,6 +44,9 @@ Material:
     - _BorderXOffset: 0
     - _BorderYOffset: 0
     - _Cutoff: 0.5
+    - _FaceScale: 1
+    - _FaceXOffset: 0
+    - _FaceYOffset: 0
     - _ImageScale: 1
     - _ImageXOffset: 0
     - _ImageYOffset: 0

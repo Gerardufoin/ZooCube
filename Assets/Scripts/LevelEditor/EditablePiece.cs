@@ -9,6 +9,9 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class EditablePiece : MonoBehaviour
 {
+    // ID is used to prevent the MaterialProperty to try to optimize the rendering as it breaks the shader
+    private static int ID = 0;
+
     // Reference to the SpriteRenderer
     private SpriteRenderer _renderer;
 
@@ -61,6 +64,9 @@ public class EditablePiece : MonoBehaviour
     {
         _properties = new MaterialPropertyBlock();
         _renderer = GetComponent<SpriteRenderer>();
+        _renderer.GetPropertyBlock(_properties);
+        _properties.SetFloat("_ID", ID++);
+        _renderer.SetPropertyBlock(_properties);
         ApplyPropertiesToShader();
     }
 
