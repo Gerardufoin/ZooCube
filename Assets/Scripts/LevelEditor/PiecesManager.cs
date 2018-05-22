@@ -76,6 +76,7 @@ public class PiecesManager : MonoBehaviour
     private GameObject _selectionContainer;
     private Rect _selectionBounds;
 
+    private bool _releaseDown = false;
 
     private int _editableLayer = 1 << 9;
 
@@ -211,8 +212,9 @@ public class PiecesManager : MonoBehaviour
         _selectionBounds.position += (mouse - (Vector2)_selectionContainer.transform.position);
         _selectionContainer.transform.position = mouse;
         UpdateSelectionBorders();
-        if (GetMouseButtonUp(0))
+        if ((_releaseDown ? GetMouseButtonDown(0) : GetMouseButtonUp(0)))
         {
+            _releaseDown = false;
             for (int i = 0; i < _selectedPieces.Count; ++i)
             {
                 _selectedPieces[i].transform.parent = null;
@@ -391,10 +393,12 @@ public class PiecesManager : MonoBehaviour
         _selectionContainer.transform.position = _selectionStart;
 
         GameObject piece = Instantiate(m_editablePiece.gameObject, _selectionStart, m_editablePiece.transform.rotation);
+        piece.transform.localScale = new Vector3(0.5f, 0.51f, 0.5f);
         piece.GetComponent<EditablePiece>().PresetProperties(face, shape);
 
         AddPieceToSelection(piece);
         piece.transform.parent = _selectionContainer.transform;
+        _releaseDown = true;
         _currentAction = E_MouseActions.MOVING;
     }
 }
