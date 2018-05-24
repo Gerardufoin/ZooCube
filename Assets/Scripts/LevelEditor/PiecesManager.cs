@@ -393,7 +393,7 @@ public class PiecesManager : MonoBehaviour
         _selectionContainer.transform.position = _selectionStart;
 
         GameObject piece = Instantiate(m_editablePiece.gameObject, _selectionStart, m_editablePiece.transform.rotation);
-        piece.transform.localScale = new Vector3(0.5f, 0.51f, 0.5f);
+        piece.transform.localScale = Vector3.one * 0.5f;
         piece.GetComponent<EditablePiece>().PresetProperties(face, shape);
 
         AddPieceToSelection(piece);

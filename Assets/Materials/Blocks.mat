@@ -31,7 +31,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ShapeMask:
-        m_Texture: {fileID: 2800000, guid: 4f9aa590ffa5c5f4eb66d6bf9c21c2c7, type: 3}
+        m_Texture: {fileID: 2800000, guid: 318ddbf2214537a43945a8ddd30d1a57, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -40,13 +40,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
-    - _BorderWidth: 0.1
+    - _BorderWidth: 0.05
     - _BorderXOffset: 0
     - _BorderYOffset: 0
     - _Cutoff: 0.5
-    - _FaceScale: 1
+    - _FaceScale: 0.45
     - _FaceXOffset: 0
-    - _FaceYOffset: 0
+    - _FaceYOffset: -0.37
+    - _ID: 0
     - _ImageScale: 1
     - _ImageXOffset: 0
     - _ImageYOffset: 0

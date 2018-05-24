@@ -33,24 +33,20 @@ public class PieceCreationManager : MonoBehaviour
     /// <summary>
     /// Toggle callback allowing to change the current piece animal type.
     /// </summary>
-    /// <param name="e">GameDatas.E_AnimalType enum passed as an int</param>
-    public void ChangePieceFace(int e)
+    /// <param name="animal">New animal</param>
+    public void ChangePieceFace(Animal animal)
     {
-        if (!m_facesToggles.transform.GetChild(e - 1).GetComponent<Toggle>().isOn) return;
-
-        _currentAnimal = GameDatas.Instance.GetAnimalData((GameDatas.E_AnimalType)e);
+        _currentAnimal = animal;
         _piecesManager.ApplyFaceOnSelection(_currentAnimal);
     }
 
     /// <summary>
     /// Toggle callback allowing to change the current piece shape type.
     /// </summary>
-    /// <param name="e">GameDatas.E_ShapeType enum passed as an int</param>
-    public void ChangePieceShape(int e)
+    /// <param name="shape">New shape</param>
+    public void ChangePieceShape(Shape shape)
     {
-        if (!m_shapesToggles.transform.GetChild(e - 1).GetComponent<Toggle>().isOn) return;
-
-        _currentShape = GameDatas.Instance.GetShapeData((GameDatas.E_ShapeType)e);
+        _currentShape = shape;
         _piecesManager.ApplyShapeOnSelection(_currentShape);
     }
 
