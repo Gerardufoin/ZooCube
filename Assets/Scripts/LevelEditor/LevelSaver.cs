@@ -3,30 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// LevelSaver class. Used to save a custom level created through the level editor.
+/// LevelSaver class. Used to convert a level into json.
 /// </summary>
 public class LevelSaver : MonoBehaviour
 {
-    // Output the level's json in the console instead of saving the data as a custom level. (Editor only)
-    [SerializeField]
-    private bool m_outputJson;
     // Creation zone. Will be scaled to the zone in the play level at load time
     [SerializeField]
     BoxCollider2D m_editZone;
 
-#if !UNITY_EDITOR
-    private void Start()
-    {
-        m_outputJson = false;
-    }
-#endif
-
     /// <summary>
-    /// Called to save the level. When called, the function will collect all the EditablePieces in the scene and save their informations using the GameDatas singleton.
+    /// Called to display and copy the level's json into the clipboard. When called, the function will collect all the EditablePieces in the scene to convert them into json.
     /// </summary>
-    public void SaveLevel()
+    public void CopyLevel()
     {
-        // We get the edited level using its hash (will be used when the load is implemented in the level editor)
+        // We get the edited level using its hash
         GameDatas.LevelDatas levelInfos = GameDatas.Instance.GetLevelByHash("");
 
         // Getting all the pieces of the scene
@@ -44,15 +34,20 @@ public class LevelSaver : MonoBehaviour
         {
             levelInfos.Pieces.Add(_pieces[i].GetPieceInfos(m_editZone));
         }
-        if (m_outputJson)
-        {
-            Debug.Log(JsonUtility.ToJson(levelInfos));
-        }
-        else
-        {
-            // Save. Will have to do some checks when the loading will be available
-            GameDatas.Instance.CustomLevels.Add(levelInfos);
-            GameDatas.Instance.SaveCustomLevels();
-        }
+        string s = JsonUtility.ToJson(levelInfos);
+        Debug.Log(s);
+        CopyToClipboard(s);
+    }
+
+    /// <summary>
+    /// Copy a string to the clipboard
+    /// </summary>
+    /// <param name="s">The string to copy</param>
+    private void CopyToClipboard(string s)
+    {
+        TextEditor te = new TextEditor();
+        te.text = s;
+        te.SelectAll();
+        te.Copy();
     }
 }

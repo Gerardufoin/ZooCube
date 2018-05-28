@@ -22,7 +22,8 @@ public class GameDatas : MonoBehaviour
         CIRCLE,
         SQUARE,
         TRIANGLE,
-        SQUARE_ALT
+        SQUARE_ALT,
+        RIGHT_TRIANGLE
     }
 
     [System.Serializable]

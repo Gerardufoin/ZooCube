@@ -40,13 +40,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
-    - _BorderWidth: 0.05
+    - _BorderWidth: 0.165
     - _BorderXOffset: 0
     - _BorderYOffset: 0
     - _Cutoff: 0.5
-    - _FaceScale: 0.45
+    - _FaceScale: 0.59
     - _FaceXOffset: 0
-    - _FaceYOffset: -0.37
+    - _FaceYOffset: 0.1
     - _ID: 0
     - _ImageScale: 1
     - _ImageXOffset: 0
