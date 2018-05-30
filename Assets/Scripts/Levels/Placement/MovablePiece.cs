@@ -94,6 +94,7 @@ public class MovablePiece : MonoBehaviour
         properties.SetFloat("_BorderYOffset", Shape.BorderOffset.y);
         properties.SetFloat("_FaceXOffset", Shape.FaceOffset.x);
         properties.SetFloat("_FaceYOffset", Shape.FaceOffset.y);
+        properties.SetFloat("_KeepScale", Shape.KeepScale);
 
         _renderer.SetPropertyBlock(properties);
     }

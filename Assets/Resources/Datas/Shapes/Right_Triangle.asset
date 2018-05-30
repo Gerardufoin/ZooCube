@@ -13,7 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 5
   Mask: {fileID: 21300000, guid: 1775c0bff4f08744e8e8318426f63f3e, type: 3}
-  FaceScale: 1
-  FaceOffset: {x: 0, y: 0}
-  BorderWidth: 0.1
-  BorderOffset: {x: 0, y: 0}
+  FaceScale: 0.5
+  FaceOffset: {x: -0.4, y: -0.4}
+  BorderWidth: 0.18
+  BorderOffset: {x: 0.035, y: 0.035}
+  KeepScale: 1

@@ -60,7 +60,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c3872ccca974b334a99cde8193d088d8, type: 2}
   - {fileID: 11400000, guid: af4400c364862e24da0eed717a7d3de3, type: 2}
   - {fileID: 11400000, guid: f512602474a17ab4b98278d64ed0fa6b, type: 2}
-  - {fileID: 11400000, guid: db65c33d8df584d4aa8db113c6a2a1c7, type: 2}
+  - {fileID: 11400000, guid: ef517b076aaf72844913ada3af8d73c5, type: 2}
   ZooLevels:
   - {fileID: 11400000, guid: a8f09f178fd73af4ea7ad4c39b6b614f, type: 2}
   CurrentUserIdx: 0

@@ -78,6 +78,7 @@ public class BlockDatas : MonoBehaviour
             properties.SetFloat("_BorderYOffset", _shape.BorderOffset.y);
             properties.SetFloat("_FaceXOffset", _shape.FaceOffset.x);
             properties.SetFloat("_FaceYOffset", _shape.FaceOffset.y);
+            properties.SetFloat("_KeepScale", Shape.KeepScale);
             SpriteRenderer.SetPropertyBlock(properties);
         }
     }

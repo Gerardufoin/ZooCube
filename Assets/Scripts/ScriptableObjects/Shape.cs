@@ -11,4 +11,6 @@ public class Shape : ScriptableObject
     public Vector2 FaceOffset;
     public float BorderWidth = 0.1f;
     public Vector2 BorderOffset;
+    [Range(0, 1)]
+    public int KeepScale;
 }

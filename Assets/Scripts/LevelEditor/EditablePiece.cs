@@ -134,6 +134,7 @@ public class EditablePiece : MonoBehaviour
             _properties.SetFloat("_BorderYOffset", _shape.BorderOffset.y);
             _properties.SetFloat("_FaceXOffset", _shape.FaceOffset.x);
             _properties.SetFloat("_FaceYOffset", _shape.FaceOffset.y);
+            _properties.SetFloat("_KeepScale", _shape.KeepScale);
             _renderer.SetPropertyBlock(_properties);
         }
     }
