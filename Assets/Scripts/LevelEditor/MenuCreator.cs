@@ -23,6 +23,7 @@ public class MenuCreator : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }
+        Material sButton = null;
         foreach (Shape shape in GameDatas.Instance.ZooShapes)
         {
             GameObject inst = Instantiate(_togglePrefab, _shapesGroup.transform);
@@ -37,6 +38,17 @@ public class MenuCreator : MonoBehaviour
             Image img = inst.transform.Find("Background/Image").GetComponent<Image>();
             img.sprite = shape.Mask;
             toggle.isOn = (count++ == 0);
+            img.rectTransform.localScale = Vector3.one * 0.9f;
+
+            img = inst.transform.Find("Background").GetComponent<Image>();
+            if (!sButton)
+            {
+                sButton = new Material(img.material);
+                sButton.SetColor("_Background", Color.white);
+            }
+            img.material = sButton;
+            img = inst.transform.Find("Background/Checkmark").GetComponent<Image>();
+            img.material = sButton;
         }
 
         foreach (Transform child in _facesGroup.transform)
@@ -58,6 +70,13 @@ public class MenuCreator : MonoBehaviour
             Image img = inst.transform.Find("Background/Image").GetComponent<Image>();
             img.sprite = animal.Face;
             toggle.isOn = (count++ == 0);
+
+            img = inst.transform.Find("Background").GetComponent<Image>();
+            Material mat = new Material(img.material);
+            mat.SetColor("_Background", animal.Color);
+            img.material = mat;
+            img = inst.transform.Find("Background/Checkmark").GetComponent<Image>();
+            img.material = mat;
         }
     }
 }

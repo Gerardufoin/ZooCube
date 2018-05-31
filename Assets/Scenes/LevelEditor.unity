@@ -230,8 +230,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.5137255, g: 0.5137255, b: 0.5137255, a: 1}
+    m_PressedColor: {r: 0, g: 0.92156863, b: 0.25490198, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -693,7 +693,7 @@ RectTransform:
   m_GameObject: {fileID: 692510036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_Children: []
   m_Father: {fileID: 1794047439}
   m_RootOrder: 1
@@ -1067,8 +1067,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 872d0a7a88ab2ee4e81d450e4d8039dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_facesToggles: {fileID: 1315622607}
-  m_shapesToggles: {fileID: 205335056}
 --- !u!114 &1156213578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1367,7 +1365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 4b890b217ff0a4d43a30dbdf48abe1dd, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.922, b: 0.25517225, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

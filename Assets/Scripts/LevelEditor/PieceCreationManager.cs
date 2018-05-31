@@ -8,13 +8,6 @@ using UnityEngine.UI;
 /// </summary>
 public class PieceCreationManager : MonoBehaviour
 {
-    // ToggleGroup managing the animals type
-    [SerializeField]
-    private ToggleGroup m_facesToggles;
-    // ToggleGroup managing the shapes
-    [SerializeField]
-    private ToggleGroup m_shapesToggles;
-
     // Current animal
     private Animal _currentAnimal;
     // Current shape

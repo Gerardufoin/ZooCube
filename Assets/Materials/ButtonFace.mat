@@ -34,6 +34,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 878e1e521b239a04fa549ec6749af28a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SelectionMask:
+        m_Texture: {fileID: 2800000, guid: 554ae710ff50dcc4aa94914b207631ae, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
