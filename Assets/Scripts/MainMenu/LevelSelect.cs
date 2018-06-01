@@ -33,6 +33,10 @@ public class LevelSelect : MonoBehaviour
                     FindObjectOfType<MainMenuManager>().Play();
                 });
             }
+            else
+            {
+                btn.GetComponent<ButtonFX>().enabled = false;
+            }
             levelNumber.gameObject.SetActive(levelAvailable);
             levelLock.gameObject.SetActive(!levelAvailable);
             levelStar.gameObject.SetActive(user.OfficialLevelsProgression > i);

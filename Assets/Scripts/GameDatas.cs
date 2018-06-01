@@ -32,15 +32,12 @@ public class GameDatas : MonoBehaviour
         public string Username;
         public E_AnimalType Icon;
         public int OfficialLevelsProgression;
-        // Hash of the completed custom levels
-        public List<string> FinishedCustomLevels;
 
         public UserDatas(string name, E_AnimalType icon)
         {
             Username = name;
             Icon = icon;
             OfficialLevelsProgression = 0;
-            FinishedCustomLevels = new List<string>();
         }
     }
 
@@ -58,15 +55,12 @@ public class GameDatas : MonoBehaviour
     public class LevelDatas
     {
         public string Name;
-        public string Hash;
         public List<PieceInfos> Pieces;
     }
     #endregion
 
     [HideInInspector]
     public const string UsersFilename = "Users.dat";
-    [HideInInspector]
-    public const string CustomLevelsFilename = "CustomLevels.dat";
 
     public List<Animal> ZooAnimals = new List<Animal>();
     public List<Shape> ZooShapes = new List<Shape>();
@@ -77,7 +71,6 @@ public class GameDatas : MonoBehaviour
     [HideInInspector]
     public Level CurrentLevel;
     public List<UserDatas> Users = new List<UserDatas>();
-    public List<LevelDatas> CustomLevels = new List<LevelDatas>();
 
     public static GameDatas Instance;
     private void Awake()
@@ -106,17 +99,6 @@ public class GameDatas : MonoBehaviour
         Save(UsersFilename, Users);
     }
 
-    public void SaveCustomLevels()
-    {
-        Save(CustomLevelsFilename, CustomLevels);
-    }
-
-    public void SaveAll()
-    {
-        SaveUsers();
-        SaveCustomLevels();
-    }
-
     private void Load<T>(string filename, ref T data)
     {
         if (File.Exists(Application.persistentDataPath + "/" + filename))
@@ -131,17 +113,6 @@ public class GameDatas : MonoBehaviour
     public void LoadUsers()
     {
         Load<List<UserDatas>>(UsersFilename, ref Users);
-    }
-
-    public void LoadCustomLevels()
-    {
-        Load<List<LevelDatas>>(CustomLevelsFilename, ref CustomLevels);
-    }
-
-    public void LoadAll()
-    {
-        LoadUsers();
-        LoadCustomLevels();
     }
 
     public Animal GetAnimalData(E_AnimalType animal)
@@ -170,21 +141,6 @@ public class GameDatas : MonoBehaviour
             }
         }
         return ZooShapes[0];
-    }
-
-    public LevelDatas GetLevelByHash(string hash)
-    {
-        for (int i = 0; i < CustomLevels.Count; ++i)
-        {
-            if (CustomLevels[i].Hash == hash)
-            {
-                return CustomLevels[i];
-            }
-        }
-        LevelDatas level = new LevelDatas();
-        level.Hash = System.DateTime.Now.Millisecond.ToString();
-        level.Pieces = new List<GameDatas.PieceInfos>();
-        return level;
     }
 
     public Level GetLevel(int nb)

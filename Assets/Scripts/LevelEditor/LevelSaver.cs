@@ -11,13 +11,32 @@ public class LevelSaver : MonoBehaviour
     [SerializeField]
     BoxCollider2D m_editZone;
 
+    // EditablePiece prefab to instantiate at runtime
+    [SerializeField]
+    private EditablePiece m_editablePiecePrefab;
+
+    // Default scale of a piece
+    private Vector3 _defaultScale = new Vector3(0.0f, 0.0f, 1.0f);
+
+    // Shortcut to the position of the editzone
+    private Vector3 _zonePosition;
+    // Shortcut to the size of the editzone
+    private Vector3 _zoneSize;
+
+    void Start()
+    {
+        _zonePosition = m_editZone.bounds.min;
+        _zoneSize = m_editZone.bounds.size;
+    }
+
     /// <summary>
     /// Called to display and copy the level's json into the clipboard. When called, the function will collect all the EditablePieces in the scene to convert them into json.
     /// </summary>
     public void CopyLevel()
     {
-        // We get the edited level using its hash
-        GameDatas.LevelDatas levelInfos = GameDatas.Instance.GetLevelByHash("");
+        // We create the level container
+        GameDatas.LevelDatas levelInfos = new GameDatas.LevelDatas();
+        levelInfos.Pieces = new List<GameDatas.PieceInfos>();
 
         // Getting all the pieces of the scene
         EditablePiece[] _pieces = FindObjectsOfType<EditablePiece>();
@@ -49,5 +68,30 @@ public class LevelSaver : MonoBehaviour
         te.text = s;
         te.SelectAll();
         te.Copy();
+    }
+
+    public void LoadLevel(string json)
+    {
+        GameDatas.LevelDatas infos = JsonUtility.FromJson<GameDatas.LevelDatas>(json);
+
+        FindObjectOfType<PiecesManager>().ClearSelection();
+        foreach (EditablePiece pieces in FindObjectsOfType<EditablePiece>())
+        {
+            Destroy(pieces.gameObject);
+        }
+        for (int i = 0; i < infos.Pieces.Count; ++i)
+        {
+            Animal animal = GameDatas.Instance.GetAnimalData(infos.Pieces[i].Animal);
+            Shape shape = GameDatas.Instance.GetShapeData(infos.Pieces[i].Shape);
+            Vector3 position = new Vector3(_zonePosition.x + _zoneSize.x * infos.Pieces[i].Position.x, _zonePosition.y + _zoneSize.y * infos.Pieces[i].Position.y, -1f);
+            Vector3 scale = _defaultScale + (Vector3)infos.Pieces[i].Scale;
+            scale.x *= _zoneSize.x;
+            scale.y *= _zoneSize.y;
+
+            EditablePiece piece = Instantiate(m_editablePiecePrefab);
+            piece.transform.localScale = scale;
+            piece.transform.position = position;
+            piece.PresetProperties(animal, shape);
+        }
     }
 }

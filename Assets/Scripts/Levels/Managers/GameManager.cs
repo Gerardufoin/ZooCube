@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
     public void ExitToMenu()
     {
         if (!_theater) return;
+        m_victoryScreen.gameObject.SetActive(false);
         if (_theater.IsOpen)
         {
             _theater.CurtainCloseActions += () => {

@@ -305,7 +305,7 @@ public class PiecesManager : MonoBehaviour
         }
     }
 
-    private void ClearSelection()
+    public void ClearSelection()
     {
         _selectionBounds = new Rect();
         m_selectionBorders.gameObject.SetActive(false);

@@ -17,11 +17,17 @@ public class ToggleIcon : MonoBehaviour
     private Sprite m_offImage;
 
     // Reference to the Image
-    private Image m_image;
-
-    private void Start()
+    private Image _image;
+    private Image ToggleImage
     {
-        m_image = GetComponent<Image>();
+        get
+        {
+            if (!_image)
+            {
+                _image = GetComponent<Image>();
+            }
+            return _image;
+        }
     }
 
     /// <summary>
@@ -30,6 +36,6 @@ public class ToggleIcon : MonoBehaviour
     /// <param name="state">If true, displays the ON image. Displays the OFF image otherwise.</param>
     public void SetState(bool state)
     {
-        m_image.sprite = (state ? m_onImage : m_offImage);
+        ToggleImage.sprite = (state ? m_onImage : m_offImage);
     }
 }

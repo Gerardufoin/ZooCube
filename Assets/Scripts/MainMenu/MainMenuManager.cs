@@ -47,14 +47,14 @@ public class MainMenuManager : MonoBehaviour
         _theater.CloseCurtains();
     }
 
-    public void Editor()
+    /*public void Editor()
     {
         _theater.CurtainCloseActions += () => {
             SceneManager.LoadSceneAsync("LevelEditor");
             _theater.ShowLoading();
         };
         _theater.CloseCurtains();
-    }
+    }*/
 
     public void Options()
     {
