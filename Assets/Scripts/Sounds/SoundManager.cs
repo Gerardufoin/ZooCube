@@ -10,7 +10,8 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
-#region PlayerPrefs keys
+    #region PlayerPrefs keys
+    private const string MAIN_VOLUME_KEY = "MAIN_Volume";
     private const string BGM_VOLUME_KEY = "BGM_Volume";
     private const string BGM_MUTE_KEY = "BGM_Mute";
     private const string FX_VOLUME_KEY = "FX_Volume";
@@ -42,14 +43,18 @@ public class SoundManager : MonoBehaviour
     // Reference to the FX source (this)
     private AudioSource _fxSource;
 
+    // Main volume. BGM and FX volumes are multiplied with this.
+    private float _mainVolume;
+
 	void Start ()
     {
         _bgmSource = Camera.main.GetComponent<AudioSource>();
         _fxSource = GetComponent<AudioSource>();
-        _bgmSource.volume = PlayerPrefs.HasKey(BGM_VOLUME_KEY) ? PlayerPrefs.GetFloat(BGM_VOLUME_KEY) : 1f;
+        _mainVolume = GetMainVolume();
+        _bgmSource.volume = GetBGMVolume();
         _bgmSource.mute = PlayerPrefs.HasKey(BGM_MUTE_KEY) ? (PlayerPrefs.GetInt(BGM_MUTE_KEY) != 0) : false;
         m_muteBGMToggle.SetState(!_bgmSource.mute);
-        _fxSource.volume = PlayerPrefs.HasKey(FX_VOLUME_KEY) ? PlayerPrefs.GetFloat(FX_VOLUME_KEY) : 1f;
+        _fxSource.volume = GetFXVolume();
         _fxSource.mute = PlayerPrefs.HasKey(FX_MUTE_KEY) ? (PlayerPrefs.GetInt(FX_MUTE_KEY) != 0) : false;
         m_muteFXToggle.SetState(!_fxSource.mute);
     }
@@ -93,14 +98,53 @@ public class SoundManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Return the main volume set in the player pref. If no volume is set, 1 is returned.
+    /// </summary>
+    /// <returns>Main volume</returns>
+    public float GetMainVolume()
+    {
+        return PlayerPrefs.HasKey(MAIN_VOLUME_KEY) ? PlayerPrefs.GetFloat(MAIN_VOLUME_KEY) : 1f;
+    }
+
+    /// <summary>
+    /// Changes the main volume
+    /// </summary>
+    /// <param name="volume">Set the main volume. The volume is clamped between 0 and 1</param>
+    public void SetMainVolume(float volume)
+    {
+        _mainVolume = Mathf.Clamp01(volume);
+        PlayerPrefs.SetFloat(MAIN_VOLUME_KEY, _mainVolume);
+        SetBGMVolume(_bgmSource.volume);
+        SetFXVolume(_fxSource.volume);
+    }
+
+    /// <summary>
+    /// Return the BGM volume set in the player pref. If no volume is set, 1 is returned.
+    /// </summary>
+    /// <returns>BGM volume</returns>
+    public float GetBGMVolume()
+    {
+        return PlayerPrefs.HasKey(BGM_VOLUME_KEY) ? PlayerPrefs.GetFloat(BGM_VOLUME_KEY) : 1f;
+    }
+
+    /// <summary>
     /// Changes the volume of the BGM
     /// </summary>
     /// <param name="volume">Set the volume of the BGM. The volume is clamped between 0 and 1</param>
     public void SetBGMVolume(float volume)
     {
         volume = Mathf.Clamp01(volume);
-        _bgmSource.volume = volume;
         PlayerPrefs.SetFloat(BGM_VOLUME_KEY, volume);
+        _bgmSource.volume = volume * _mainVolume;
+    }
+
+    /// <summary>
+    /// Return the FX volume set in the player pref. If no volume is set, 1 is returned.
+    /// </summary>
+    /// <returns>FX volume</returns>
+    public float GetFXVolume()
+    {
+        return PlayerPrefs.HasKey(FX_VOLUME_KEY) ? PlayerPrefs.GetFloat(FX_VOLUME_KEY) : 1f;
     }
 
     /// <summary>
@@ -110,8 +154,8 @@ public class SoundManager : MonoBehaviour
     public void SetFXVolume(float volume)
     {
         volume = Mathf.Clamp01(volume);
-        _fxSource.volume = volume;
         PlayerPrefs.SetFloat(FX_VOLUME_KEY, volume);
+        _fxSource.volume = volume * _mainVolume;
     }
 
     /// <summary>

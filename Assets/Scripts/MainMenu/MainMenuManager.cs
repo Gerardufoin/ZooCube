@@ -17,12 +17,15 @@ public class MainMenuManager : MonoBehaviour
 
     // Reference to the theater script
     private Theater _theater;
+    // Reference to the options panel
+    private Options _options;
 
     // If true, pressing escape bring the player back to the main menu
     private bool _enableEscMenu;
 
     private void Start()
     {
+        _options = GameObject.FindGameObjectWithTag("Options").GetComponent<Options>();
         _theater = GameObject.FindGameObjectWithTag("Theater").GetComponent<Theater>();
         if (!_theater.IsOpen)
         {
@@ -47,18 +50,18 @@ public class MainMenuManager : MonoBehaviour
         _theater.CloseCurtains();
     }
 
-    /*public void Editor()
+    public void Editor()
     {
         _theater.CurtainCloseActions += () => {
             SceneManager.LoadSceneAsync("LevelEditor");
             _theater.ShowLoading();
         };
         _theater.CloseCurtains();
-    }*/
+    }
 
     public void Options()
     {
-        Debug.Log("OPTIONS");
+        _options.TogglePanel();
     }
 
     public void LevelSelect()
