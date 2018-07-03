@@ -103,7 +103,7 @@ public class SoundManager : MonoBehaviour
     /// <returns>Main volume</returns>
     public float GetMainVolume()
     {
-        return PlayerPrefs.HasKey(MAIN_VOLUME_KEY) ? PlayerPrefs.GetFloat(MAIN_VOLUME_KEY) : 1f;
+        return PlayerPrefs.GetFloat(MAIN_VOLUME_KEY, 1f);
     }
 
     /// <summary>
@@ -114,8 +114,8 @@ public class SoundManager : MonoBehaviour
     {
         _mainVolume = Mathf.Clamp01(volume);
         PlayerPrefs.SetFloat(MAIN_VOLUME_KEY, _mainVolume);
-        SetBGMVolume(_bgmSource.volume);
-        SetFXVolume(_fxSource.volume);
+        SetBGMVolume(GetBGMVolume());
+        SetFXVolume(GetFXVolume());
     }
 
     /// <summary>
@@ -124,7 +124,7 @@ public class SoundManager : MonoBehaviour
     /// <returns>BGM volume</returns>
     public float GetBGMVolume()
     {
-        return PlayerPrefs.HasKey(BGM_VOLUME_KEY) ? PlayerPrefs.GetFloat(BGM_VOLUME_KEY) : 1f;
+        return PlayerPrefs.GetFloat(BGM_VOLUME_KEY, 1f);
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class SoundManager : MonoBehaviour
     {
         volume = Mathf.Clamp01(volume);
         PlayerPrefs.SetFloat(BGM_VOLUME_KEY, volume);
-        _bgmSource.volume = volume * _mainVolume;
+        if (_bgmSource) _bgmSource.volume = volume * _mainVolume;
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ public class SoundManager : MonoBehaviour
     /// <returns>FX volume</returns>
     public float GetFXVolume()
     {
-        return PlayerPrefs.HasKey(FX_VOLUME_KEY) ? PlayerPrefs.GetFloat(FX_VOLUME_KEY) : 1f;
+        return PlayerPrefs.GetFloat(FX_VOLUME_KEY, 1f);
     }
 
     /// <summary>
@@ -155,7 +155,7 @@ public class SoundManager : MonoBehaviour
     {
         volume = Mathf.Clamp01(volume);
         PlayerPrefs.SetFloat(FX_VOLUME_KEY, volume);
-        _fxSource.volume = volume * _mainVolume;
+        if (_fxSource) _fxSource.volume = volume * _mainVolume;
     }
 
     /// <summary>
