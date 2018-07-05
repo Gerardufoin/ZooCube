@@ -65,12 +65,18 @@ public class GameDatas : MonoBehaviour
     public List<Animal> ZooAnimals = new List<Animal>();
     public List<Shape> ZooShapes = new List<Shape>();
     public List<Level> ZooLevels = new List<Level>();
+    public List<Language> Languages = new List<Language>();
 
     [HideInInspector]
     public int CurrentUserIdx;
     [HideInInspector]
     public Level CurrentLevel;
     public List<UserDatas> Users = new List<UserDatas>();
+
+    // Current language of the game
+    private E_Language _currentLanguage;
+    // Current Language file converted to a dictionnary
+    private Dictionary<E_TranslationKey, string> _currentLocalization = new Dictionary<E_TranslationKey, string>();
 
     public static GameDatas Instance;
     private void Awake()
@@ -79,6 +85,7 @@ public class GameDatas : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SetLocalization((E_Language)PlayerPrefs.GetInt(Options.LOCAL_KEY, (int)E_Language.ENGLISH), true);
         }
         else if (Instance != this)
         {
@@ -147,5 +154,43 @@ public class GameDatas : MonoBehaviour
     {
         nb -= 1;
         return (nb < ZooLevels.Count ? ZooLevels[nb] : ZooLevels[0]);
+    }
+
+    /// <summary>
+    /// Set the loaded localization of the game. Replace the _currentLocalization dictionnary with the new translation
+    /// </summary>
+    /// <param name="lang">Selected language</param>
+    /// <param name="forceInit">If true, set the localization even if lang is the same as _currentLanguage</param>
+    public void SetLocalization(E_Language lang, bool forceInit = false)
+    {
+        if (lang == _currentLanguage && !forceInit) return;
+
+        for (int i = 0; i < Languages.Count; ++i)
+        {
+            if (Languages[i].Name == lang)
+            {
+                _currentLanguage = lang;
+                _currentLocalization.Clear();
+                foreach (Localization item in Languages[i].Translation)
+                {
+                    _currentLocalization.Add(item.Key, item.Value);
+                }
+                foreach (LocalizeText text in FindObjectsOfType<LocalizeText>())
+                {
+                    text.Localize();
+                }
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Get the translation for a specific key
+    /// </summary>
+    /// <param name="key">Selected translation key</param>
+    /// <returns></returns>
+    public string GetLocalization(E_TranslationKey key)
+    {
+        return _currentLocalization[key];
     }
 }

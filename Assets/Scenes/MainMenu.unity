@@ -2691,6 +2691,7 @@ GameObject:
   - component: {fileID: 318608941}
   - component: {fileID: 318608943}
   - component: {fileID: 318608942}
+  - component: {fileID: 318608944}
   m_Layer: 5
   m_Name: TextMeshPro Text
   m_TagString: Untagged
@@ -2838,6 +2839,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 318608940}
+--- !u!114 &318608944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 318608940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c1f7b190ea74d498f3672c3df813f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TranslationKey: 1
 --- !u!1 &324869018
 GameObject:
   m_ObjectHideFlags: 0
@@ -5317,6 +5330,7 @@ GameObject:
   - component: {fileID: 572087347}
   - component: {fileID: 572087349}
   - component: {fileID: 572087348}
+  - component: {fileID: 572087350}
   m_Layer: 5
   m_Name: TextMeshPro Text
   m_TagString: Untagged
@@ -5462,6 +5476,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 572087346}
+--- !u!114 &572087350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 572087346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c1f7b190ea74d498f3672c3df813f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TranslationKey: 0
 --- !u!1 &579176161
 GameObject:
   m_ObjectHideFlags: 0
@@ -6724,6 +6750,7 @@ GameObject:
   - component: {fileID: 811072038}
   - component: {fileID: 811072040}
   - component: {fileID: 811072039}
+  - component: {fileID: 811072041}
   m_Layer: 5
   m_Name: TextMeshPro Text
   m_TagString: Untagged
@@ -6869,6 +6896,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 811072037}
+--- !u!114 &811072041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 811072037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c1f7b190ea74d498f3672c3df813f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TranslationKey: 3
 --- !u!1001 &822815374
 Prefab:
   m_ObjectHideFlags: 0
@@ -16783,15 +16822,31 @@ MonoBehaviour:
     m_Options:
     - m_Text: 960x600
       m_Image: {fileID: 0}
-    - m_Text: 1024x768
+    - m_Text: 1280x600
+      m_Image: {fileID: 0}
+    - m_Text: 1280x720
+      m_Image: {fileID: 0}
+    - m_Text: 1280x768
+      m_Image: {fileID: 0}
+    - m_Text: 1280x800
+      m_Image: {fileID: 0}
+    - m_Text: 1280x960
+      m_Image: {fileID: 0}
+    - m_Text: 1280x1024
+      m_Image: {fileID: 0}
+    - m_Text: 1360x768
+      m_Image: {fileID: 0}
+    - m_Text: 1366x768
+      m_Image: {fileID: 0}
+    - m_Text: 1400x1050
+      m_Image: {fileID: 0}
+    - m_Text: 1440x900
+      m_Image: {fileID: 0}
+    - m_Text: 1600x900
+      m_Image: {fileID: 0}
+    - m_Text: 1680x1050
       m_Image: {fileID: 0}
     - m_Text: 1920x1080
-      m_Image: {fileID: 0}
-    - m_Text: 1024x1024
-      m_Image: {fileID: 0}
-    - m_Text: 1024x1024
-      m_Image: {fileID: 0}
-    - m_Text: 1024x1024
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -17836,6 +17891,7 @@ GameObject:
   - component: {fileID: 1970982189}
   - component: {fileID: 1970982191}
   - component: {fileID: 1970982190}
+  - component: {fileID: 1970982192}
   m_Layer: 5
   m_Name: TextMeshPro Text
   m_TagString: Untagged
@@ -17981,6 +18037,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1970982188}
+--- !u!114 &1970982192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1970982188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c1f7b190ea74d498f3672c3df813f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TranslationKey: 2
 --- !u!1001 &1981249234
 Prefab:
   m_ObjectHideFlags: 0

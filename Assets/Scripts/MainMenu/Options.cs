@@ -12,9 +12,9 @@ public enum E_Language
 
 public class Options : MonoBehaviour
 {
-    private const string RESOLUTION_KEY = "Prefered_Resolution";
-    private const string IS_FULLSCREEN_KEY = "Prefered_Fullscreen";
-    private const string LOCAL_KEY = "Prefered_Localization";
+    public const string RESOLUTION_KEY = "Prefered_Resolution";
+    public const string IS_FULLSCREEN_KEY = "Prefered_Fullscreen";
+    public const string LOCAL_KEY = "Prefered_Localization";
 
     // Reference to the general volume slider
     public Slider m_generalVolumeSlider;
@@ -188,6 +188,6 @@ public class Options : MonoBehaviour
     {
         _language = (E_Language)lang;
         PlayerPrefs.SetInt(LOCAL_KEY, lang);
-        Debug.Log("Language set to " + _language);
+        FindObjectOfType<GameDatas>().SetLocalization(_language);
     }
 }
