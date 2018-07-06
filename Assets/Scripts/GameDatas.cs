@@ -171,9 +171,9 @@ public class GameDatas : MonoBehaviour
             {
                 _currentLanguage = lang;
                 _currentLocalization.Clear();
-                foreach (Localization item in Languages[i].Translation)
+                foreach (E_TranslationKey e in System.Enum.GetValues(typeof(E_TranslationKey)))
                 {
-                    _currentLocalization.Add(item.Key, item.Value);
+                    _currentLocalization.Add(e, Languages[i].Translation[(int)e]);
                 }
                 foreach (LocalizeText text in FindObjectsOfType<LocalizeText>())
                 {

@@ -13,11 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 0
   Translation:
-  - Key: 0
-    Value: Play
-  - Key: 1
-    Value: Options
-  - Key: 2
-    Value: Credits
-  - Key: 3
-    Value: Quit
+  - Play
+  - Options
+  - Credits
+  - Quit
