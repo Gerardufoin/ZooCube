@@ -7,6 +7,8 @@ public class LocalizeText : MonoBehaviour
 {
     // Translation key of the text
     public E_TranslationKey TranslationKey;
+    // Capitalize the text
+    public bool Capitalize;
 
     // Reference to GameDatas
     private GameDatas _gameDatas;
@@ -61,6 +63,7 @@ public class LocalizeText : MonoBehaviour
     /// </summary>
     public void Localize()
     {
-        Text.text = Datas.GetLocalization(TranslationKey);
+        string txt = Datas.GetLocalization(TranslationKey);
+        Text.text = (Capitalize ? txt.ToUpper() : txt);
     }
 }

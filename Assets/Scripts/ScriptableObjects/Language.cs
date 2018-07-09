@@ -7,7 +7,27 @@ public enum E_TranslationKey
     PLAY,
     OPTIONS,
     CREDITS,
-    QUIT
+    QUIT,
+    BACK,
+    PROGRAMMING,
+    THANKS,
+    VOLUME,
+    GENERAL,
+    MUSIC,
+    SOUND,
+    RESOLUTION,
+    FULLSCREEN,
+    LANGUAGE,
+    NEW_PROFILE,
+    ENTER_USERNAME,
+    CREATE,
+    SELECT_PROFILE,
+    CHOOSE_LEVEL,
+    LEVEL_CLEARED,
+    NEXT_LEVEL,
+    LEVEL_SELECT,
+    MAIN_MENU,
+    LOADING
 }
 
 [CreateAssetMenu(fileName = "Lang", menuName = "ZooCube/Lang")]

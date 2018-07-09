@@ -20,9 +20,6 @@ public class MainMenuManager : MonoBehaviour
     // Reference to the options panel
     private Options _options;
 
-    // If true, pressing escape bring the player back to the main menu
-    private bool _enableEscMenu;
-
     private void Start()
     {
         _options = GameObject.FindGameObjectWithTag("Options").GetComponent<Options>();
@@ -30,14 +27,6 @@ public class MainMenuManager : MonoBehaviour
         if (!_theater.IsOpen)
         {
             _theater.OpenCurtains(true);
-        }
-    }
-
-    private void Update()
-    {
-        if (_enableEscMenu && Input.GetKeyDown(KeyCode.Escape))
-        {
-            ReturnMenu();
         }
     }
 
@@ -71,7 +60,6 @@ public class MainMenuManager : MonoBehaviour
             m_mainUI.SetActive(false);
             m_levelSelection.SetActive(true);
             _theater.OpenCurtains();
-            _enableEscMenu = true;
         };
     }
 
@@ -82,13 +70,11 @@ public class MainMenuManager : MonoBehaviour
             m_mainUI.SetActive(false);
             m_credits.SetActive(true);
             _theater.OpenCurtains();
-            _enableEscMenu = true;
         };
     }
 
     public void ReturnMenu()
     {
-        _enableEscMenu = false;
         _theater.CloseCurtains();
         _theater.CurtainCloseActions += () => {
             m_credits.SetActive(false);

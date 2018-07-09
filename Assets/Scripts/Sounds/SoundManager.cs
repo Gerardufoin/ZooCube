@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// SoundManager class. Manages the BGM and FX (volume, tracks, etc).
@@ -48,15 +49,29 @@ public class SoundManager : MonoBehaviour
 
 	void Start ()
     {
-        _bgmSource = Camera.main.GetComponent<AudioSource>();
         _fxSource = GetComponent<AudioSource>();
         _mainVolume = GetMainVolume();
+
+        InitSceneVolumes();
+        m_muteBGMToggle.SetState(!_bgmSource.mute);
+        m_muteFXToggle.SetState(!_fxSource.mute);
+
+        SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) =>
+        {
+            InitSceneVolumes();
+        };
+    }
+
+    /// <summary>
+    /// Initialize the volume on the audiosources of the scene
+    /// </summary>
+    private void InitSceneVolumes()
+    {
+        _bgmSource = Camera.main.GetComponent<AudioSource>();
         _bgmSource.volume = GetBGMVolume();
         _bgmSource.mute = PlayerPrefs.HasKey(BGM_MUTE_KEY) ? (PlayerPrefs.GetInt(BGM_MUTE_KEY) != 0) : false;
-        m_muteBGMToggle.SetState(!_bgmSource.mute);
         _fxSource.volume = GetFXVolume();
         _fxSource.mute = PlayerPrefs.HasKey(FX_MUTE_KEY) ? (PlayerPrefs.GetInt(FX_MUTE_KEY) != 0) : false;
-        m_muteFXToggle.SetState(!_fxSource.mute);
     }
 
     /// <summary>
