@@ -44,7 +44,9 @@ Material:
     - _BorderXOffset: 0
     - _BorderYOffset: 0.0026
     - _Cutoff: 0.5
+    - _KeepScale: 0
     m_Colors:
     - _BackgroundColor: {r: 0.9058824, g: 0.4156863, b: 0.09411766, a: 1}
     - _BorderColor: {r: 0.5803922, g: 0.28627452, b: 0.09411766, a: 1}
+    - _BordersWidth: {r: 0.05, g: 0.05, b: 0.05, a: 0.05}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

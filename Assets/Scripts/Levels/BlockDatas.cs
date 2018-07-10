@@ -73,7 +73,7 @@ public class BlockDatas : MonoBehaviour
             SpriteRenderer.GetPropertyBlock(properties);
             properties.SetFloat("_FaceScale", _shape.FaceScale);
             properties.SetTexture("_ShapeMask", _shape.Mask.texture);
-            properties.SetFloat("_BorderWidth", _shape.BorderWidth);
+            properties.SetVector("_BordersWidth", Vector4.one * _shape.BorderWidth);
             properties.SetFloat("_BorderXOffset", _shape.BorderOffset.x);
             properties.SetFloat("_BorderYOffset", _shape.BorderOffset.y);
             properties.SetFloat("_FaceXOffset", _shape.FaceOffset.x);

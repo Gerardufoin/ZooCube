@@ -15,6 +15,6 @@ MonoBehaviour:
   Mask: {fileID: 21300000, guid: 318ddbf2214537a43945a8ddd30d1a57, type: 3}
   FaceScale: 0.6
   FaceOffset: {x: 0, y: -0.35}
-  BorderWidth: 0.1
+  BorderWidth: 0.05
   BorderOffset: {x: 0, y: 0.02}
   KeepScale: 1

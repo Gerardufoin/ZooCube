@@ -89,7 +89,7 @@ public class MovablePiece : MonoBehaviour
         properties.SetColor("_BorderColor", Animal.BorderColor);
         properties.SetFloat("_FaceScale", Shape.FaceScale);
         properties.SetTexture("_ShapeMask", Shape.Mask.texture);
-        properties.SetFloat("_BorderWidth", Shape.BorderWidth);
+        properties.SetVector("_BordersWidth", Vector4.one * Shape.BorderWidth);
         properties.SetFloat("_BorderXOffset", Shape.BorderOffset.x);
         properties.SetFloat("_BorderYOffset", Shape.BorderOffset.y);
         properties.SetFloat("_FaceXOffset", Shape.FaceOffset.x);

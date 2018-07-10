@@ -129,7 +129,7 @@ public class EditablePiece : MonoBehaviour
             _renderer.GetPropertyBlock(_properties);
             _properties.SetFloat("_FaceScale", _shape.FaceScale);
             _properties.SetTexture("_ShapeMask", _shape.Mask.texture);
-            _properties.SetFloat("_BorderWidth", _shape.BorderWidth);
+            _properties.SetVector("_BordersWidth", Vector4.one * _shape.BorderWidth);
             _properties.SetFloat("_BorderXOffset", _shape.BorderOffset.x);
             _properties.SetFloat("_BorderYOffset", _shape.BorderOffset.y);
             _properties.SetFloat("_FaceXOffset", _shape.FaceOffset.x);
