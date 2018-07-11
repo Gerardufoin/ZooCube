@@ -7,6 +7,8 @@ public class Recepter : MonoBehaviour
     public int Id;
     // Contains the info needed for the shader, loaded from the level's json
     public Shape Shape;
+    // Contains the informations about the recepter borders scale, loaded from the level's json
+    public Vector4 Borders;
 
     // Reference to the RecepterManager
     private RecepterManager _recepterManager;
@@ -42,6 +44,10 @@ public class Recepter : MonoBehaviour
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(properties);
         properties.SetTexture("_ShapeMask", Shape.Mask.texture);
+        properties.SetVector("_BordersWidth", Borders * (Shape.BorderWidth / 2));
+        properties.SetFloat("_BorderXOffset", Shape.BorderOffset.x);
+        properties.SetFloat("_BorderYOffset", Shape.BorderOffset.y);
+        properties.SetFloat("_KeepScale", Shape.KeepScale);
         _renderer.SetPropertyBlock(properties);
     }
 }

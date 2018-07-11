@@ -119,34 +119,34 @@ Shader "ZooCube/Block"
 				float4 tex2DNode4 = tex2D( _Face, ( ( appendResult69 - ( ( temp_output_62_0 - float2( 1,1 ) ) / float2( 2,2 ) ) ) - appendResult73 ) );
 				float temp_output_12_0 = ( 1.0 - tex2DNode4.a );
 				float4 appendResult77 = (float4(( ( tex2DNode4 * IN.color * tex2DNode4.a ) + ( _BackgroundColor * temp_output_12_0 ) ).rgb , ( ( tex2DNode4.a * IN.color.a ) + ( temp_output_12_0 * _BackgroundColor.a ) )));
-				float4 temp_output_6_0_g145 = appendResult77;
-				float2 uv11_g145 = IN.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float2 appendResult100_g145 = (float2(( _BordersWidth.x + _BordersWidth.z ) , ( _BordersWidth.y + _BordersWidth.w )));
-				float2 temp_output_7_0_g145 = ScaleRatio78;
-				float2 break89_g145 = temp_output_7_0_g145;
-				float2 appendResult88_g145 = (float2(break89_g145.x , break89_g145.x));
-				float2 appendResult91_g145 = (float2(break89_g145.y , break89_g145.y));
-				float2 ifLocalVar90_g145 = 0;
-				if( break89_g145.x >= break89_g145.y )
-				ifLocalVar90_g145 = appendResult88_g145;
+				float4 temp_output_6_0_g148 = appendResult77;
+				float2 uv11_g148 = IN.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float2 appendResult100_g148 = (float2(( _BordersWidth.x + _BordersWidth.z ) , ( _BordersWidth.y + _BordersWidth.w )));
+				float2 temp_output_7_0_g148 = ScaleRatio78;
+				float2 break89_g148 = temp_output_7_0_g148;
+				float2 appendResult88_g148 = (float2(break89_g148.x , break89_g148.x));
+				float2 appendResult91_g148 = (float2(break89_g148.y , break89_g148.y));
+				float2 ifLocalVar90_g148 = 0;
+				if( break89_g148.x >= break89_g148.y )
+				ifLocalVar90_g148 = appendResult88_g148;
 				else
-				ifLocalVar90_g145 = appendResult91_g145;
-				float2 lerpResult95_g145 = lerp( temp_output_7_0_g145 , ifLocalVar90_g145 , _KeepScale);
-				float2 ScaleRatio8_g145 = lerpResult95_g145;
-				float2 break12_g145 = ( ( appendResult100_g145 / ScaleRatio8_g145 ) + 1.0 );
-				float2 appendResult17_g145 = (float2(( uv11_g145.x * break12_g145.x ) , ( uv11_g145.y * break12_g145.y )));
-				float2 appendResult101_g145 = (float2(_BordersWidth.x , _BordersWidth.y));
-				float2 BorderCoordinates102_g145 = appendResult101_g145;
-				float2 appendResult18_g145 = (float2(_BorderXOffset , _BorderYOffset));
-				float2 temp_output_23_0_g145 = ( ( appendResult17_g145 - BorderCoordinates102_g145 ) + ( appendResult18_g145 / ScaleRatio8_g145 ) );
-				float2 break60_g145 = step( float2( 0,0 ) , ( 1.0 - temp_output_23_0_g145 ) );
-				float2 break61_g145 = step( float2( 0,0 ) , temp_output_23_0_g145 );
-				float clampResult68_g145 = clamp( ( tex2D( _ShapeMask, temp_output_23_0_g145 ).r + ( 1.0 - ( break60_g145.x * break60_g145.y * break61_g145.x * break61_g145.y ) ) ) , 0.0 , 1.0 );
+				ifLocalVar90_g148 = appendResult91_g148;
+				float2 lerpResult95_g148 = lerp( temp_output_7_0_g148 , ifLocalVar90_g148 , _KeepScale);
+				float2 ScaleRatio8_g148 = lerpResult95_g148;
+				float2 break12_g148 = ( ( appendResult100_g148 / ScaleRatio8_g148 ) + 1.0 );
+				float2 appendResult17_g148 = (float2(( uv11_g148.x * break12_g148.x ) , ( uv11_g148.y * break12_g148.y )));
+				float2 appendResult101_g148 = (float2(_BordersWidth.x , _BordersWidth.y));
+				float2 BorderCoordinates102_g148 = ( appendResult101_g148 / ScaleRatio8_g148 );
+				float2 appendResult18_g148 = (float2(_BorderXOffset , _BorderYOffset));
+				float2 temp_output_23_0_g148 = ( ( appendResult17_g148 - BorderCoordinates102_g148 ) + ( appendResult18_g148 / ScaleRatio8_g148 ) );
+				float2 break60_g148 = step( float2( 0,0 ) , ( 1.0 - temp_output_23_0_g148 ) );
+				float2 break61_g148 = step( float2( 0,0 ) , temp_output_23_0_g148 );
+				float clampResult68_g148 = clamp( ( tex2D( _ShapeMask, temp_output_23_0_g148 ).r + ( 1.0 - ( break60_g148.x * break60_g148.y * break61_g148.x * break61_g148.y ) ) ) , 0.0 , 1.0 );
 				float2 uv_ShapeMask = IN.texcoord.xy * _ShapeMask_ST.xy + _ShapeMask_ST.zw;
-				float clampResult34_g145 = clamp( ( (temp_output_6_0_g145).a * ( 1.0 - tex2D( _ShapeMask, uv_ShapeMask ).r ) * _BorderColor.a ) , 0.0 , 1.0 );
-				float4 appendResult38_g145 = (float4((( float4( ( (temp_output_6_0_g145).rgb * ( 1.0 - clampResult68_g145 ) ) , 0.0 ) + ( _BorderColor * clampResult68_g145 ) )).rgb , clampResult34_g145));
+				float clampResult34_g148 = clamp( ( (temp_output_6_0_g148).a * ( 1.0 - tex2D( _ShapeMask, uv_ShapeMask ).r ) * _BorderColor.a ) , 0.0 , 1.0 );
+				float4 appendResult38_g148 = (float4((( float4( ( (temp_output_6_0_g148).rgb * ( 1.0 - clampResult68_g148 ) ) , 0.0 ) + ( _BorderColor * clampResult68_g148 ) )).rgb , clampResult34_g148));
 				
-				fixed4 c = ( appendResult38_g145 + ( _ID * 0.0 ) );
+				fixed4 c = ( appendResult38_g148 + ( _ID * 0.0 ) );
 				c.rgb *= c.a;
 				return c;
 			}
@@ -189,7 +189,7 @@ Node;AmplifyShaderEditor.SimpleAddOpNode;21;-578.4736,124.8902;Float;False;2;2;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;15;-588.7813,407.407;Float;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.DynamicAppendNode;77;-405.8012,299.591;Float;False;FLOAT4;4;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.RangedFloatNode;173;-344.8201,719.7365;Float;False;Property;_ID;ID;1;1;[PerRendererData];Create;True;0;0;False;0;0;0;0;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;224;-185.6634,383.2658;Float;False;AddBorder;0;;145;e22a0ad25ec970f4d94f3a43eb80ec65;0;2;6;COLOR;0,0,0,0;False;7;FLOAT2;1,1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;5
+Node;AmplifyShaderEditor.FunctionNode;227;-185.6634,383.2658;Float;False;AddBorder;0;;148;e22a0ad25ec970f4d94f3a43eb80ec65;0;2;6;COLOR;0,0,0,0;False;7;FLOAT2;1,1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;5
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;179;-133.8201,614.7365;Float;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;178;39.17993,521.7365;Float;False;2;2;0;FLOAT4;0,0,0,0;False;1;FLOAT;0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;172;161.0808,522.2263;Float;False;True;2;Float;ASEMaterialInspector;0;8;ZooCube/Block;7b8ddc695d7cc78438993d5918a9e7b9;0;0;SubShader 0 Pass 0;2;True;3;1;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;True;2;False;-1;False;False;True;2;False;-1;False;False;True;5;Queue=Transparent;IgnoreProjector=True;RenderType=Transparent;PreviewType=Plane;CanUseSpriteAtlas=True;False;0;False;False;False;False;False;False;False;False;False;True;2;0;;0;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
@@ -228,11 +228,11 @@ WireConnection;15;0;13;0
 WireConnection;15;1;14;0
 WireConnection;77;0;21;0
 WireConnection;77;3;15;0
-WireConnection;224;6;77;0
-WireConnection;224;7;78;0
+WireConnection;227;6;77;0
+WireConnection;227;7;78;0
 WireConnection;179;0;173;0
-WireConnection;178;0;224;0
+WireConnection;178;0;227;0
 WireConnection;178;1;179;0
 WireConnection;172;0;178;0
 ASEEND*/
-//CHKSM=9072A96505FD0F493823BF3E4E67097CE3FCD318
+//CHKSM=308352EB16831BA172F86D428286215000BBFDA3

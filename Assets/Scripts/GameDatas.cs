@@ -49,6 +49,7 @@ public class GameDatas : MonoBehaviour
         public E_ShapeType Shape;
         public Vector2 Position;
         public Vector2 Scale;
+        public Vector4 RecepterBorders;
     }
 
     [System.Serializable]

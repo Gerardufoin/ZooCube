@@ -84,6 +84,7 @@ public class LevelLoader : MonoBehaviour
                 recepter.transform.localScale = scale;
                 recepter.transform.position = position;
                 recepter.Shape = shape;
+                recepter.Borders = infos.Pieces[i].RecepterBorders;
 
                 MovablePiece piece = Instantiate(m_piecePrefab);
                 piece.Id = i;

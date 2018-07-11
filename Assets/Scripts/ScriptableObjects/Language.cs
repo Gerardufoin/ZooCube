@@ -34,5 +34,6 @@ public enum E_TranslationKey
 public class Language : ScriptableObject
 {
     public E_Language Name;
+    [SerializeField]
     public List<string> Translation;
 }

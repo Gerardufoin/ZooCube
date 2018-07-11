@@ -181,6 +181,8 @@ public class EditablePiece : MonoBehaviour
         piece.Scale.x = transform.localScale.x / zone.bounds.size.x;
         piece.Scale.y = transform.localScale.y / zone.bounds.size.y;
 
+        piece.RecepterBorders = Vector4.one;
+
         return (piece);
     }
 }
