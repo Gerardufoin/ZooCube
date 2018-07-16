@@ -91,7 +91,7 @@ public class LevelSaver : MonoBehaviour
             EditablePiece piece = Instantiate(m_editablePiecePrefab);
             piece.transform.localScale = scale;
             piece.transform.position = position;
-            piece.PresetProperties(animal, shape);
+            piece.PresetProperties(animal, shape, infos.Pieces[i].RecepterBorders);
         }
     }
 }

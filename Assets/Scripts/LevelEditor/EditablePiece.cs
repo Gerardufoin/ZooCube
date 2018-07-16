@@ -42,6 +42,17 @@ public class EditablePiece : MonoBehaviour
             ApplyShapeToShader();
         }
     }
+    // Borders of the piece
+    private Vector4 _borders;
+    public Vector4 Borders
+    {
+        get { return _borders; }
+        set
+        {
+            _borders = value;
+            ApplyBordersToShader();
+        }
+    }
 
     // PropertyBlock used to modify shader (to avoid creating a new one every time).
     private MaterialPropertyBlock _properties;
@@ -54,10 +65,12 @@ public class EditablePiece : MonoBehaviour
     /// </summary>
     /// <param name="animal">ScriptableObject Animal datas</param>
     /// <param name="shape">ScriptableObject Shape datas</param>
-    public void PresetProperties(Animal animal, Shape shape)
+    /// <param name="borders">Borders of the recepter</param>
+    public void PresetProperties(Animal animal, Shape shape, Vector4 borders)
     {
         _animal = animal;
         _shape = shape;
+        _borders = borders;
     }
 
     private void Start()
@@ -129,7 +142,7 @@ public class EditablePiece : MonoBehaviour
             _renderer.GetPropertyBlock(_properties);
             _properties.SetFloat("_FaceScale", _shape.FaceScale);
             _properties.SetTexture("_ShapeMask", _shape.Mask.texture);
-            _properties.SetVector("_BordersWidth", Vector4.one * _shape.BorderWidth);
+            _properties.SetVector("_BordersWidth", _borders * _shape.BorderWidth);
             _properties.SetFloat("_BorderXOffset", _shape.BorderOffset.x);
             _properties.SetFloat("_BorderYOffset", _shape.BorderOffset.y);
             _properties.SetFloat("_FaceXOffset", _shape.FaceOffset.x);
@@ -150,6 +163,19 @@ public class EditablePiece : MonoBehaviour
             _properties.SetTexture("_Face", _animal.Face.texture);
             _properties.SetColor("_BackgroundColor", _animal.Color);
             _properties.SetColor("_BorderColor", _animal.BorderColor);
+            _renderer.SetPropertyBlock(_properties);
+        }
+    }
+
+    /// <summary>
+    /// Apply the values stored in _borders to the shader's properties.
+    /// </summary>
+    private void ApplyBordersToShader()
+    {
+        if (_shape != null)
+        {
+            _renderer.GetPropertyBlock(_properties);
+            _properties.SetVector("_BordersWidth", _borders * _shape.BorderWidth);
             _renderer.SetPropertyBlock(_properties);
         }
     }
@@ -181,7 +207,7 @@ public class EditablePiece : MonoBehaviour
         piece.Scale.x = transform.localScale.x / zone.bounds.size.x;
         piece.Scale.y = transform.localScale.y / zone.bounds.size.y;
 
-        piece.RecepterBorders = Vector4.one;
+        piece.RecepterBorders = _borders;
 
         return (piece);
     }

@@ -386,6 +386,14 @@ public class PiecesManager : MonoBehaviour
         }
     }
 
+    public void ApplyMaskOnSelectionBorders(int mask)
+    {
+        for (int i = 0; i < _selectedPieces.Count; ++i)
+        {
+            _selectedPieces[i].Borders = new Vector4(((mask & 1) != 0 ? 1 : 0), ((mask & 2) != 0 ? 1 : 0), ((mask & 4) != 0 ? 1 : 0), ((mask & 8) != 0 ? 1 : 0));
+        }
+    }
+
     public void CreatePiece(Animal face, Shape shape)
     {
         ClearSelection();
@@ -394,7 +402,7 @@ public class PiecesManager : MonoBehaviour
 
         GameObject piece = Instantiate(m_editablePiece.gameObject, _selectionStart, m_editablePiece.transform.rotation);
         piece.transform.localScale = Vector3.one * 0.5f;
-        piece.GetComponent<EditablePiece>().PresetProperties(face, shape);
+        piece.GetComponent<EditablePiece>().PresetProperties(face, shape, Vector4.one);
 
         AddPieceToSelection(piece);
         piece.transform.parent = _selectionContainer.transform;
