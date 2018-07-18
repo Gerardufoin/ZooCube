@@ -94,7 +94,7 @@ public class LevelLoader : MonoBehaviour
                 piece.Shape = shape;
                 ++i;
             }
-            if (++colIdx > m_spawns.Count)
+            if (++colIdx >= m_spawns.Count)
             {
                 colIdx = 0;
                 rowIdx++;

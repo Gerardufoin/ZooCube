@@ -27,9 +27,10 @@ public class LevelSelect : MonoBehaviour
             btn.onClick.RemoveAllListeners();
             if (levelAvailable)
             {
+                int id = i;
                 btn.onClick.AddListener(() =>
                 {
-                    GameDatas.Instance.CurrentLevel = GameDatas.Instance.GetLevel(i + 1);
+                    GameDatas.Instance.CurrentLevel = GameDatas.Instance.GetLevel(id + 1);
                     FindObjectOfType<MainMenuManager>().Play();
                 });
             }

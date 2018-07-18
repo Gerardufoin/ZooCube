@@ -394,6 +394,15 @@ public class PiecesManager : MonoBehaviour
         }
     }
 
+    public void ToggleRecepterMode()
+    {
+        EditablePiece.RecepterMode = !EditablePiece.RecepterMode;
+        foreach (EditablePiece piece in FindObjectsOfType<EditablePiece>())
+        {
+            piece.ApplyPropertiesToShader();
+        }
+    }
+
     public void CreatePiece(Animal face, Shape shape)
     {
         ClearSelection();

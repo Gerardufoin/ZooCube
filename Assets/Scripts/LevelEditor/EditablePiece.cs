@@ -11,9 +11,20 @@ public class EditablePiece : MonoBehaviour
 {
     // ID is used to prevent the MaterialProperty to try to optimize the rendering as it breaks the shader
     private static int ID = 0;
+    // If true, the pieces display changes to their recepter form
+    public static bool RecepterMode = false;
+
+    // Reference to the block material
+    public Material m_pieceMaterial;
+    // Reference to the recepter material
+    public Material m_recepterMaterial;
 
     // Reference to the SpriteRenderer
     private SpriteRenderer _renderer;
+    // Stored recepter background color
+    private Color _recepterBackground;
+    // Stored recepter border color
+    private Color _recepterBorder;
 
     // Set to true once the piece has been placed once. Used in the Reset method.
     private bool _placedOnce = false;
@@ -75,6 +86,8 @@ public class EditablePiece : MonoBehaviour
 
     private void Start()
     {
+        _recepterBackground = m_recepterMaterial.GetColor("_BackgroundColor");
+        _recepterBorder = m_recepterMaterial.GetColor("_BorderColor");
         _properties = new MaterialPropertyBlock();
         _renderer = GetComponent<SpriteRenderer>();
         _renderer.GetPropertyBlock(_properties);
@@ -142,7 +155,7 @@ public class EditablePiece : MonoBehaviour
             _renderer.GetPropertyBlock(_properties);
             _properties.SetFloat("_FaceScale", _shape.FaceScale);
             _properties.SetTexture("_ShapeMask", _shape.Mask.texture);
-            _properties.SetVector("_BordersWidth", _borders * _shape.BorderWidth);
+            _properties.SetVector("_BordersWidth", (RecepterMode ? _borders : Vector4.one) * _shape.BorderWidth);
             _properties.SetFloat("_BorderXOffset", _shape.BorderOffset.x);
             _properties.SetFloat("_BorderYOffset", _shape.BorderOffset.y);
             _properties.SetFloat("_FaceXOffset", _shape.FaceOffset.x);
@@ -161,8 +174,8 @@ public class EditablePiece : MonoBehaviour
         {
             _renderer.GetPropertyBlock(_properties);
             _properties.SetTexture("_Face", _animal.Face.texture);
-            _properties.SetColor("_BackgroundColor", _animal.Color);
-            _properties.SetColor("_BorderColor", _animal.BorderColor);
+            _properties.SetColor("_BackgroundColor", (RecepterMode ? _recepterBackground : _animal.Color));
+            _properties.SetColor("_BorderColor", (RecepterMode ? _recepterBorder : _animal.BorderColor));
             _renderer.SetPropertyBlock(_properties);
         }
     }
@@ -175,7 +188,7 @@ public class EditablePiece : MonoBehaviour
         if (_shape != null)
         {
             _renderer.GetPropertyBlock(_properties);
-            _properties.SetVector("_BordersWidth", _borders * _shape.BorderWidth);
+            _properties.SetVector("_BordersWidth", (RecepterMode ? _borders : Vector4.one) * _shape.BorderWidth);
             _renderer.SetPropertyBlock(_properties);
         }
     }
@@ -183,8 +196,9 @@ public class EditablePiece : MonoBehaviour
     /// <summary>
     /// Apply both the animal and shape datas at the same time.
     /// </summary>
-    private void ApplyPropertiesToShader()
+    public void ApplyPropertiesToShader()
     {
+        _renderer.material = (RecepterMode ? m_recepterMaterial : m_pieceMaterial);
         ApplyAnimalToShader();
         ApplyShapeToShader();
     }
