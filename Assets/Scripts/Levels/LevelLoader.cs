@@ -20,9 +20,19 @@ public class LevelLoader : MonoBehaviour
     // MovablePiece prefab to instantiate at runtime
     [SerializeField]
     private MovablePiece m_piecePrefab;
-    // Reference to the playzone
+    // Mirror hint prefab to instantiate at runtime
     [SerializeField]
-    private BoxCollider2D m_playzone;
+    private Recepter m_hintPrefab;
+
+    // Reference to the simple playzone
+    [SerializeField]
+    private BoxCollider2D m_playZone;
+    // Reference to the mirror playzone
+    [SerializeField]
+    private BoxCollider2D m_mirrorPlayZone;
+    // Reference to the mirror hint zone
+    [SerializeField]
+    private BoxCollider2D m_mirrorHintZone;
     // Piece spawners separated in different lists to vary positions
     [SerializeField]
     private List<SpawnWrapper> m_spawns = new List<SpawnWrapper>();
@@ -34,6 +44,10 @@ public class LevelLoader : MonoBehaviour
     private Vector3 _zonePosition;
     // Shortcut to the size of the playzone
     private Vector3 _zoneSize;
+    // Shortcut to the position of the hint zone
+    private Vector3 _hintPosition;
+    // Shortcut to the size of the hint zone
+    private Vector3 _hintSize;
 
     // Amount of spawners in all the different lists
     private int _spawnsSize;
@@ -56,8 +70,22 @@ public class LevelLoader : MonoBehaviour
                 }
             }
         }
-        _zonePosition = m_playzone.bounds.min;
-        _zoneSize = m_playzone.bounds.size;
+        if (GameDatas.Instance.CurrentLevel.Type == E_LevelType.MIRROR)
+        {
+            m_mirrorPlayZone.gameObject.SetActive(true);
+            m_playZone.gameObject.SetActive(false);
+            _zonePosition = m_mirrorPlayZone.bounds.min;
+            _zoneSize = m_mirrorPlayZone.bounds.size;
+            _hintPosition = m_mirrorHintZone.bounds.min;
+            _hintSize = m_mirrorHintZone.bounds.size;
+        }
+        else
+        {
+            m_playZone.gameObject.SetActive(true);
+            m_mirrorPlayZone.gameObject.SetActive(false);
+            _zonePosition = m_playZone.bounds.min;
+            _zoneSize = m_playZone.bounds.size;
+        }
         this.LoadLevel(GameDatas.Instance.CurrentLevel.JsonData);
     }
 
@@ -92,6 +120,16 @@ public class LevelLoader : MonoBehaviour
                 piece.transform.position = m_spawns[colIdx].Spawns[rowIdx].position;
                 piece.Animal = animal;
                 piece.Shape = shape;
+
+                if (GameDatas.Instance.CurrentLevel.Type == E_LevelType.MIRROR)
+                {
+                    Recepter hint = Instantiate(m_hintPrefab);
+                    recepter.Id = -1;
+                    hint.transform.localScale = scale;
+                    hint.transform.position = new Vector3(_hintPosition.x + _hintSize.x * infos.Pieces[i].Position.x, _hintPosition.y + _hintSize.y * infos.Pieces[i].Position.y, -1f);
+                    recepter.Shape = shape;
+                    recepter.Borders = infos.Pieces[i].RecepterBorders;
+                }
                 ++i;
             }
             if (++colIdx >= m_spawns.Count)
