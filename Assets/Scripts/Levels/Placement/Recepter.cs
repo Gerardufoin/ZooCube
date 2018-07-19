@@ -41,13 +41,16 @@ public class Recepter : MonoBehaviour
     IEnumerator SetShader()
     {
         yield return new WaitForFixedUpdate();
-        MaterialPropertyBlock properties = new MaterialPropertyBlock();
-        _renderer.GetPropertyBlock(properties);
-        properties.SetTexture("_ShapeMask", Shape.Mask.texture);
-        properties.SetVector("_BordersWidth", Borders * (Shape.BorderWidth / 2));
-        properties.SetFloat("_BorderXOffset", Shape.BorderOffset.x);
-        properties.SetFloat("_BorderYOffset", Shape.BorderOffset.y);
-        properties.SetFloat("_KeepScale", Shape.KeepScale);
-        _renderer.SetPropertyBlock(properties);
+        if (Shape != null)
+        {
+            MaterialPropertyBlock properties = new MaterialPropertyBlock();
+            _renderer.GetPropertyBlock(properties);
+            properties.SetTexture("_ShapeMask", Shape.Mask.texture);
+            properties.SetVector("_BordersWidth", Borders * (Shape.BorderWidth / 2));
+            properties.SetFloat("_BorderXOffset", Shape.BorderOffset.x);
+            properties.SetFloat("_BorderYOffset", Shape.BorderOffset.y);
+            properties.SetFloat("_KeepScale", Shape.KeepScale);
+            _renderer.SetPropertyBlock(properties);
+        }
     }
 }
