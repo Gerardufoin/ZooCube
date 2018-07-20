@@ -1,19 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Recepter : MonoBehaviour
+public class Hint : MonoBehaviour
 {
     // ID is used to prevent the MaterialProperty to try to optimize the rendering as it breaks the shader
     private static int Material_ID = 0;
-    // Id of the receter, should match a MovablePiece
-    public int Id;
     // Contains the info needed for the shader, loaded from the level's json
     public Shape Shape;
-    // Contains the informations about the recepter borders scale, loaded from the level's json
-    public Vector4 Borders;
-
-    // Reference to the RecepterManager
-    private RecepterManager _recepterManager;
 
     // Reference to the renderer
     private Renderer _renderer;
@@ -21,22 +15,7 @@ public class Recepter : MonoBehaviour
     private void Start()
     {
         _renderer = GetComponent<Renderer>();
-        _recepterManager = FindObjectOfType<RecepterManager>();
-        // Increase the recepter count
-        _recepterManager.RecepterCount++;
         StartCoroutine(SetShader());
-    }
-
-    // When the mouse enter the recepter, we signal it to the RecepterManager
-    void OnMouseEnter()
-    {
-        _recepterManager.AddRecepter(this);
-    }
-
-    // When the mouse leaves the recepter, we signal it to the RecepterManager
-    void OnMouseExit()
-    {
-        _recepterManager.RemoveRecepter(this);
     }
 
     // Set the shape map of the recepter shader
@@ -49,7 +28,7 @@ public class Recepter : MonoBehaviour
             _renderer.GetPropertyBlock(properties);
             properties.SetFloat("_ID", Material_ID++);
             properties.SetTexture("_ShapeMask", Shape.Mask.texture);
-            properties.SetVector("_BordersWidth", Borders * (Shape.BorderWidth / 2));
+            properties.SetVector("_BordersWidth", Vector4.one * (Shape.BorderWidth / 2));
             properties.SetFloat("_BorderXOffset", Shape.BorderOffset.x);
             properties.SetFloat("_BorderYOffset", Shape.BorderOffset.y);
             properties.SetFloat("_KeepScale", Shape.KeepScale);

@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
+    // If set to true, the scene open on the level select
+    [HideInInspector]
+    public static bool SkipToLevelSelect;
+
     // Reference to the MainUI
     [SerializeField]
     private GameObject m_mainUI;
@@ -24,7 +28,15 @@ public class MainMenuManager : MonoBehaviour
     {
         _options = GameObject.FindGameObjectWithTag("Options").GetComponent<Options>();
         _theater = GameObject.FindGameObjectWithTag("Theater").GetComponent<Theater>();
-        if (!_theater.IsOpen)
+        if (SkipToLevelSelect)
+        {
+            SkipToLevelSelect = false;
+            m_mainUI.SetActive(false);
+            m_levelSelection.SetActive(true);
+            FindObjectOfType<LevelSelectManager>().LevelSelectPanel(true);
+            _theater.OpenCurtains();
+        }
+        else if (!_theater.IsOpen)
         {
             _theater.OpenCurtains(true);
         }

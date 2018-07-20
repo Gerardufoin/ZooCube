@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MovablePiece : MonoBehaviour
 {
+    // ID is used to prevent the MaterialProperty to try to optimize the rendering as it breaks the shader
+    private static int Material_ID = 0;
     public int Id;
     public Animal Animal;
     public Shape Shape;
@@ -84,6 +86,7 @@ public class MovablePiece : MonoBehaviour
         MaterialPropertyBlock properties = new MaterialPropertyBlock();
         _renderer.GetPropertyBlock(properties);
 
+        properties.SetFloat("_ID", Material_ID++);
         properties.SetTexture("_Face", Animal.Face.texture);
         properties.SetColor("_BackgroundColor", Animal.Color);
         properties.SetColor("_BorderColor", Animal.BorderColor);

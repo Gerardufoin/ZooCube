@@ -22,7 +22,7 @@ public class LevelLoader : MonoBehaviour
     private MovablePiece m_piecePrefab;
     // Mirror hint prefab to instantiate at runtime
     [SerializeField]
-    private Recepter m_hintPrefab;
+    private Hint m_hintPrefab;
 
     // Reference to the simple playzone
     [SerializeField]
@@ -70,7 +70,7 @@ public class LevelLoader : MonoBehaviour
                 }
             }
         }
-        if (GameDatas.Instance.CurrentLevel.Type == E_LevelType.MIRROR)
+        if (GameDatas.Instance.CurrentLevel.Type == E_LevelType.HINT)
         {
             m_mirrorPlayZone.gameObject.SetActive(true);
             m_playZone.gameObject.SetActive(false);
@@ -121,14 +121,19 @@ public class LevelLoader : MonoBehaviour
                 piece.Animal = animal;
                 piece.Shape = shape;
 
-                if (GameDatas.Instance.CurrentLevel.Type == E_LevelType.MIRROR)
+                if (GameDatas.Instance.CurrentLevel.Type == E_LevelType.HINT)
                 {
-                    Recepter hint = Instantiate(m_hintPrefab);
-                    recepter.Id = -1;
+                    Hint hint = Instantiate(m_hintPrefab);
                     hint.transform.localScale = scale;
-                    hint.transform.position = new Vector3(_hintPosition.x + _hintSize.x * infos.Pieces[i].Position.x, _hintPosition.y + _hintSize.y * infos.Pieces[i].Position.y, -1f);
-                    recepter.Shape = shape;
-                    recepter.Borders = infos.Pieces[i].RecepterBorders;
+                    if (GameDatas.Instance.CurrentLevel.MirrorHint)
+                    {
+                        hint.transform.position = new Vector3(m_mirrorHintZone.bounds.max.x - _hintSize.x * infos.Pieces[i].Position.x, _hintPosition.y + _hintSize.y * infos.Pieces[i].Position.y, -1f);
+                    }
+                    else
+                    {
+                        hint.transform.position = new Vector3(_hintPosition.x + _hintSize.x * infos.Pieces[i].Position.x, _hintPosition.y + _hintSize.y * infos.Pieces[i].Position.y, -1f);
+                    }
+                    hint.Shape = shape;
                 }
                 ++i;
             }

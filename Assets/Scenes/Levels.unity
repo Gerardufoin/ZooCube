@@ -6386,7 +6386,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 902530304}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1741040720}
+        m_MethodName: ToLevelSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &902530304
@@ -6689,7 +6700,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1, y: 0}
+  m_Offset: {x: -1.25, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0.36666667, y: 0.36666667, z: 0.36666667, w: 0.36666667}
     pivot: {x: 0.5, y: 0.5}
@@ -6700,7 +6711,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 2.5, y: 2.5}
   m_EdgeRadius: 0
 --- !u!4 &1078119564 stripped
 Transform:
@@ -8006,7 +8017,7 @@ MonoBehaviour:
     type: 2}
   m_piecePrefab: {fileID: 114047180807834804, guid: b312311db3275de4eb99b0c824ec1b64,
     type: 2}
-  m_hintPrefab: {fileID: 114809896142761406, guid: dbf3f6111c487874591ece4ce5bb4b0b,
+  m_hintPrefab: {fileID: 114269854714617258, guid: dbf3f6111c487874591ece4ce5bb4b0b,
     type: 2}
   m_playZone: {fileID: 62292673}
   m_mirrorPlayZone: {fileID: 1831992582}
@@ -8108,7 +8119,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1831992580
 Transform:
   m_ObjectHideFlags: 0
@@ -8116,7 +8127,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1831992579}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.42, z: 0}
+  m_LocalPosition: {x: 0, y: 1.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1064186922}
@@ -8163,7 +8174,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 4.2, y: 2.2}
+  m_Size: {x: 5.2788415, y: 2.7651076}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -8180,18 +8191,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1, y: 0}
+  m_Offset: {x: 1.25, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0.36666667, y: 0.36666667, z: 0.36666667, w: 0.36666667}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.85333335, y: 0.85333335}
-    newSize: {x: 4.2, y: 2.2}
+    newSize: {x: 5.2788415, y: 2.7651076}
     adaptiveTilingThreshold: 0.5
     drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 2.5, y: 2.5}
   m_EdgeRadius: 0
 --- !u!4 &1832968528 stripped
 Transform:

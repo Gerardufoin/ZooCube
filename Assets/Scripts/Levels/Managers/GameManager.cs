@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
                 GameDatas.Instance.SaveUsers();
             }
             if (_theater) _theater.CloseCurtains();
-            Debug.Log("FINISHED :D");
         }
     }
 
@@ -115,5 +114,14 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadSceneAsync("Levels");
             _theater.ShowLoading();
         }
+    }
+
+    /// <summary>
+    /// Button callback to return to the level select.
+    /// </summary>
+    public void ToLevelSelect()
+    {
+        MainMenuManager.SkipToLevelSelect = true;
+        ExitToMenu();
     }
 }
