@@ -64,6 +64,6 @@ public class LocalizeText : MonoBehaviour
     public void Localize()
     {
         string txt = Datas.GetLocalization(TranslationKey);
-        Text.text = (Capitalize ? txt.ToUpper() : txt);
+        Text.text = (Capitalize ? txt.ToUpper() : txt).Replace("\\n", "\n");
     }
 }

@@ -27,7 +27,12 @@ public enum E_TranslationKey
     NEXT_LEVEL,
     LEVEL_SELECT,
     MAIN_MENU,
-    LOADING
+    LOADING,
+    WARNING,
+    DELETE_CONFIRMATION_1,
+    DELETE_CONFIRMATION_2,
+    CONFIRM,
+    CANCEL
 }
 
 [CreateAssetMenu(fileName = "Lang", menuName = "ZooCube/Lang")]

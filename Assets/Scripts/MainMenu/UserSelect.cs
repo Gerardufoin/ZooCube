@@ -16,6 +16,8 @@ public class UserSelect : MonoBehaviour
     private GameObject m_leftArrow;
     [SerializeField]
     private GameObject m_rightArrow;
+    [SerializeField]
+    private ConfirmationPanel m_confirmationPanel;
 
     private LevelSelectManager _levelSelectManager;
 
@@ -34,7 +36,7 @@ public class UserSelect : MonoBehaviour
 
     public void LoadSlots(int pageIdx)
     {
-        _slotPageIdx = (pageIdx >= 0  && pageIdx * MAX_SLOTS_BY_PANEL < GameDatas.Instance.Users.Count) ? pageIdx : 0;
+        _slotPageIdx = (pageIdx < 0 ? 0 : (pageIdx * MAX_SLOTS_BY_PANEL >= GameDatas.Instance.Users.Count ? GameDatas.Instance.Users.Count / MAX_SLOTS_BY_PANEL : pageIdx));
         foreach (Transform child in m_slotsPanel)
         {
             GameObject.Destroy(child.gameObject);
@@ -68,5 +70,24 @@ public class UserSelect : MonoBehaviour
     public void PreviousProfiles()
     {
         LoadSlots(_slotPageIdx - 1);
+    }
+
+    public void DeleteUser(int idx)
+    {
+        if (idx >= 0 && idx < GameDatas.Instance.Users.Count)
+        {
+            m_confirmationPanel.gameObject.SetActive(true);
+            m_confirmationPanel.InitConfirmation(GameDatas.Instance.Users[idx].Username, () =>
+            {
+                DeleteConfirme(idx);
+            });
+        }
+    }
+
+    public void DeleteConfirme(int idx)
+    {
+        GameDatas.Instance.Users.RemoveAt(idx);
+        GameDatas.Instance.SaveUsers();
+        LoadSlots(_slotPageIdx);
     }
 }
