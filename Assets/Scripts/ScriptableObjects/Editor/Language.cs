@@ -38,5 +38,6 @@ public class LanguageEditor : Editor
                 t.Translation[idx] = text;
             }
         }
+        EditorUtility.SetDirty(target);
     }
 }

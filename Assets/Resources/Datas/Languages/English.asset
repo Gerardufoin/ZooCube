@@ -37,3 +37,10 @@ MonoBehaviour:
   - Level Select
   - Main Menu
   - Loading
+  - Warning
+  - The profile
+  - is going to be deleted.\nThis action is permanent and all progression will be
+    lost.\nDo you want to continue ?
+  - Confirm
+  - Cancel
+  - Delete
