@@ -44,3 +44,10 @@ MonoBehaviour:
   - Confirm
   - Cancel
   - Delete
+  - Start
+  - "\u2022 Welcome on ZooCube!\\n\\n\u2022 Help the animals get on scene by clicking
+    and draging them on the corresponding orange slots.\\n\\n\u2022 But be careful!
+    The shape of the animal has to fit the slot in order to place him.\\n\\n\u2022
+    Place all the animals on the scene to finish the level. Good luck!"
+  - 
+  - 

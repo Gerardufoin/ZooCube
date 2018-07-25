@@ -37,6 +37,9 @@ public class LevelLoader : MonoBehaviour
     [SerializeField]
     private List<SpawnWrapper> m_spawns = new List<SpawnWrapper>();
 
+    [SerializeField]
+    private Transform m_tutorials;
+
     // Default scale of a piece/recepter
     private Vector3 _defaultScale = new Vector3(0.0f, 0.0f, 1.0f);
 
@@ -85,6 +88,10 @@ public class LevelLoader : MonoBehaviour
             m_mirrorPlayZone.gameObject.SetActive(false);
             _zonePosition = m_playZone.bounds.min;
             _zoneSize = m_playZone.bounds.size;
+        }
+        foreach (Transform child in m_tutorials)
+        {
+            child.gameObject.SetActive(child.GetSiblingIndex() + 1 == GameDatas.Instance.CurrentLevel.Tutorial);
         }
         this.LoadLevel(GameDatas.Instance.CurrentLevel.JsonData);
     }
@@ -143,5 +150,10 @@ public class LevelLoader : MonoBehaviour
                 rowIdx++;
             }
         }
+    }
+
+    public void HideTutorial()
+    {
+        m_tutorials.GetChild(GameDatas.Instance.CurrentLevel.Tutorial - 1).gameObject.SetActive(false);
     }
 }

@@ -14,6 +14,8 @@ public class Level : ScriptableObject
     public int Number;
     public E_LevelType Type;
     public bool MirrorHint;
+    [Range(0, 3)]
+    public int Tutorial;
     [TextArea]
     public string JsonData;
 }

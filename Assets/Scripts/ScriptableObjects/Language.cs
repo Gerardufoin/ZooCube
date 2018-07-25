@@ -33,7 +33,11 @@ public enum E_TranslationKey
     DELETE_CONFIRMATION_2,
     CONFIRM,
     CANCEL,
-    DELETE
+    DELETE,
+    START,
+    TUTORIAL1,
+    TUTORIAL2,
+    TUTORIAL3
 }
 
 [CreateAssetMenu(fileName = "Lang", menuName = "ZooCube/Lang")]
