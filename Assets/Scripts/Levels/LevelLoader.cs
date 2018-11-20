@@ -154,6 +154,6 @@ public class LevelLoader : MonoBehaviour
 
     public void HideTutorial()
     {
-        m_tutorials.GetChild(GameDatas.Instance.CurrentLevel.Tutorial - 1).gameObject.SetActive(false);
+        m_tutorials.gameObject.SetActive(false);
     }
 }
