@@ -10,20 +10,12 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Button))]
 public class ButtonFX : EventTrigger
 {
-    // Reference to the FX AudioSource
-    private AudioSource _fxSource;
+    // Reference to the SoundManager
+    private SoundManager _soundManager;
 
-    // Reference to hover fx
-    private AudioClip _hoverFX;
-    // Reference to click fx
-    private AudioClip _clickFX;
-
-	void Start ()
+	void Start()
     {
-        SoundManager sManager = FindObjectOfType<SoundManager>();
-        _fxSource = sManager.GetComponent<AudioSource>();
-        _hoverFX = sManager.GetFX(SoundManager.E_FX.BUTTON_HOVER);
-        _clickFX = sManager.GetFX(SoundManager.E_FX.BUTTON_CLICK);
+        _soundManager = FindObjectOfType<SoundManager>();
     }
 
     /// <summary>
@@ -33,7 +25,7 @@ public class ButtonFX : EventTrigger
     {
         base.OnPointerEnter(eventData);
 
-        _fxSource.PlayOneShot(_hoverFX);
+        _soundManager.PlayFX(SoundManager.E_FX.BUTTON_HOVER);
     }
 
     /// <summary>
@@ -43,6 +35,6 @@ public class ButtonFX : EventTrigger
     {
         base.OnPointerDown(eventData);
 
-        _fxSource.PlayOneShot(_clickFX);
+        _soundManager.PlayFX(SoundManager.E_FX.BUTTON_CLICK);
     }
 }
