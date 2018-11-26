@@ -17,6 +17,12 @@ public class Theater : MonoBehaviour
 
     // Reference to the animator
     private Animator _curtains;
+    // Reference to the curtains' audiosource for the animation
+    [SerializeField]
+    private AudioSource _curtainsAudio;
+    // Reference to the main curtain' audiosource for the animation
+    [SerializeField]
+    private AudioSource _mainCurtainAudio;
 
     // Is the theater currently opened ?
     private bool _isOpen = true;
@@ -103,5 +109,24 @@ public class Theater : MonoBehaviour
             CurtainCloseActions();
             CurtainCloseActions = null;
         }
+    }
+
+    /// <summary>
+    /// Callback to play the audio from the animation
+    /// </summary>
+    public void PlayCurtainsAudio()
+    {
+        _curtainsAudio.Play();
+    }
+
+    public void StartBigCurtainsAudio()
+    {
+        _mainCurtainAudio.loop = true;
+        _mainCurtainAudio.Play();
+    }
+
+    public void StopBigCurtainsAudio()
+    {
+        _mainCurtainAudio.loop = false;
     }
 }
