@@ -7035,6 +7035,7 @@ GameObject:
   - component: {fileID: 876583753}
   - component: {fileID: 876583752}
   - component: {fileID: 876583751}
+  - component: {fileID: 876583754}
   m_Layer: 5
   m_Name: Leave
   m_TagString: Untagged
@@ -7147,6 +7148,19 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 876583749}
   m_CullTransparentMesh: 0
+--- !u!114 &876583754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 876583749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5287d0e567c102e429e66ad1c84d4144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!1 &901229853
 GameObject:
   m_ObjectHideFlags: 0
@@ -7193,6 +7207,7 @@ GameObject:
   - component: {fileID: 902530305}
   - component: {fileID: 902530304}
   - component: {fileID: 902530303}
+  - component: {fileID: 902530306}
   m_Layer: 5
   m_Name: LevelSelection
   m_TagString: Untagged
@@ -7305,6 +7320,19 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 902530301}
   m_CullTransparentMesh: 0
+--- !u!114 &902530306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 902530301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5287d0e567c102e429e66ad1c84d4144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!4 &948057730 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4063801342586592, guid: 9adecbb0531e90441a110d7789f0c506,
@@ -8108,6 +8136,7 @@ GameObject:
   - component: {fileID: 1170789188}
   - component: {fileID: 1170789187}
   - component: {fileID: 1170789186}
+  - component: {fileID: 1170789189}
   m_Layer: 5
   m_Name: Start
   m_TagString: Untagged
@@ -8220,6 +8249,19 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1170789184}
   m_CullTransparentMesh: 0
+--- !u!114 &1170789189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1170789184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5287d0e567c102e429e66ad1c84d4144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!1 &1199335893
 GameObject:
   m_ObjectHideFlags: 0
@@ -10658,6 +10700,7 @@ GameObject:
   - component: {fileID: 2111358084}
   - component: {fileID: 2111358083}
   - component: {fileID: 2111358082}
+  - component: {fileID: 2111358085}
   m_Layer: 5
   m_Name: NextLevel
   m_TagString: Untagged
@@ -10770,6 +10813,19 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2111358080}
   m_CullTransparentMesh: 0
+--- !u!114 &2111358085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2111358080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5287d0e567c102e429e66ad1c84d4144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!1 &2141037368
 GameObject:
   m_ObjectHideFlags: 0
