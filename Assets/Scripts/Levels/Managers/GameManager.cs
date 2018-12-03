@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
         {
             m_starParticles.Play();
             m_victoryScreen.gameObject.SetActive(true);
+            m_victoryScreen.GetComponent<AudioSource>().Play();
             m_victoryScreen.SetTrigger("Appear");
             if (_currentUser.OfficialLevelsProgression < _currentLevel.Number)
             {
