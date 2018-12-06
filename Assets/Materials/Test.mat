@@ -4,7 +4,7 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Test
   m_Shader: {fileID: 4800000, guid: 22ced7231e3e28b42b9760a066d4dcf9, type: 3}
@@ -102,6 +102,6 @@ Material:
     m_Colors:
     - _BackgroundColor: {r: 0.6313726, g: 0.4, b: 0.22352941, a: 1}
     - _BorderColor: {r: 0.3843138, g: 0.2196079, b: 0.1058824, a: 1}
-    - _BordersWidth: {r: 0.07, g: 0.07, b: 0.07, a: 0.07}
+    - _BordersWidth: {r: 0.05, g: 0.05, b: 0.05, a: 0.05}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

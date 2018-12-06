@@ -10,11 +10,10 @@ Shader "ZooCube/Recepter"
 		[PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
 		_ShapeMask("ShapeMask", 2D) = "white" {}
 		_BorderColor("BorderColor", Color) = (0.3843138,0.2196079,0.1058824,1)
-		_BackgroundColor("BackgroundColor", Color) = (0,0,0,1)
 		_BorderXOffset("BorderXOffset", Float) = 0
 		_BorderYOffset("BorderYOffset", Float) = 0
-		[Toggle]_KeepScale("KeepScale", Float) = 0
 		_BordersWidth("BordersWidth", Vector) = (0,0,0,0)
+		_BackgroundColor("BackgroundColor", Color) = (0,0,0,1)
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 	}
 
@@ -64,7 +63,6 @@ Shader "ZooCube/Recepter"
 			uniform float4 _BackgroundColor;
 			uniform sampler2D _ShapeMask;
 			uniform float4 _BordersWidth;
-			uniform float _KeepScale;
 			uniform float _BorderXOffset;
 			uniform float _BorderYOffset;
 			uniform float4 _BorderColor;
@@ -103,47 +101,26 @@ Shader "ZooCube/Recepter"
 			
 			fixed4 frag(v2f IN  ) : SV_Target
 			{
-				float4 temp_output_6_0_g11 = _BackgroundColor;
-				float2 uv11_g11 = IN.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
-				float2 appendResult100_g11 = (float2(( _BordersWidth.x + _BordersWidth.z ) , ( _BordersWidth.y + _BordersWidth.w )));
+				float4 temp_output_6_0_g18 = _BackgroundColor;
+				float2 uv11_g18 = IN.texcoord.xy * float2( 1,1 ) + float2( 0,0 );
+				float2 appendResult100_g18 = (float2(( _BordersWidth.x + _BordersWidth.z ) , ( _BordersWidth.y + _BordersWidth.w )));
 				float3 ase_objectScale = float3( length( unity_ObjectToWorld[ 0 ].xyz ), length( unity_ObjectToWorld[ 1 ].xyz ), length( unity_ObjectToWorld[ 2 ].xyz ) );
-				float clampResult49_g5 = clamp( ase_objectScale.x , 0.0 , 1.0 );
-				float clampResult50_g5 = clamp( ase_objectScale.y , 0.0 , 1.0 );
-				float2 appendResult57_g5 = (float2(( ase_objectScale.x / clampResult50_g5 ) , 1.0));
-				float2 clampResult61_g5 = clamp( (ase_objectScale).xy , float2( 1,1 ) , float2( 1000,1000 ) );
-				float2 appendResult58_g5 = (float2(1.0 , ( ase_objectScale.y / clampResult49_g5 )));
-				float2 ifLocalVar47_g5 = 0;
-				if( clampResult49_g5 > clampResult50_g5 )
-				ifLocalVar47_g5 = appendResult57_g5;
-				else if( clampResult49_g5 == clampResult50_g5 )
-				ifLocalVar47_g5 = clampResult61_g5;
-				else if( clampResult49_g5 < clampResult50_g5 )
-				ifLocalVar47_g5 = appendResult58_g5;
-				float2 temp_output_7_0_g11 = ifLocalVar47_g5;
-				float2 break89_g11 = temp_output_7_0_g11;
-				float2 appendResult88_g11 = (float2(break89_g11.x , break89_g11.x));
-				float2 appendResult91_g11 = (float2(break89_g11.y , break89_g11.y));
-				float2 ifLocalVar90_g11 = 0;
-				if( break89_g11.x >= break89_g11.y )
-				ifLocalVar90_g11 = appendResult88_g11;
-				else
-				ifLocalVar90_g11 = appendResult91_g11;
-				float2 lerpResult95_g11 = lerp( temp_output_7_0_g11 , ifLocalVar90_g11 , _KeepScale);
-				float2 ScaleRatio8_g11 = lerpResult95_g11;
-				float2 break12_g11 = ( ( appendResult100_g11 / ScaleRatio8_g11 ) + 1.0 );
-				float2 appendResult17_g11 = (float2(( uv11_g11.x * break12_g11.x ) , ( uv11_g11.y * break12_g11.y )));
-				float2 appendResult101_g11 = (float2(_BordersWidth.x , _BordersWidth.y));
-				float2 BorderCoordinates102_g11 = ( appendResult101_g11 / ScaleRatio8_g11 );
-				float2 appendResult18_g11 = (float2(_BorderXOffset , _BorderYOffset));
-				float2 temp_output_23_0_g11 = ( ( appendResult17_g11 - BorderCoordinates102_g11 ) + ( appendResult18_g11 / ScaleRatio8_g11 ) );
-				float2 break60_g11 = step( float2( 0,0 ) , ( 1.0 - temp_output_23_0_g11 ) );
-				float2 break61_g11 = step( float2( 0,0 ) , temp_output_23_0_g11 );
-				float clampResult68_g11 = clamp( ( tex2D( _ShapeMask, temp_output_23_0_g11 ).r + ( 1.0 - ( break60_g11.x * break60_g11.y * break61_g11.x * break61_g11.y ) ) ) , 0.0 , 1.0 );
+				float2 appendResult109_g18 = (float2(ase_objectScale.x , ase_objectScale.y));
+				float2 ScaleRatio8_g18 = appendResult109_g18;
+				float2 break12_g18 = ( ( appendResult100_g18 / ScaleRatio8_g18 ) + 1.0 );
+				float2 appendResult17_g18 = (float2(( uv11_g18.x * break12_g18.x ) , ( uv11_g18.y * break12_g18.y )));
+				float2 appendResult101_g18 = (float2(_BordersWidth.x , _BordersWidth.y));
+				float2 BorderCoordinates102_g18 = ( appendResult101_g18 / ScaleRatio8_g18 );
+				float2 appendResult18_g18 = (float2(_BorderXOffset , _BorderYOffset));
+				float2 temp_output_23_0_g18 = ( ( appendResult17_g18 - BorderCoordinates102_g18 ) + ( appendResult18_g18 / ScaleRatio8_g18 ) );
+				float2 break60_g18 = step( float2( 0,0 ) , ( 1.0 - temp_output_23_0_g18 ) );
+				float2 break61_g18 = step( float2( 0,0 ) , temp_output_23_0_g18 );
+				float clampResult68_g18 = clamp( ( tex2D( _ShapeMask, temp_output_23_0_g18 ).r + ( 1.0 - ( break60_g18.x * break60_g18.y * break61_g18.x * break61_g18.y ) ) ) , 0.0 , 1.0 );
 				float2 uv_ShapeMask = IN.texcoord.xy * _ShapeMask_ST.xy + _ShapeMask_ST.zw;
-				float clampResult34_g11 = clamp( ( (temp_output_6_0_g11).a * ( 1.0 - tex2D( _ShapeMask, uv_ShapeMask ).r ) * _BorderColor.a ) , 0.0 , 1.0 );
-				float4 appendResult38_g11 = (float4((( float4( ( (temp_output_6_0_g11).rgb * ( 1.0 - clampResult68_g11 ) ) , 0.0 ) + ( _BorderColor * clampResult68_g11 ) )).rgb , clampResult34_g11));
+				float clampResult34_g18 = clamp( ( (temp_output_6_0_g18).a * ( 1.0 - tex2D( _ShapeMask, uv_ShapeMask ).r ) * _BorderColor.a ) , 0.0 , 1.0 );
+				float4 appendResult38_g18 = (float4((( float4( ( (temp_output_6_0_g18).rgb * ( 1.0 - clampResult68_g18 ) ) , 0.0 ) + ( _BorderColor * clampResult68_g18 ) )).rgb , clampResult34_g18));
 				
-				fixed4 c = appendResult38_g11;
+				fixed4 c = appendResult38_g18;
 				c.rgb *= c.a;
 				return c;
 			}
@@ -155,14 +132,12 @@ Shader "ZooCube/Recepter"
 	
 }
 /*ASEBEGIN
-Version=15401
--1709;102;1627;892;1049.007;381.5017;1;True;False
-Node;AmplifyShaderEditor.FunctionNode;6;-428.5,157;Float;False;ScalingRatio;-1;;5;096dc3062cc962b49b5311cdb37df263;0;0;3;FLOAT2;0;FLOAT;27;FLOAT;28
-Node;AmplifyShaderEditor.ColorNode;2;-442.5,-119;Float;False;Property;_BackgroundColor;BackgroundColor;1;0;Create;True;0;0;False;0;0,0,0,1;0,0,0,0;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.FunctionNode;12;-177.5,19;Float;False;AddBorder;0;;11;e22a0ad25ec970f4d94f3a43eb80ec65;0;2;6;COLOR;0,0,0,0;False;7;FLOAT2;1,1;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;5
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;14,19;Float;False;True;2;Float;ASEMaterialInspector;0;5;ZooCube/Recepter;0f8ba0101102bb14ebf021ddadce9b49;0;0;;2;True;3;1;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;True;2;False;-1;False;False;True;2;False;-1;False;False;True;5;Queue=Transparent;IgnoreProjector=True;RenderType=Transparent;PreviewType=Plane;CanUseSpriteAtlas=True;False;0;False;False;False;False;False;False;False;False;False;True;2;0;;0;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
-WireConnection;12;6;2;0
-WireConnection;12;7;6;0
-WireConnection;1;0;12;0
+Version=16100
+-1709;79;1627;915;1049.007;393.5017;1;True;False
+Node;AmplifyShaderEditor.ColorNode;2;-408.5,14;Float;False;Property;_BackgroundColor;BackgroundColor;6;0;Create;True;0;0;False;0;0,0,0,1;0,0,0,0;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.FunctionNode;19;-177.5,19;Float;False;AddBorder;0;;18;e22a0ad25ec970f4d94f3a43eb80ec65;0;1;6;COLOR;0,0,0,0;False;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;5
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;14,19;Float;False;True;2;Float;ASEMaterialInspector;0;5;ZooCube/Recepter;0f8ba0101102bb14ebf021ddadce9b49;0;0;;2;True;3;1;False;-1;10;False;-1;0;1;False;-1;0;False;-1;False;True;2;False;-1;False;False;True;2;False;-1;False;False;True;5;Queue=Transparent=Queue=0;IgnoreProjector=True;RenderType=Transparent=RenderType;PreviewType=Plane;CanUseSpriteAtlas=True;False;0;False;False;False;False;False;False;False;False;False;True;2;0;;0;0;Standard;0;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;0
+WireConnection;19;6;2;0
+WireConnection;1;0;19;0
 ASEEND*/
-//CHKSM=DC78F62B58036F62D5F1BE96E9BF998E9742A409
+//CHKSM=28294D22BDB6CE9C9613DBE6532B4A3D00C15402
