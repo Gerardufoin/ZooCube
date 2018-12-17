@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 /// <summary>
 /// LevelSaver class. Used to convert a level into json.
@@ -70,9 +71,9 @@ public class LevelSaver : MonoBehaviour
         te.Copy();
     }
 
-    public void LoadLevel(string json)
+    public void LoadLevel(TMP_InputField input)
     {
-        GameDatas.LevelDatas infos = JsonUtility.FromJson<GameDatas.LevelDatas>(json);
+        GameDatas.LevelDatas infos = JsonUtility.FromJson<GameDatas.LevelDatas>(input.text);
 
         FindObjectOfType<PiecesManager>().ClearSelection();
         foreach (EditablePiece pieces in FindObjectsOfType<EditablePiece>())

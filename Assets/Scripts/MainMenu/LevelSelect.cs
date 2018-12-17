@@ -22,7 +22,7 @@ public class LevelSelect : MonoBehaviour
             Button btn = level.GetComponent<Button>();
             bool levelAvailable = (i <= user.OfficialLevelsProgression);
 
-            level.GetComponent<Image>().color = (levelAvailable ? m_difficultyColors[(i / 10 < m_difficultyColors.Count ? i / 10 : m_difficultyColors.Count)] : Color.white);
+            level.GetComponent<Image>().color = m_difficultyColors[(i / 10 < m_difficultyColors.Count ? i / 10 : m_difficultyColors.Count)];
             btn.enabled = levelAvailable;
             btn.onClick.RemoveAllListeners();
             if (levelAvailable)
