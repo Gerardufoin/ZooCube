@@ -56,6 +56,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 594a0b10e5a35194585947280720fc60, type: 2}
   - {fileID: 11400000, guid: 1a9b460b0675d6b4e883ab7ebf787ac1, type: 2}
   - {fileID: 11400000, guid: cfc6c0f915008794ba28bc0b34702e1d, type: 2}
+  - {fileID: 11400000, guid: 341fb76fee9b7444a8379b5e7090fd05, type: 2}
+  - {fileID: 11400000, guid: 9a320fb8484e74d48b8231b12130b0b5, type: 2}
+  - {fileID: 11400000, guid: 938e424ea3ef82b41bdb9573b858a608, type: 2}
+  - {fileID: 11400000, guid: 509c22314b510aa4683dac4d3ae4b86b, type: 2}
+  - {fileID: 11400000, guid: e97d85d29f14a5647bf6cc46e91f07f4, type: 2}
   ZooShapes:
   - {fileID: 11400000, guid: c3872ccca974b334a99cde8193d088d8, type: 2}
   - {fileID: 11400000, guid: af4400c364862e24da0eed717a7d3de3, type: 2}

@@ -13,7 +13,12 @@ public class GameDatas : MonoBehaviour
         MONKEY,
         RABBIT,
         PENGUIN,
-        PIG
+        PIG,
+        ELEPHANT,
+        PARROT,
+        SNAKE,
+        GIRAFFE,
+        PANDA
     }
 
     public enum E_ShapeType
